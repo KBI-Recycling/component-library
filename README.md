@@ -9,3 +9,5 @@ A seamless merger of Material UI inputs with Formik form management.
 ```bash
 npm install --save material-formik-ui
 ```
+## Special Thanks
+[A guide to building a React component with webpack 4, publishing to npm, and deploying the demo to GitHub Pages](https://medium.com/dailyjs/building-a-react-component-with-webpack-publish-to-npm-deploy-to-github-guide-6927f60b3220)
