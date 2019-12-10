@@ -1,6 +1,3 @@
-import React from 'react';
+import {default as TestComponent} from './inputs/TestComponent';
 
-const MyComponent = () => (
-  <h1>Hello from My Component</h1>
-);
-export default MyComponent;
+export {TestComponent};
