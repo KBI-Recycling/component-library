@@ -15,10 +15,13 @@
   "author": "Daniel Kinsbursky",
   "license": "ISC",
   "peerDependencies": {
+    "@material-ui/core": "4.x.x",
+    "formik": "2.x.x",
     "react": "16.x.x",
     "react-dom": "16.x.x"
   },
   "devDependencies": {
+    "@material-ui/core": "^4.7.2",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^10.0.3",
@@ -34,6 +37,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
+    "formik": "^2.0.7",
     "gh-pages": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.12.0",
