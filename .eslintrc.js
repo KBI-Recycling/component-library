@@ -4,7 +4,7 @@ module.exports = {
     "arrow-parens": 0,
     "indent": [ "error", 2, {"MemberExpression": 1}],
     "linebreak-style": 0,
-    "max-len": ["error", {"code": 160}],
+    "max-len": ["error", {"code": 200}],
     "react/prop-types": [2],
     "react/jsx-tag-spacing": [2],
   }
