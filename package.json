@@ -10,6 +10,8 @@
     "publish-demo": "npm run build && npm run deploy",
     "publish-free": "npm publish --access public",
     "start": "webpack-dev-server --mode development",
+    "styleguide": "styleguidist server",
+    "styleguide:build": "styleguidist build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "babel src -d dist --copy-files"
   },
