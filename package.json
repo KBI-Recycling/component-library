@@ -1,17 +1,19 @@
 {
-  "name": "@kbi/material-formik-ui",
+  "name": "@kbi/component-library",
   "version": "0.0.1",
-  "description": "A seamless merger of Material UI inputs with Formik form management.",
+  "description": "A library of all reusable KBI components and utilities.",
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack --mode production",
-    "deploy": "gh-pages -d examples/dist",
     "prepublishOnly": "npm run transpile",
     "publish-demo": "npm run build && npm run deploy",
     "publish-free": "npm publish --access public",
     "start": "webpack-dev-server --mode development",
     "styleguide": "styleguidist server",
     "styleguide:build": "styleguidist build",
+    "styleguide:deploy": "gh-pages -d styleguide",
+    "npm:transpile": "babel src -d dist --copy-files",
+    "npm:publish-free": "npm publish --access public",
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "babel src -d dist --copy-files"
   },
