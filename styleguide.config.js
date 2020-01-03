@@ -2,6 +2,7 @@ module.exports = {
   title: 'KBI Components',
   version: '1.0.0',
   pagePerSection: true,
+  styleguideDir: 'examples',
   sortProps: props => {
     const required = props.filter(prop => prop.required);
     const notRequired = props.filter(prop => !prop.required);
@@ -17,4 +18,19 @@ module.exports = {
       components: 'src/Formik/**/*.js',
     },
   ],
+  webpackConfig: {
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'],
+        },
+      ],
+    },
+  },
 };

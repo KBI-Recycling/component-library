@@ -5,11 +5,18 @@
   "repository": "https://github.com/KBI-Recycling/component-library",
   "main": "dist/index.js",
   "scripts": {
+    "build": "webpack --mode production",
+    "prepublishOnly": "npm run transpile",
+    "publish-demo": "npm run build && npm run deploy",
+    "publish-free": "npm publish --access public",
+    "start": "webpack-dev-server --mode development",
     "styleguide": "styleguidist server",
     "styleguide:build": "styleguidist build",
-    "styleguide:deploy": "gh-pages -d examples",
-    "transpile": "babel src -d dist --copy-files",
-    "publish-free": "npm publish --access public"
+    "styleguide:deploy": "gh-pages -d styleguide",
+    "npm:transpile": "babel src -d dist --copy-files",
+    "npm:publish-free": "npm publish --access public",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "transpile": "babel src -d dist --copy-files"
   },
   "author": "Daniel Kinsbursky",
   "license": "ISC",
@@ -25,7 +32,6 @@
     "@babel/core": "^7.7.7",
     "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@babel/preset-env": "^7.7.7",
-    "@babel/preset-react": "^7.7.4",
     "@material-ui/core": "^4.8.2",
     "@material-ui/icons": "^4.5.1",
     "@typescript-eslint/eslint-plugin": "^2.14.0",
@@ -54,35 +60,5 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
     "yup": "^0.28.0"
-  },
-  "eslintConfig": {
-    "extends": [
-      "eslint:recommended",
-      "react-app",
-      "google"
-    ],
-    "rules": {
-      "arrow-parens": 0,
-      "indent": [
-        "error",
-        2,
-        {
-          "MemberExpression": 1
-        }
-      ],
-      "linebreak-style": 0,
-      "max-len": [
-        "error",
-        {
-          "code": 200
-        }
-      ],
-      "react/prop-types": [
-        2
-      ],
-      "react/jsx-tag-spacing": [
-        2
-      ]
-    }
   }
 }
