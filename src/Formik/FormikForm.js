@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import {Formik, Form} from 'formik';
 
 /**
- * Boilerplate Formik/Form components, which should be used to pass down Formik context to child input compoennts (e.g. TextField, etc.).
+ * A component that combines Formik's <a href='https://jaredpalmer.com/formik/docs/api/formik' target='_blank'>Formik</a> and
+ * <a href='https://jaredpalmer.com/formik/docs/api/form' target='_blank'>Form</a> components with preset KBI boilerplate.
+ * Commonly used Formik props are described below in the PROPS & Methods section. Less commonly used props can also be passed;
+ * see <a href='https://jaredpalmer.com/formik/docs/api/formik' target="_blank">Formik API</a> for details.
  *
  * @version 1.0.0
+ * @author [Gerry Blackmon](https://github.com/gblackiv)
  * @author [Daniel Kinsbursky](https://github.com/kbi-daniel)
  * @author [Chris Voss](https://github.com/ChrisJVoss)
- * @author [Gerry Blackmon](https://github.com/gblackiv)
  * @param {object} props Properties passed down from parent component.
  * @return {JSX} A react JSX component.
  * @public
@@ -38,7 +41,7 @@ const FormikForm = (props) => {
 };
 
 FormikForm.propTypes = {
-  /** All JSX passed down when wrapped in FormikForm tags (e.g. `<FormikForm>{children}</FormikForm>`). */
+  /** All JSX passed down through FormikForm tags (e.g. `<FormikForm>{children}</FormikForm>`). */
   children: PropTypes.node.isRequired,
   /** Initial field errors of the form, Formik will make these values available to render methods component as `errors`. */
   initialErrors: PropTypes.object,
