@@ -5,7 +5,7 @@ import {FastField, Field} from 'formik';
 
 /**
  * A component that wraps Material UI TextField with Formik form context. Commonly used TextField props are described below in the PROPS & Methods section.
- * Less commonly used  props can also be passed; see <a href='https://material-ui.com/api/text-field/' target="_blank">TextField API</a> for details.
+ * Less commonly used props can also be passed; see <a href='https://material-ui.com/api/text-field/' target="_blank">TextField API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
