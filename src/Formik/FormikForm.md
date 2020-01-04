@@ -6,9 +6,7 @@ import {Grid} from '@material-ui/core';
 import TextField from './TextField';
 
 <FormikForm initialValues={{ Company: 'KBI Recycling', Contact: 'Daniel Kinsbursky' }}>
-  {/* FormikForm child elements are wrapped in a IIFE. This is not required in production*/}
-  {/* IIFE is only used in this example to prevent styleguidist render error */}
-  {(formik => (
+  {formik => (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={6}>
         <TextField name='Company' id='FormikForm:Company' />
@@ -17,6 +15,6 @@ import TextField from './TextField';
         <TextField name='Contact' id='FormikForm:Contact' />
       </Grid>
     </Grid>
-  ))()}
+  )}
 </FormikForm>
 ```
