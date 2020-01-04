@@ -1,9 +1,8 @@
 TextField Examples:
 
 ```js
-import React, {Fragment, useMemo} from 'react'
+import React from 'react'
 import {Formik, Form} from 'formik';
-import {object, string} from 'yup';
 import {Grid, Typography} from '@material-ui/core';
 
 <Formik validateOnChange={false} initialValues={{ Company: 'KBI Recycling' }}>

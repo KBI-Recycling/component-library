@@ -1,17 +1,29 @@
 SubmitButton Example:
 
 ```js
-import React, {Fragment, useMemo} from 'react'
+import React, {useMemo} from 'react'
 import {Formik, Form} from 'formik';
 import {Grid} from '@material-ui/core';
 import TextField from './TextField';
+import {object, string} from 'yup';
 
-const initialValues = {
-  Company: 'KBI Recycling',
-  Contact: 'Daniel Kinsbursky',
-};
+const formProps = useMemo(() => ({
+  initialValues: {
+    Company: 'KBI Recycling',
+    Contact: 'Daniel Kinsbursky',
+  },
+  onSubmit: (values, actions) => {
+    setTimeout(() => {
+      actions.setSubmitting(false)
+    }, 2000)
+  },
+  validationSchema: object().shape({
+    Company: string().required(),
+    Contact: string().required(),
+  }),
+}), []);
 
-<Formik validateOnChange={false} initialValues={initialValues}>
+<Formik validateOnChange={false} {...formProps}>
   {formik => (
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
@@ -21,8 +33,12 @@ const initialValues = {
         <Grid item xs={6}>
           <TextField name='Contact' />
         </Grid>
-        <Grid item>
-          <SubmitButton>Submit</SubmitButton>
+        <Grid item style={{display: 'flex'}}>
+          <SubmitButton />
+          <div style={{paddingRight: '16px'}} />
+          <SubmitButton variant='outlined'>Outlined</SubmitButton>
+          <div style={{paddingRight: '16px'}} />
+          <SubmitButton color='secondary'>Secondary</SubmitButton>
         </Grid>
       </Grid>
     </Form>

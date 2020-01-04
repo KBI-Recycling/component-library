@@ -84,7 +84,6 @@ const TextField = (props) => {
 };
 
 TextField.defaultProps = {
-  autoFocus: false,
   color: 'primary',
   disabled: false,
   error: false,

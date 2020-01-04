@@ -76,13 +76,16 @@ const SubmitButton = (props) => {
   return (
     <div {...wrapperPropsMemo}>
       <Button {...buttonPropsMemo}>
-        {children}
+        {children || 'Submit'}
       </Button>
       {formikDisabled && <CircularProgress {...progressPropsMemo} />}
     </div>
   );
 };
-
+SubmitButton.defaultProps = {
+  color: 'primary',
+  variant: 'contained',
+};
 SubmitButton.propTypes = {
   children: PropTypes.node.isRequired,
   progressProps: PropTypes.object,

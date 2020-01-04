@@ -15,7 +15,11 @@ module.exports = {
     },
     {
       name: 'Formik Components',
-      components: 'src/Formik/**/*.js',
+      components: [
+        'src/Formik/FormikForm.js',
+        'src/Formik/SubmitButton.js',
+        'src/Formik/TextField.js',
+      ],
     },
   ],
   webpackConfig: {
