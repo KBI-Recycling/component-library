@@ -23,6 +23,9 @@ module.exports = {
     },
   ],
   webpackConfig: {
+    devServer: {
+      open: true,
+    },
     module: {
       rules: [
         {
