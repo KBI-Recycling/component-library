@@ -18,6 +18,7 @@ module.exports = {
       components: [
         'src/Formik/FormikForm.js',
         'src/Formik/SubmitButton.js',
+        'src/Formik/FormButton.js',
         'src/Formik/TextField.js',
       ],
     },

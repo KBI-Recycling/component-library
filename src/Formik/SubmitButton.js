@@ -5,9 +5,10 @@ import {useFormikContext} from 'formik';
 
 /**
  * A component that integrates Material UI Button with Formik form context. The buttons type attribute is hardcoded to 'submit'
- * to allow for standard form functionality, such as triggering onSubmit when `enter` key pushed. Commonly used Button props are
- * described below in the PROPS & METHODS section. Less commonly used props can also be passed; see
- * <a href='https://material-ui.com/api/button/' target="_blank">Button API</a> for details.
+ * to allow for standard form functionality, such as triggering onSubmit when `enter` key pushed. Also, Material UI CircularProgress
+ * has been added to indicate form is either submitting or validating (button will also be disabled). Commonly used Button props are
+ * described below in the PROPS & METHODS section. Less common props can also be passed; see <a href='https://material-ui.com/api/button/' target="_blank">
+ * Button API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
