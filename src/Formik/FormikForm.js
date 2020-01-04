@@ -5,7 +5,7 @@ import {Formik, Form} from 'formik';
 /**
  * A component that combines Formik's <a href='https://jaredpalmer.com/formik/docs/api/formik' target='_blank'>Formik</a> and
  * <a href='https://jaredpalmer.com/formik/docs/api/form' target='_blank'>Form</a> components with preset KBI boilerplate.
- * Commonly used Formik props are described below in the PROPS & Methods section. Less commonly used props can also be passed;
+ * Commonly used Formik props are described below in the PROPS & METHODS section. Less commonly used props can also be passed;
  * see <a href='https://jaredpalmer.com/formik/docs/api/formik' target="_blank">Formik API</a> for details.
  *
  * @version 1.0.0

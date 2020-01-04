@@ -4,6 +4,7 @@ SubmitButton Example:
 import React, {useMemo} from 'react'
 import {Formik, Form} from 'formik';
 import {Grid} from '@material-ui/core';
+import {Delete, Save} from '@material-ui/icons';
 import TextField from './TextField';
 import {object, string} from 'yup';
 
@@ -33,12 +34,19 @@ const formProps = useMemo(() => ({
         <Grid item xs={6}>
           <TextField name='Contact' />
         </Grid>
-        <Grid item style={{display: 'flex'}}>
+        <Grid item xs={12} style={{display: 'flex'}}>
           <SubmitButton />
           <div style={{paddingRight: '16px'}} />
           <SubmitButton variant='outlined'>Outlined</SubmitButton>
           <div style={{paddingRight: '16px'}} />
           <SubmitButton color='secondary'>Secondary</SubmitButton>
+          <div style={{paddingRight: '16px'}} />
+          <SubmitButton startIcon={<Delete />}>startIcon</SubmitButton>
+          <div style={{paddingRight: '16px'}} />
+          <SubmitButton endIcon={<Save />}>endIcon</SubmitButton>
+        </Grid>
+        <Grid item xs={12}>
+          <SubmitButton fullWidth={true}>Full Width</SubmitButton>
         </Grid>
       </Grid>
     </Form>

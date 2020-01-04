@@ -4,7 +4,7 @@ import MuiTextField from '@material-ui/core/TextField';
 import {FastField, Field} from 'formik';
 
 /**
- * A component that wraps Material UI TextField with Formik form context. Commonly used TextField props are described below in the PROPS & Methods section.
+ * A component that wraps Material UI TextField with Formik form context. Commonly used TextField props are described below in the PROPS & METHODS section.
  * Less commonly used props can also be passed; see <a href='https://material-ui.com/api/text-field/' target="_blank">TextField API</a> for details.
  *
  * @version 1.0.0
@@ -42,6 +42,7 @@ const TextField = (props) => {
   const textFieldProps = useCallback(formik => {
     const {field, form, meta} = formik;
     return {
+      ...field,
       color,
       disabled: disabled || form.isSubmitting,
       error: error || (meta.touched && meta.error) ? true : false,
@@ -60,7 +61,6 @@ const TextField = (props) => {
       rows,
       rowsMax,
       size,
-      value: field.value,
       variant,
       onBlur: event => {
         field.onBlur(event);
