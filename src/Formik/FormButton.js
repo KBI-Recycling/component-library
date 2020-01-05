@@ -32,7 +32,6 @@ const FormButton = (props) => {
     variant,
     ...otherProps
   } = props;
-  console.log({size, otherProps});
   const buttonPropsMemo = useMemo(() => ({
     color,
     disabled: disabled || formik.isSubmitting || formik.isValidating,

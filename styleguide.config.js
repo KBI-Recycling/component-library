@@ -20,6 +20,7 @@ module.exports = {
         'src/Formik/SubmitButton.js',
         'src/Formik/FormButton.js',
         'src/Formik/TextField.js',
+        'src/Formik/CurrencyField.js',
       ],
     },
   ],

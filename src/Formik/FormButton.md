@@ -30,10 +30,10 @@ const formProps = useMemo(() => ({
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <TextField name='Company' />
+          <TextField name='Company' id='SubmitButton:Company' />
         </Grid>
         <Grid item xs={6}>
-          <TextField name='Contact' />
+          <TextField name='Contact' id='SubmitButton:Contact' />
         </Grid>
         <Grid item xs={12} style={{display: 'flex'}}>
           <SubmitButton />
