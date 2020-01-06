@@ -1,4 +1,10 @@
-SubmitButton Example:
+How to Access:
+```static
+import {Formik} from '@kbi/component-library';
+const {FormButton} = Formik;
+```
+
+FormButton Example:
 
 ```js
 import React, {useMemo} from 'react'
