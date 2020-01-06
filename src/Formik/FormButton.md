@@ -1,4 +1,10 @@
-SubmitButton Example:
+How to Access:
+```static
+import {Formik} from '@kbi/component-library';
+const {FormButton} = Formik;
+```
+
+FormButton Example:
 
 ```js
 import React, {useMemo} from 'react'
@@ -6,6 +12,7 @@ import {Formik, Form} from 'formik';
 import {Grid} from '@material-ui/core';
 import {Delete, Save} from '@material-ui/icons';
 import TextField from './TextField';
+import SubmitButton from './SubmitButton';
 import {object, string} from 'yup';
 
 const formProps = useMemo(() => ({
@@ -29,24 +36,21 @@ const formProps = useMemo(() => ({
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <TextField name='Company' />
+          <TextField name='Company' id='SubmitButton:Company' />
         </Grid>
         <Grid item xs={6}>
-          <TextField name='Contact' />
+          <TextField name='Contact' id='SubmitButton:Contact' />
         </Grid>
         <Grid item xs={12} style={{display: 'flex'}}>
           <SubmitButton />
           <div style={{paddingRight: '16px'}} />
-          <SubmitButton variant='outlined'>Outlined</SubmitButton>
+          <FormButton>FormButton</FormButton>
           <div style={{paddingRight: '16px'}} />
-          <SubmitButton color='secondary'>Secondary</SubmitButton>
+          <FormButton variant='outlined'>outlined</FormButton>
           <div style={{paddingRight: '16px'}} />
-          <SubmitButton startIcon={<Delete />}>startIcon</SubmitButton>
+          <FormButton color='secondary'>secondary</FormButton>
           <div style={{paddingRight: '16px'}} />
-          <SubmitButton endIcon={<Save />}>endIcon</SubmitButton>
-        </Grid>
-        <Grid item xs={12}>
-          <SubmitButton fullWidth={true}>Full Width</SubmitButton>
+          <FormButton startIcon={<Delete />}>startIcon</FormButton>
         </Grid>
       </Grid>
     </Form>

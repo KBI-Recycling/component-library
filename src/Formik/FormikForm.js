@@ -5,7 +5,7 @@ import {Formik, Form} from 'formik';
 /**
  * A component that combines Formik's <a href='https://jaredpalmer.com/formik/docs/api/formik' target='_blank'>Formik</a> and
  * <a href='https://jaredpalmer.com/formik/docs/api/form' target='_blank'>Form</a> components with preset KBI boilerplate.
- * Commonly used Formik props are described below in the PROPS & Methods section. Less commonly used props can also be passed;
+ * Commonly used Formik props are described below in the PROPS & METHODS section. Less commonly used props can also be passed;
  * see <a href='https://jaredpalmer.com/formik/docs/api/formik' target="_blank">Formik API</a> for details.
  *
  * @version 1.0.0
@@ -33,7 +33,7 @@ const FormikForm = (props) => {
     <Formik {...formikProps} {...otherProps}>
       {formikProps => (
         <Form style={{width: '100%'}} noValidate method="post">
-          {children}
+          {children && children({...formikProps})}
         </Form>
       )}
     </Formik>
@@ -42,7 +42,7 @@ const FormikForm = (props) => {
 
 FormikForm.propTypes = {
   /** All JSX passed down through FormikForm tags (e.g. `<FormikForm>{children}</FormikForm>`). */
-  children: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
   /** Initial field errors of the form, Formik will make these values available to render methods component as `errors`. */
   initialErrors: PropTypes.object,
   /** An arbitrary value for the initial `status` of the form. If the form is reset, this value will be restored. */

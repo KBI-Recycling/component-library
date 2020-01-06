@@ -1,12 +1,40 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Button, CircularProgress} from '@material-ui/core';
 import {useFormikContext} from 'formik';
 
+/**
+ * A component that integrates Material UI Button with Formik form context. The buttons type attribute is hardcoded to 'submit'
+ * to allow for standard form functionality, such as triggering onSubmit when `enter` key pushed. Also, Material UI CircularProgress
+ * has been added to indicate form is either submitting or validating (button will also be disabled). Commonly used Button props are
+ * described below in the PROPS & METHODS section. Less common props can also be passed; see <a href='https://material-ui.com/api/button/' target="_blank">
+ * Button API</a> for details.
+ *
+ * @version 1.0.0
+ * @author [Gerry Blackmon](https://github.com/gblackiv)
+ * @author [Daniel Kinsbursky](https://github.com/kbi-daniel)
+ * @author [Chris Voss](https://github.com/ChrisJVoss)
+ * @param {object} props Properties passed down from parent component.
+ * @return {JSX} A react JSX component.
+ * @public
+ *
+ */
 const SubmitButton = (props) => {
-  const {children, progressProps} = props;
-  const {classes, color, component, disabled, disableFocusRipple, disableRipple, endIcon, fullWidth, href, size, startIcon, style, variant} = props;
   const formik = useFormikContext();
+  const {
+    children,
+    color,
+    disabled,
+    endIcon,
+    fullWidth,
+    href,
+    progressProps,
+    size,
+    startIcon,
+    style,
+    variant,
+    ...otherProps
+  } = props;
 
   const formikDisabled = useMemo(() => {
     if (formik.isSubmitting || formik.isValidating) return true;
@@ -17,49 +45,41 @@ const SubmitButton = (props) => {
     if (buttonSize === 'small') return 12;
     else return 24;
   }, [size]);
-  const getButtonMargin = useCallback((element) => {
-    // Apply margin styles to wrapper div element and hardcode Button MUI component to a {margin: 0}
-    // Applying margin to wrappr div ensures proper placement of CircularProgress component with position of 'absolute'
-    if (element === 'Button') return {margin: 0};
-    else if (element === 'Wrapper') {
-      const SubmitButtonMargin = {
-        margin: style?.margin || 0,
-        marginTop: style?.marginTop,
-        marginRight: style?.marginRight,
-        marginBottom: style?.marginBottom,
-        marginLeft: style?.marginLeft,
-      };
-      return SubmitButtonMargin;
-    }
-  }, [style]);
 
-  const wrapperPropsMemo = useMemo(() => {
-    return {
-      style: {
-        ...getButtonMargin('Wrapper'),
-        position: 'relative',
-      },
-    };
-  }, [getButtonMargin]);
+  const wrapperPropsMemo = useMemo(() => ({
+    // Applying margin to div wrapper ensures proper placement of CircularProgress component.
+    // Hardcoding buttonPropsMemo to {margin: 0} to ensure margin style only applied in wrapperPropsMemo.
+    style: {
+      position: 'relative',
+      margin: style?.margin || 0,
+      marginTop: style?.marginTop || 0,
+      marginRight: style?.marginRight || 0,
+      marginBottom: style?.marginBottom || 0,
+      marginLeft: style?.marginLeft || 0,
+    },
+  }), [style]);
   const buttonPropsMemo = useMemo(() => ({
-    classes: classes,
-    color: color,
-    component: component,
+    color,
     disabled: disabled || formikDisabled,
-    disableFocusRipple: disableFocusRipple,
-    disableRipple: disableRipple || true,
+    disableRipple: true,
     endIcon: endIcon,
-    fullWidth: fullWidth,
-    href: href,
-    size: size,
-    startIcon: startIcon,
+    fullWidth,
+    href,
+    size,
+    startIcon,
     style: {
       ...style,
-      ...getButtonMargin('Button'),
+      // Applying margin to div wrapper ensures proper placement of CircularProgress component.
+      // Hardcoding buttonPropsMemo to {margin: 0} to ensure margin style only applied in wrapperPropsMemo.
+      margin: 0,
+      marginTop: 0,
+      marginRight: 0,
+      marginBottom: 0,
+      marginLeft: 0,
     },
     type: 'submit',
-    variant: variant,
-  }), [classes, color, component, disableFocusRipple, disableRipple, disabled, endIcon, formikDisabled, fullWidth, getButtonMargin, href, size, startIcon, style, variant]);
+    variant,
+  }), [color, disabled, endIcon, formikDisabled, fullWidth, href, size, startIcon, style, variant]);
   const progressPropsMemo = useMemo(() => ({
     size: progressSizeMemo,
     ...progressProps,
@@ -75,7 +95,7 @@ const SubmitButton = (props) => {
 
   return (
     <div {...wrapperPropsMemo}>
-      <Button {...buttonPropsMemo}>
+      <Button {...buttonPropsMemo} {...otherProps}>
         {children}
       </Button>
       {formikDisabled && <CircularProgress {...progressPropsMemo} />}
@@ -83,21 +103,36 @@ const SubmitButton = (props) => {
   );
 };
 
+SubmitButton.defaultProps = {
+  children: 'Submit',
+  color: 'primary',
+  disabled: false,
+  fullWidth: false,
+  size: 'medium',
+  variant: 'contained',
+};
 SubmitButton.propTypes = {
-  children: PropTypes.node.isRequired,
-  progressProps: PropTypes.object,
-  classes: PropTypes.object,
-  color: PropTypes.string,
-  component: PropTypes.node,
+  /** The text of the button (e.g. `<SubmitButton>{children}</SubmitButton>`) */
+  children: PropTypes.node,
+  /** The color of the component. It supports those theme colors that make sense for this component. */
+  color: PropTypes.oneOf(['default', 'inherit', 'primary', 'secondary']),
+  /** If `true`, the button will be disabled. */
   disabled: PropTypes.bool,
-  disableFocusRipple: PropTypes.bool,
-  disableRipple: PropTypes.bool,
+  /** Element placed after the children */
   endIcon: PropTypes.node,
+  /** If `true`, the button will take up the full width of its container. */
   fullWidth: PropTypes.bool,
+  /** The URL to link to when the button is clicked. If defined, an `<a>` element will be used as the root node. */
   href: PropTypes.string,
-  size: PropTypes.string,
+  /** Pass props to SubmitButton's CircularProgress component. See <a href='https://material-ui.com/api/circular-progress/' target='_blank'>CircularProgress API</a> for details. */
+  progressProps: PropTypes.object,
+  /** The size of the button. `small` is equivalent to the dense button styling. */
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  /** Element placed before the children. */
   startIcon: PropTypes.node,
+  /** An object to add CSS styles to Button component */
   style: PropTypes.object,
-  variant: PropTypes.string,
+  /** The variant to use. */
+  variant: PropTypes.oneOf(['contained', 'outlined', 'text']),
 };
 export default SubmitButton;
