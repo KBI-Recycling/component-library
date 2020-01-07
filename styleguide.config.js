@@ -21,6 +21,7 @@ module.exports = {
         'src/Formik/FormButton.js',
         'src/Formik/TextField.js',
         'src/Formik/CurrencyField.js',
+        'src/Formik/AutoField.js',
       ],
     },
   ],
