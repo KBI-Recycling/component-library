@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {Field} from 'formik';
 import {FormControl, FormHelperText, FormLabel} from '@material-ui/core';
@@ -19,7 +19,7 @@ import MuiRadioGroup from '@material-ui/core/RadioGroup';
  */
 const RadioGroup = (props) => {
   const {children, label, name, row, ...otherProps} = props;
-  const formControlProps = (form) => {
+  const formControlProps = useCallback((form) => {
     return {
       disabled: form.isSubmitting,
       error: Boolean(form.touched[name] && form.errors[name]),
@@ -27,7 +27,7 @@ const RadioGroup = (props) => {
       margin: 'dense',
       ...otherProps,
     };
-  };
+  }, [name, otherProps]);
 
   return (
     <Field name={name}>
