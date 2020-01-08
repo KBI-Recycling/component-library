@@ -7,6 +7,7 @@ import {default as NumberField} from './Formik/NumberField';
 import {default as DateField} from './Formik/DateField';
 import {default as PasswordField} from './Formik/PasswordField';
 import {default as RadioGroup} from './Formik/RadioGroup';
+import {default as SelectField} from './Formik/SelectField';
 
 export {default as Hello} from './TestComponent/Hello';
 export * from './TestComponent/Hello';
@@ -21,6 +22,7 @@ export const Formik = {
   DateField,
   PasswordField,
   RadioGroup,
+  SelectField,
 };
 /*
 export {default as Formik} from './Formik/';

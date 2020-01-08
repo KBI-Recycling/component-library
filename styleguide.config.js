@@ -26,6 +26,7 @@ module.exports = {
         'src/Formik/DateField.js',
         'src/Formik/PasswordField.js',
         'src/Formik/RadioGroup.js',
+        'src/Formik/SelectField.js',
       ],
     },
   ],
