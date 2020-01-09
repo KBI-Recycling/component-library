@@ -86,6 +86,7 @@
     }
   },
   "dependencies": {
-    "@material-ui/lab": "^4.0.0-alpha.38"
+    "@material-ui/lab": "^4.0.0-alpha.38",
+    "lodash.get": "^4.4.2"
   }
 }
