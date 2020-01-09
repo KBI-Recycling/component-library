@@ -2,7 +2,8 @@ import {default as FormikForm} from './Formik/FormikForm';
 import {default as SubmitButton} from './Formik/SubmitButton';
 import {default as FormButton} from './Formik/FormButton';
 import {default as TextField} from './Formik/TextField';
-import {default as AutoField} from './Formik/AutoField';
+import {default as AutoComplete} from './Formik/AutoComplete';
+import {default as AutoCompleteObject} from './Formik/AutoCompleteObject';
 import {default as NumberField} from './Formik/NumberField';
 import {default as DateField} from './Formik/DateField';
 import {default as PasswordField} from './Formik/PasswordField';
@@ -17,12 +18,13 @@ export const Formik = {
   SubmitButton,
   FormButton,
   TextField,
-  AutoField,
+  AutoComplete,
   NumberField,
   DateField,
   PasswordField,
   RadioGroup,
   SelectField,
+  AutoCompleteObject,
 };
 /*
 export {default as Formik} from './Formik/';

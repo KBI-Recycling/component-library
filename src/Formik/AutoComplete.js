@@ -7,6 +7,7 @@ import {Field} from 'formik';
 /**
  * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop; see <a href='https://material-ui.com/api/text-field/' target="_blank">
  * TextField API</a> for details.
+ * This component returns the string value associated with the selected option's "optionKey" property.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
@@ -17,8 +18,8 @@ import {Field} from 'formik';
  * @public
  *
  */
-const AutoField = props => {
-  const {disabled, fast, label, name, onBlur, onChange, options, optionLabel, required, autoSelect, textFieldProps, ...otherProps} = props;
+const AutoComplete = props => {
+  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const autoCompleteProps = (form, field) => ({
     ...field,
     autoHighlight: true,
@@ -30,7 +31,7 @@ const AutoField = props => {
     getOptionLabel: (option, state) => {
       if (typeof option === 'string') return option;
       else if (typeof option === 'number') return option.toString(10);
-      else if (typeof option === 'object') return option[optionLabel];
+      else if (typeof option === 'object') return option[optionKey];
       else return '';
     },
     options,
@@ -39,7 +40,7 @@ const AutoField = props => {
       if (onBlur) onBlur({field, form});
     },
     onChange: (e, value) => {
-      if (value) form.setFieldValue(field.name, value[optionLabel]);
+      if (value) form.setFieldValue(field.name, value[optionKey]);
       else form.setFieldValue(field.name, '');
       if (onChange) {
         onChange({
@@ -86,11 +87,11 @@ const AutoField = props => {
   );
 };
 
-AutoField.defaultProps = {
+AutoComplete.defaultProps = {
   fast: false,
   autoSelect: false,
 };
-AutoField.propTypes = {
+AutoComplete.propTypes = {
   /** Auto Select (incomplete) */
   autoSelect: PropTypes.bool,
   /** If `true`, the `input` element will be disabled. */
@@ -106,12 +107,12 @@ AutoField.propTypes = {
   /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
   onChange: PropTypes.func,
   /** String name of options object property. */
-  optionLabel: PropTypes.string.isRequired,
-  /** Array of objects. These are referenced by the 'optionLabel' prop. */
+  optionKey: PropTypes.string.isRequired,
+  /** Array of objects. These are referenced by the 'optionKey' prop. */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
   /** Object to stylize the underlying MUI TextField component.  */
   textFieldProps: PropTypes.object,
 };
-export default AutoField;
+export default AutoComplete;
