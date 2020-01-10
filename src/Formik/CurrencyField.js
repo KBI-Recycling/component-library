@@ -30,14 +30,11 @@ const CurrencyField = (props) => {
     id,
     label,
     margin,
-    multiline,
     name,
     onBlur,
     onChange,
     placeholder,
     required,
-    rows,
-    rowsMax,
     size,
     variant,
     ...otherProps
@@ -59,11 +56,8 @@ const CurrencyField = (props) => {
       InputProps: {startAdornment: <InputAdornment position="start">$</InputAdornment>},
       label: label || name,
       margin,
-      multiline,
       placeholder,
       required,
-      rows,
-      rowsMax,
       size,
       variant,
       onBlur: event => {
@@ -88,7 +82,7 @@ const CurrencyField = (props) => {
         else event.preventDefault();
       },
     };
-  }, [color, decimal, disabled, error, fullWidth, helperText, id, label, margin, multiline, name, onBlur, onChange, placeholder, required, rows, rowsMax, size, variant]);
+  }, [color, decimal, disabled, error, fullWidth, helperText, id, label, margin, name, onBlur, onChange, placeholder, required, size, variant]);
 
   if (fast) {
     return <FastField name={name}>
@@ -108,7 +102,6 @@ CurrencyField.defaultProps = {
   fast: false,
   fullWidth: true,
   margin: 'dense',
-  multiline: false,
   required: false,
   variant: 'standard',
 };
@@ -133,22 +126,16 @@ CurrencyField.propTypes = {
   label: PropTypes.string,
   /** If `dense` or `normal`, will adjust vertical spacing of this and contained components. */
   margin: PropTypes.oneOf(['none', 'dense', 'normal']),
-  /** if true, a `textarea` element will be rendered instead of an input. */
-  multiline: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, form, meta}) => {}`; */
   onBlur: PropTypes.func,
-  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, form, meta}) => {}`; */
   onChange: PropTypes.func,
   /** The short hint displayed in the input before the user enters a value. */
   placeholder: PropTypes.string,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
-  /** Number of rows to display when multiline option is set to true. */
-  rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  /** Maximum number of rows to display when multiline option is set to true. */
-  rowsMax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** The size of the text field. */
   size: PropTypes.oneOf(['small', 'medium']),
   /** The variant to use. */
