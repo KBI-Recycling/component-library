@@ -13,7 +13,6 @@ import {Grid, Typography, FormControlLabel, Radio} from '@material-ui/core';
 
 <Formik validateOnChange={false} initialValues={{ Gerry: false, Gerry2: false, Dan: false, Chris: false}}>
   {formik => {
-        console.log(formik.values)
     return (
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
