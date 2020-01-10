@@ -78,12 +78,12 @@ const NumberField = (props) => {
         const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
         if (persistKeyCodes.includes(event.keyCode)) event.persist();
         else if (event.keyCode === 190 && field.value.split('.').length <= 1) event.persist();
-        else if (event.keyCode === 38) form.setFieldValue(name, (Math.round(field.value) + 1).toString());
-        else if (event.keyCode === 40) form.setFieldValue(name, (Math.round(field.value) - 1).toString());
+        else if (event.keyCode === 38) form.setFieldValue(name, (Number(field.value) + 1).toFixed(decimal));
+        else if (event.keyCode === 40) form.setFieldValue(name, (Number(field.value) - 1).toFixed(decimal));
         else event.preventDefault();
       },
     };
-  }, [color, disabled, error, fullWidth, helperText, id, label, margin, name, onBlur, onChange, placeholder, required, size, variant, setNumberValue]);
+  }, [color, disabled, error, fullWidth, id, name, label, margin, placeholder, required, size, variant, helperText, setNumberValue, onBlur, onChange, decimal]);
 
   if (fast) {
     return <FastField name={name}>
