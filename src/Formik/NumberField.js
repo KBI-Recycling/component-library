@@ -80,12 +80,8 @@ const NumberField = (props) => {
         if (onChange) onChange({event, field, form, meta});
       },
       onKeyDown: e => {
-        if (e.keyCode >= 48 && e.keyCode <= 57) e.persist();
-        else if (e.keyCode >= 96 && e.keyCode <= 105) e.persist();
-        else if (e.keyCode === 8) e.persist();
-        else if (e.keyCode === 9) e.persist();
-        else if (e.keyCode === 13) e.persist();
-        else if (e.keyCode === 46) e.persist();
+        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
+        if (persistKeyCodes.includes(e.keyCode)) e.persist();
         else if (e.keyCode === 190) {
           if (field.value.split('.').length > 1) e.preventDefault();
           else e.persist();

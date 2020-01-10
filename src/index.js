@@ -9,9 +9,11 @@ import {default as DateField} from './Formik/DateField';
 import {default as PasswordField} from './Formik/PasswordField';
 import {default as RadioGroup} from './Formik/RadioGroup';
 import {default as SelectField} from './Formik/SelectField';
+import {default as SwitchField} from './Formik/SwitchField';
+import {default as WeightField} from './Formik/WeightField';
 
-export {default as Hello} from './TestComponent/Hello';
-export * from './TestComponent/Hello';
+export {default as ValidationExample} from './TestComponent/ValidationExample';
+export * from './TestComponent/ValidationExample';
 
 export const Formik = {
   FormikForm,
@@ -25,6 +27,8 @@ export const Formik = {
   RadioGroup,
   SelectField,
   AutoCompleteObject,
+  SwitchField,
+  WeightField,
 };
 /*
 export {default as Formik} from './Formik/';

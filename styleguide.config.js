@@ -28,6 +28,8 @@ module.exports = {
         'src/Formik/RadioGroup.js',
         'src/Formik/SelectField.js',
         'src/Formik/AutoCompleteObject.js',
+        'src/Formik/SwitchField.js',
+        'src/Formik/WeightField.js',
       ],
     },
   ],
