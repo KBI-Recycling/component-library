@@ -1,5 +1,5 @@
 How to Access:
-```static
+```html
 import {Formik} from '@kbi/component-library';
 const {NumberField} = Formik;
 ```
