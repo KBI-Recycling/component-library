@@ -5,8 +5,9 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import {FastField, Field} from 'formik';
 
 /**
- * A component that wraps Material UI TextField with Formik form context and only accepts number inputs. Decimal places can be set via the "decimal" prop. Commonly used TextField props are described below in the PROPS & METHODS section.
- * Less common props can also be passed; see <a href='https://material-ui.com/api/text-field/' target="_blank">TextField API</a> for details.
+ * A component that wraps Material UI TextField with Formik form context and only accepts number inputs. Decimal places can be set via the "decimal" prop.
+ * Commonly used TextField props are described below in the PROPS & METHODS section. Less common props can also be passed;
+ * see <a href='https://material-ui.com/api/text-field/' target="_blank">TextField API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
@@ -29,14 +30,11 @@ const NumberField = (props) => {
     id,
     label,
     margin,
-    multiline,
     name,
     onBlur,
     onChange,
     placeholder,
     required,
-    rows,
-    rowsMax,
     size,
     variant,
     ...otherProps
@@ -63,11 +61,8 @@ const NumberField = (props) => {
       InputProps: {endAdornment: <InputAdornment position="end">No.</InputAdornment>},
       label: label || name,
       margin,
-      multiline,
       placeholder,
       required,
-      rows,
-      rowsMax,
       size,
       variant,
       onBlur: event => {
@@ -79,16 +74,16 @@ const NumberField = (props) => {
         field.onChange(event);
         if (onChange) onChange({event, field, form, meta});
       },
-      onKeyDown: e => {
+      onKeyDown: event => {
         const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-        if (persistKeyCodes.includes(e.keyCode)) e.persist();
-        else if (e.keyCode === 190) {
-          if (field.value.split('.').length > 1) e.preventDefault();
-          else e.persist();
-        } else e.preventDefault();
+        if (persistKeyCodes.includes(event.keyCode)) event.persist();
+        else if (event.keyCode === 190 && field.value.split('.').length <= 1) event.persist();
+        else if (event.keyCode === 38) form.setFieldValue(name, (Math.round(field.value) + 1).toString());
+        else if (event.keyCode === 40) form.setFieldValue(name, (Math.round(field.value) + 1).toString());
+        else event.preventDefault();
       },
     };
-  }, [color, disabled, error, fullWidth, helperText, id, label, margin, multiline, name, onBlur, onChange, placeholder, required, rows, rowsMax, size, variant, setNumberValue]);
+  }, [color, disabled, error, fullWidth, helperText, id, label, margin, name, onBlur, onChange, placeholder, required, size, variant, setNumberValue]);
 
   if (fast) {
     return <FastField name={name}>
@@ -108,7 +103,6 @@ NumberField.defaultProps = {
   fast: false,
   fullWidth: true,
   margin: 'dense',
-  multiline: false,
   required: false,
   variant: 'standard',
 };
@@ -133,22 +127,16 @@ NumberField.propTypes = {
   label: PropTypes.string,
   /** If `dense` or `normal`, will adjust vertical spacing of this and contained components. */
   margin: PropTypes.oneOf(['none', 'dense', 'normal']),
-  /** if true, a `textarea` element will be rendered instead of an input. */
-  multiline: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, form, meta}) => {}`; */
   onBlur: PropTypes.func,
-  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, form, meta}) => {}`; */
   onChange: PropTypes.func,
   /** The short hint displayed in the input before the user enters a value. */
   placeholder: PropTypes.string,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
-  /** Number of rows to display when multiline option is set to true. */
-  rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  /** Maximum number of rows to display when multiline option is set to true. */
-  rowsMax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** The size of the text field. */
   size: PropTypes.oneOf(['small', 'medium']),
   /** The variant to use. */
