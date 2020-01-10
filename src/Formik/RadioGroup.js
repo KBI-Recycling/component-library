@@ -6,7 +6,8 @@ import MuiRadioGroup from '@material-ui/core/RadioGroup';
 
 /**
  * A component that wraps Material UI FormControl and RadioGroup with Formik form context. Commonly used FormControl props are described below in the PROPS & METHODS section.
- * Less common props can also be passed; see <a href='https://material-ui.com/api/form-control/' target="_blank">FormControl API</a> and <a href='https://material-ui.com/api/radio/' target="_blank">Radio API</a> for details.
+ * Less common props can also be passed; see <a href='https://material-ui.com/api/form-control/' target="_blank">FormControl API</a>
+ * and <a href='https://material-ui.com/api/radio/' target="_blank">Radio API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
