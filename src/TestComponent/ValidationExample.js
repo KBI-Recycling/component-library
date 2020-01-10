@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
-import PropTypes from 'prop-types';
 import {Formik, Form} from 'formik';
 import {FormControlLabel, Grid, MenuItem, Radio} from '@material-ui/core';
 import {AutoComplete, AutoCompleteObject, addYupMethod, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
 import {object, string, date, number, boolean} from 'yup';
+
 /**
  * A test component used to try out Formik components with validation.
  *
@@ -16,7 +16,6 @@ import {object, string, date, number, boolean} from 'yup';
  *
  */
 addYupMethod();
-console.log(object());
 const ValidationExample = () => {
   const defaultFormik = {
     Text: '',
@@ -122,9 +121,4 @@ const ValidationExample = () => {
   );
 };
 
-ValidationExample.defaultProps = {
-  text: 'World',
-};
-ValidationExample.propTypes = {
-};
 export default ValidationExample;
