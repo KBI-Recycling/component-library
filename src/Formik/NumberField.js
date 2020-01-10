@@ -79,7 +79,7 @@ const NumberField = (props) => {
         if (persistKeyCodes.includes(event.keyCode)) event.persist();
         else if (event.keyCode === 190 && field.value.split('.').length <= 1) event.persist();
         else if (event.keyCode === 38) form.setFieldValue(name, (Math.round(field.value) + 1).toString());
-        else if (event.keyCode === 40) form.setFieldValue(name, (Math.round(field.value) + 1).toString());
+        else if (event.keyCode === 40) form.setFieldValue(name, (Math.round(field.value) - 1).toString());
         else event.preventDefault();
       },
     };
