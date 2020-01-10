@@ -1,0 +1,6 @@
+Hello example:
+
+```js
+<ValidationExample />
+
+```

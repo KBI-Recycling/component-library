@@ -1,13 +1,12 @@
 import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
-import {InputAdornment, TextField} from '@material-ui/core';
+import MuiTextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import {FastField, Field} from 'formik';
 
 /**
- * A component that wraps Material UI TextField with Formik form context. Hardcoded to only accept number inputs and to round to nearest hundredth
- * decimal. Default hundredth decimal can be changed; see `decimal` prop below for details. Also, has a hardcoded '$' `InputAdornment`. Commonly
- * used TextField props are described below in the PROPS & METHODS section. Less common props can also be passed; see <a href='https://material-ui.com/api/text-field/' target="_blank">
- * TextField API</a> for details.
+ * A component that wraps Material UI TextField with Formik form context and only accepts number inputs. Units can be set via the "unit" prop. Commonly used TextField props are described below in the PROPS & METHODS section.
+ * Less common props can also be passed; see <a href='https://material-ui.com/api/text-field/' target="_blank">TextField API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
@@ -18,7 +17,7 @@ import {FastField, Field} from 'formik';
  * @public
  *
  */
-const CurrencyField = (props) => {
+const WeightField = (props) => {
   const {
     color,
     decimal,
@@ -30,15 +29,24 @@ const CurrencyField = (props) => {
     id,
     label,
     margin,
+    multiline,
     name,
     onBlur,
     onChange,
     placeholder,
     required,
+    rows,
+    rowsMax,
     size,
+    unit,
     variant,
     ...otherProps
   } = props;
+  const setWeightValue = useCallback((field, form) => {
+    const value = parseFloat(field.value).toFixed(decimal);
+    if (!isNaN(value)) form.setFieldValue(field.name, value);
+    else form.setFieldValue(field.name, '');
+  }, [decimal]);
   const textFieldProps = useCallback(formik => {
     const {field, form, meta} = formik;
     return {
@@ -53,63 +61,62 @@ const CurrencyField = (props) => {
         else return '';
       })(),
       id: id || name,
-      InputProps: {startAdornment: <InputAdornment position="start">$</InputAdornment>},
+      InputProps: {endAdornment: <InputAdornment position="end">{unit}</InputAdornment>},
       label: label || name,
       margin,
+      multiline,
       placeholder,
       required,
+      rows,
+      rowsMax,
       size,
       variant,
       onBlur: event => {
-        const setCurrencyValue = () => {
-          const value = parseFloat(field.value).toFixed(decimal);
-          if (!isNaN(value)) form.setFieldValue(name, value);
-          else form.setFieldValue(name, '');
-        };
         field.onBlur(event);
+        setWeightValue(field, form);
         if (onBlur) onBlur({event, field, form, meta});
-        if (event.target.value === '') form.setFieldValue(name, '0.00');
-        else setCurrencyValue();
       },
       onChange: event => {
         field.onChange(event);
         if (onChange) onChange({event, field, form, meta});
       },
-      onKeyDown: event => {
-        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-        if (persistKeyCodes.includes(event.keyCode)) event.persist();
-        else if (event.keyCode === 190 && field.value.split('.').length <= 1) event.persist();
-        else event.preventDefault();
+      onKeyDown: e => {
+        const allowedKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
+        if (allowedKeyCodes.includes(e.keyCode)) e.persist();
+        else if (e.key === '.' && field.value.split('.').length <= 1) e.persist();
+        else e.preventDefault();
       },
     };
-  }, [color, decimal, disabled, error, fullWidth, helperText, id, label, margin, name, onBlur, onChange, placeholder, required, size, variant]);
+  }, [color, disabled, error, fullWidth, helperText, id, label, margin, multiline, name, onBlur, onChange, placeholder, required, rows, rowsMax, size, unit, variant, setWeightValue]);
 
   if (fast) {
     return <FastField name={name}>
-      {formik => <TextField {...textFieldProps(formik)} {...otherProps} />}
+      {formik => <MuiTextField {...textFieldProps(formik)} {...otherProps} />}
     </FastField>;
   }
   return <Field name={name}>
-    {formik => <TextField {...textFieldProps(formik)} {...otherProps} />}
+    {formik => <MuiTextField {...textFieldProps(formik)} {...otherProps} />}
   </Field>;
 };
 
-CurrencyField.defaultProps = {
+WeightField.defaultProps = {
   color: 'primary',
-  decimal: 2,
+  decimal: 0,
   disabled: false,
   error: false,
   fast: false,
   fullWidth: true,
   margin: 'dense',
+  multiline: false,
   required: false,
+  unit: 'lbs',
   variant: 'standard',
 };
-CurrencyField.propTypes = {
+WeightField.propTypes = {
   /** The color of the component. It supports those theme colors that make sense for this component. */
   color: PropTypes.oneOf(['primary', 'secondary']),
-  /** The number of decimal spaces. */
-  decimal: PropTypes.number,
+  /** Number indicating how many decimal places to display. */
+  decimal: PropTypes.number.isRequired,
   /** If `true`, the `input` element will be disabled. */
   disabled: PropTypes.bool,
   /** If `true`, the label will be displayed in an error state. */
@@ -126,19 +133,27 @@ CurrencyField.propTypes = {
   label: PropTypes.string,
   /** If `dense` or `normal`, will adjust vertical spacing of this and contained components. */
   margin: PropTypes.oneOf(['none', 'dense', 'normal']),
+  /** if true, a `textarea` element will be rendered instead of an input. */
+  multiline: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, form, meta}) => {}`; */
+  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
   onBlur: PropTypes.func,
-  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, form, meta}) => {}`; */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
   onChange: PropTypes.func,
   /** The short hint displayed in the input before the user enters a value. */
   placeholder: PropTypes.string,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
+  /** Number of rows to display when multiline option is set to true. */
+  rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  /** Maximum number of rows to display when multiline option is set to true. */
+  rowsMax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** The size of the text field. */
   size: PropTypes.oneOf(['small', 'medium']),
+  /** String abbreviation of unit of weight */
+  unit: PropTypes.string,
   /** The variant to use. */
   variant: PropTypes.oneOf(['standard', 'outlined', 'filled']),
 };
-export default CurrencyField;
+export default WeightField;

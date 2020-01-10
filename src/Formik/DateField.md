@@ -1,27 +1,27 @@
 How to Access:
 ```html
 import {Formik} from '@kbi/component-library';
-const {CurrencyField} = Formik;
+const {DateField} = Formik;
 ```
 
-CurrencyField Examples:
+DateField Examples:
 
 ```js
 import React from 'react'
 import {Formik, Form} from 'formik';
 import {Grid, Typography} from '@material-ui/core';
 
-<Formik validateOnChange={false} initialValues={{ Amount: '2.50', AmountDecimal: '2.500' }}>
+<Formik validateOnChange={false} initialValues={{ BasicDate: '', FilledDate: '2020-01-01'}}>
   {formik => (
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography variant='caption'>Basic</Typography>
-          <CurrencyField name='Amount' id='CurrencyField:Basic' />
+          <DateField name='BasicDate' label='Date' />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography variant='caption'>Custom Decimal</Typography>
-          <CurrencyField name='AmountDecimal' decimal={3} label='Amount' id='CurrencyField:Decimal' />
+          <Typography variant='caption'>Pre-filled</Typography>
+          <DateField name='FilledDate' label='Date' />
         </Grid>
       </Grid>
     </Form>
