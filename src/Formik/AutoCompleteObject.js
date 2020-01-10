@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+/* eslint-disable no-invalid-this */
 import React, {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {Autocomplete} from '@material-ui/lab';
@@ -9,9 +10,9 @@ import {TextField} from '@material-ui/core';
 import * as Yup from 'yup';
 
 /**
- * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop; see <a href='https://material-ui.com/api/text-field/' target="_blank">
- * TextField API</a> for details.
- * This component returns the object associated with the selected option and requires special validation via the use of the "exists" method added to Yup validation.
+ * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop;
+ * see <a href='https://material-ui.com/api/text-field/' target="_blank"> TextField API</a> for details. This component returns the object associated with the
+ * selected option and requires special validation via the use of the "exists" method added to Yup validation.
  *
  * (add more examples utilizing more prop options)
  *
@@ -99,7 +100,7 @@ export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlig
       },
       onFocus: e => setShrunkLabel(true),
     });
-  }, [autoHighlight, autoSelect, disableClearable, filterOptions, filterSelectedOptions, freeSolo, loading, loadingText, multiple, name, noOptionsText, onBlur, onChange, optionKey, options, otherProps.disabled, shrunkLabel, textFieldProps]);
+  }, [autoHighlight, autoSelect, disableClearable, filterOptions, filterSelectedOptions, freeSolo, loading, loadingText, multiple, name, noOptionsText, onBlur, onChange, optionKey, options, otherProps.disabled, shrunkLabel, textFieldProps]); //eslint-disable-line
 
   if (fast) {
     return (
@@ -170,7 +171,6 @@ AutoCompleteObject.propTypes = {
 
 // eslint-disable-next-line require-jsdoc
 export function addYupMethod() {
-  console.log('I ran');
   Yup.addMethod(Yup.object, 'exists', function(message) {
     return this.test('not empty string', message, function(value) {
       if (!value) {
