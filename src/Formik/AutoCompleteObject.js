@@ -14,7 +14,7 @@ import * as Yup from 'yup';
  * see <a href='https://material-ui.com/api/text-field/' target="_blank"> TextField API</a> for details. This component returns the object associated with the
  * selected option and requires special validation via the use of the "exists" method added to Yup validation.
  *
- * (add more examples utilizing more prop options)
+ * To add validation to AutoCompleteObject, include 'validateAutoObject' in the import statement and call it before defining the React component.
  *
  *
  * @version 1.0.0
@@ -170,10 +170,10 @@ AutoCompleteObject.propTypes = {
 };
 
 // eslint-disable-next-line require-jsdoc
-export function addYupMethod() {
+export function validateAutoObject() {
   Yup.addMethod(Yup.object, 'exists', function(message) {
     return this.test('not empty string', message, function(value) {
-      if (!value) {
+      if (!value && value !== null) {
         throw this.createError({
           path: `${this.path}`,
         });

@@ -1,7 +1,8 @@
 How to Access:
 ```html
 import {Formik} from '@kbi/component-library';
-const {AutoCompleteObject} = Formik;
+const {AutoCompleteObject, validateAutoObject} = Formik;
+validateAutoObject();
 ```
 
 AutoCompleteObject Examples:

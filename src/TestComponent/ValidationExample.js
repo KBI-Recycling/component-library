@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {Formik, Form} from 'formik';
 import {FormControlLabel, Grid, MenuItem, Radio} from '@material-ui/core';
-import {AutoComplete, AutoCompleteObject, addYupMethod, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
+import {AutoComplete, AutoCompleteObject, validateAutoObject, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
 import {object, string, date, number, boolean} from 'yup';
 
 /**
@@ -15,7 +15,7 @@ import {object, string, date, number, boolean} from 'yup';
  * @public
  *
  */
-addYupMethod();
+validateAutoObject();
 const ValidationExample = () => {
   const defaultFormik = {
     Text: '',
@@ -33,7 +33,7 @@ const ValidationExample = () => {
   const validationSchema = object().shape({
     Text: string().required(),
     Auto: string().required(),
-    AutoObject: object().exists('AutoObject is a required field.').nullable(),
+    AutoObject: object().exists('AutoObject is a required field.'),
     Currency: number().required().min(5).max(30),
     Date: date().required(),
     Number: number().required(),
@@ -54,7 +54,7 @@ const ValidationExample = () => {
   }), []);
 
   const autoObjectProps = useMemo(() => ({
-    name: 'Automatic',
+    name: 'AutoObject',
     label: 'AutoCompleteObject',
     options: [{name: 'Chris', info: 123}, {name: 'Dan', info: 456}, {name: 'Gerry', info: 789}],
     optionKey: 'name',
