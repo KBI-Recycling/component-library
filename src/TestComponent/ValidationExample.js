@@ -2,9 +2,8 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Formik, Form} from 'formik';
 import {FormControlLabel, Grid, MenuItem, Radio} from '@material-ui/core';
-import {AutoComplete, AutoCompleteObject, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
+import {AutoComplete, AutoCompleteObject, addYupMethod, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
 import {object, string, date, number, boolean} from 'yup';
-
 /**
  * A test component used to try out Formik components with validation.
  *
@@ -16,6 +15,8 @@ import {object, string, date, number, boolean} from 'yup';
  * @public
  *
  */
+addYupMethod();
+console.log(object());
 const ValidationExample = () => {
   const defaultFormik = {
     Text: '',
@@ -33,7 +34,7 @@ const ValidationExample = () => {
   const validationSchema = object().shape({
     Text: string().required(),
     Auto: string().required(),
-    // AutoObject: string().required(),
+    AutoObject: object().exists('AutoObject is a required field.').nullable(),
     Currency: number().required().min(5).max(30),
     Date: date().required(),
     Number: number().required(),
@@ -50,6 +51,13 @@ const ValidationExample = () => {
     name: 'Auto',
     label: 'AutoComplete',
     options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
+    optionKey: 'name',
+  }), []);
+
+  const autoObjectProps = useMemo(() => ({
+    name: 'Automatic',
+    label: 'AutoCompleteObject',
+    options: [{name: 'Chris', info: 123}, {name: 'Dan', info: 456}, {name: 'Gerry', info: 789}],
     optionKey: 'name',
   }), []);
   return (
@@ -70,6 +78,9 @@ const ValidationExample = () => {
               </Grid>
               <Grid item xs={12}>
                 <AutoComplete {...autoProps} />
+              </Grid>
+              <Grid item xs={12}>
+                <AutoCompleteObject {...autoObjectProps} />
               </Grid>
               <Grid item xs={12}>
                 <CurrencyField name='Currency' />

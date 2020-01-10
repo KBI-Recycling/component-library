@@ -6,6 +6,7 @@ import {createFilterOptions} from '@material-ui/lab/Autocomplete';
 import {Field, FastField} from 'formik';
 import get from 'lodash.get';
 import {TextField} from '@material-ui/core';
+import * as Yup from 'yup';
 
 /**
  * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop; see <a href='https://material-ui.com/api/text-field/' target="_blank">
@@ -25,7 +26,7 @@ import {TextField} from '@material-ui/core';
  *
  */
 // eslint-disable-next-line max-len
-const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
+export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
   const [shrunkLabel, setShrunkLabel] = useState(false);
   const filterOptions = createFilterOptions({
     matchFrom: 'any',
@@ -166,4 +167,18 @@ AutoCompleteObject.propTypes = {
   /** Array of objects. These are referenced by the 'optionKey' prop. */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
-export default AutoCompleteObject;
+
+// eslint-disable-next-line require-jsdoc
+export function addYupMethod() {
+  console.log('I ran');
+  Yup.addMethod(Yup.object, 'exists', function(message) {
+    return this.test('not empty string', message, function(value) {
+      if (!value) {
+        throw this.createError({
+          path: `${this.path}`,
+        });
+      }
+      return true;
+    });
+  });
+}
