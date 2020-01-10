@@ -112,9 +112,9 @@ DateField.propTypes = {
   margin: PropTypes.oneOf(['none', 'dense', 'normal']),
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, form, meta}) => {}`; */
   onBlur: PropTypes.func,
-  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, form, meta}) => {}`; */
   onChange: PropTypes.func,
   /** The short hint displayed in the input before the user enters a value. */
   placeholder: PropTypes.string,
