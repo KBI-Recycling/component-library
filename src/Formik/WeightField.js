@@ -29,14 +29,11 @@ const WeightField = (props) => {
     id,
     label,
     margin,
-    multiline,
     name,
     onBlur,
     onChange,
     placeholder,
     required,
-    rows,
-    rowsMax,
     size,
     unit,
     variant,
@@ -64,11 +61,8 @@ const WeightField = (props) => {
       InputProps: {endAdornment: <InputAdornment position="end">{unit}</InputAdornment>},
       label: label || name,
       margin,
-      multiline,
       placeholder,
       required,
-      rows,
-      rowsMax,
       size,
       variant,
       onBlur: event => {
@@ -80,14 +74,16 @@ const WeightField = (props) => {
         field.onChange(event);
         if (onChange) onChange({event, field, form, meta});
       },
-      onKeyDown: e => {
+      onKeyDown: event => {
         const allowedKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-        if (allowedKeyCodes.includes(e.keyCode)) e.persist();
-        else if (e.key === '.' && field.value.split('.').length <= 1) e.persist();
-        else e.preventDefault();
+        if (allowedKeyCodes.includes(event.keyCode)) event.persist();
+        else if (event.key === '.' && field.value.split('.').length <= 1) event.persist();
+        else if (event.keyCode === 38) form.setFieldValue(name, (Number(field.value) + 1).toFixed(decimal));
+        else if (event.keyCode === 40) form.setFieldValue(name, (Number(field.value) - 1).toFixed(decimal));
+        else event.preventDefault();
       },
     };
-  }, [color, disabled, error, fullWidth, helperText, id, label, margin, multiline, name, onBlur, onChange, placeholder, required, rows, rowsMax, size, unit, variant, setWeightValue]);
+  }, [color, disabled, error, fullWidth, id, name, unit, label, margin, placeholder, required, size, variant, helperText, setWeightValue, onBlur, onChange, decimal]);
 
   if (fast) {
     return <FastField name={name}>
@@ -133,8 +129,6 @@ WeightField.propTypes = {
   label: PropTypes.string,
   /** If `dense` or `normal`, will adjust vertical spacing of this and contained components. */
   margin: PropTypes.oneOf(['none', 'dense', 'normal']),
-  /** if true, a `textarea` element will be rendered instead of an input. */
-  multiline: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
   /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
@@ -145,10 +139,6 @@ WeightField.propTypes = {
   placeholder: PropTypes.string,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
-  /** Number of rows to display when multiline option is set to true. */
-  rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  /** Maximum number of rows to display when multiline option is set to true. */
-  rowsMax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** The size of the text field. */
   size: PropTypes.oneOf(['small', 'medium']),
   /** String abbreviation of unit of weight */
