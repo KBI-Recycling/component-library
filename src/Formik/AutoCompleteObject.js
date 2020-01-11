@@ -39,7 +39,7 @@ export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlig
     return {
       ...field,
       disabled: form.isSubmitting,
-      error: meta.touched && meta.error,
+      error: Boolean(meta.touched && meta.error),
       fullWidth: true,
       helperText: (() => {
         if (meta.touched && meta.error) return meta.error;
@@ -171,12 +171,18 @@ AutoCompleteObject.propTypes = {
 
 // eslint-disable-next-line require-jsdoc
 export function validateAutoObject() {
-  Yup.addMethod(Yup.object, 'exists', function(message) {
+  Yup.addMethod(Yup.mixed, 'exists', function(message) {
     return this.test('not empty string', message, function(value) {
-      if (!value && value !== null) {
+      if (typeof value === 'undefined') {
         throw this.createError({
           path: `${this.path}`,
         });
+      } else if (typeof value === 'object' && value !== null) {
+        if (Array.isArray(value) && value.length === 0) {
+          throw this.createError({
+            path: `${this.path}`,
+          });
+        }
       }
       return true;
     });

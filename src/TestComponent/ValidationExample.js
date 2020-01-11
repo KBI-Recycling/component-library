@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {Formik, Form} from 'formik';
 import {FormControlLabel, Grid, MenuItem, Radio} from '@material-ui/core';
 import {AutoComplete, AutoCompleteObject, validateAutoObject, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
-import {object, string, date, number, boolean} from 'yup';
+import {object, mixed, string, date, number, boolean} from 'yup';
 
 /**
  * A test component used to try out Formik components with validation.
@@ -33,7 +33,7 @@ const ValidationExample = () => {
   const validationSchema = object().shape({
     Text: string().required(),
     Auto: string().required(),
-    AutoObject: object().exists('AutoObject is a required field.'),
+    AutoObject: mixed().exists('AutoObject is a required field.').required(),
     Currency: number().required().min(5).max(30),
     Date: date().required(),
     Number: number().required(),
@@ -58,6 +58,7 @@ const ValidationExample = () => {
     label: 'AutoCompleteObject',
     options: [{name: 'Chris', info: 123}, {name: 'Dan', info: 456}, {name: 'Gerry', info: 789}],
     optionKey: 'name',
+    multiple: true,
   }), []);
   return (
     <>
@@ -69,53 +70,56 @@ const ValidationExample = () => {
         validateOnChange={true}
         validateOnBlur={true}
       >
-        {formik => (
-          <Form style={{width: '100%'}}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <TextField name='Text' />
+        {formik => {
+          // console.log(formik.values.AutoObject);
+          return (
+            <Form style={{width: '100%'}}>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>
+                  <TextField name='Text' />
+                </Grid>
+                <Grid item xs={12}>
+                  <AutoComplete {...autoProps} />
+                </Grid>
+                <Grid item xs={12}>
+                  <AutoCompleteObject {...autoObjectProps} />
+                </Grid>
+                <Grid item xs={12}>
+                  <CurrencyField name='Currency' />
+                </Grid>
+                <Grid item xs={12}>
+                  <DateField name='Date' />
+                </Grid>
+                <Grid item xs={12}>
+                  <NumberField name='Number' />
+                </Grid>
+                <Grid item xs={12}>
+                  <PasswordField name='Password' />
+                </Grid>
+                <Grid item xs={12}>
+                  <SelectField name='Select'>
+                    <MenuItem value={'Chris'}>Chris</MenuItem>
+                    <MenuItem value={'Dan'}>Dan</MenuItem>
+                    <MenuItem value={'Gerry'}>Gerry</MenuItem>
+                  </SelectField>
+                </Grid>
+                <Grid item xs={12}>
+                  <WeightField name='Weight' />
+                </Grid>
+                <Grid item xs={12}>
+                  <RadioGroup name='Radio'>
+                    <FormControlLabel value="Gerry" control={<Radio />} label="Gerry" />
+                    <FormControlLabel value="Dan" control={<Radio />} label="Dan" />
+                    <FormControlLabel value="Chris" control={<Radio />} label="Chris" />
+                  </RadioGroup>
+                </Grid>
+                <Grid item xs={12}>
+                  <SwitchField name='Switch' />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <AutoComplete {...autoProps} />
-              </Grid>
-              <Grid item xs={12}>
-                <AutoCompleteObject {...autoObjectProps} />
-              </Grid>
-              <Grid item xs={12}>
-                <CurrencyField name='Currency' />
-              </Grid>
-              <Grid item xs={12}>
-                <DateField name='Date' />
-              </Grid>
-              <Grid item xs={12}>
-                <NumberField name='Number' />
-              </Grid>
-              <Grid item xs={12}>
-                <PasswordField name='Password' />
-              </Grid>
-              <Grid item xs={12}>
-                <SelectField name='Select'>
-                  <MenuItem value={'Chris'}>Chris</MenuItem>
-                  <MenuItem value={'Dan'}>Dan</MenuItem>
-                  <MenuItem value={'Gerry'}>Gerry</MenuItem>
-                </SelectField>
-              </Grid>
-              <Grid item xs={12}>
-                <WeightField name='Weight' />
-              </Grid>
-              <Grid item xs={12}>
-                <RadioGroup name='Radio'>
-                  <FormControlLabel value="Gerry" control={<Radio />} label="Gerry" />
-                  <FormControlLabel value="Dan" control={<Radio />} label="Dan" />
-                  <FormControlLabel value="Chris" control={<Radio />} label="Chris" />
-                </RadioGroup>
-              </Grid>
-              <Grid item xs={12}>
-                <SwitchField name='Switch' />
-              </Grid>
-            </Grid>
-          </Form>
-        )}
+            </Form>
+          );
+        }}
       </Formik>
     </>
   );
