@@ -5,7 +5,7 @@ import {Typography, TableCell} from '@material-ui/core';
 const MuiHeadCell = (props) => {
   const {field, title, noWrapHead} = props;
   return (
-    <TableCell key={field}>
+    <TableCell>
       <Typography noWrap={noWrapHead}>{title || field}</Typography>
     </TableCell>
   );

@@ -7,7 +7,10 @@ const MuiBodyRow = (props) => {
   const {columns, row} = props;
   return (
     <TableRow>
-      {columns.map((column, index) => <MuiBodyCell key={index} field={row[column.field]} type={column.type} />)}
+      {columns.map((column, index) => {
+        const {field, ...otherProps} = column;
+        return <MuiBodyCell key={index} field={row[field]} {...otherProps} />;
+      })}
     </TableRow>
   );
 };

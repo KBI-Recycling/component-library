@@ -5,7 +5,7 @@ import {Check, Close} from '@material-ui/icons';
 import moment from 'moment';
 
 const MuiBodyCell = (props) => {
-  const {field, type} = props;
+  const {field, type, typeDateFormat} = props;
   const typographyProps = useMemo(() => ({
     align: 'left',
     noWrap: true,
@@ -26,7 +26,9 @@ const MuiBodyCell = (props) => {
   }
   if (type === 'date') {
     return <TableCell>
-      <Typography {...typographyProps}>{moment(field).format('MM/DD/YYYY')}</Typography>
+      <Typography {...typographyProps}>
+        {moment(field).format(typeDateFormat || 'MM/DD/YYYY')}
+      </Typography>
     </TableCell>;
   }
   if (type === 'currency') {
@@ -44,5 +46,6 @@ const MuiBodyCell = (props) => {
 MuiBodyCell.propTypes = {
   field: PropTypes.string,
   type: PropTypes.oneOf(['boolean', 'numeric', 'date', 'currency']),
+  typeDateFormat: PropTypes.string,
 };
-export default MuiBodyCell;
+export default React.memo(MuiBodyCell);

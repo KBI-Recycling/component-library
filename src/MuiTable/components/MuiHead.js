@@ -8,7 +8,7 @@ const MuiHead = (props) => {
   return (
     <TableHead>
       <TableRow>
-        {columns.map((column) => <MuiHeadCell {...column} />)}
+        {columns.map((column, index) => <MuiHeadCell key={index} {...column} />)}
       </TableRow>
     </TableHead>
   );

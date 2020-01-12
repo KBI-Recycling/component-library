@@ -35,9 +35,13 @@ MuiTable.propTypes = {
     field: PropTypes.string.isRequired,
     /** Overwrites default `field` text used in the table header. */
     title: PropTypes.string,
-    /** Default: `true`. If `true`, longer text will NOT be wrapped in the column's header cell. If `false`, longer text will be wrapped, per standard browser rules. */
+    /** Data type: 'boolean', 'numeric', 'date', 'currency' */
+    type: PropTypes.string,
+    /** **Default: 'MM/DD/YYYY'.** Used to format date data types. Takes a string of tokens and replaces them with their corresponding values. See <a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js Format Docs</a> for details. */ //eslint-disable-line
+    typeDateFormat: PropTypes.string,
+    /** **Default: `true`.** If `true`, longer text will NOT be wrapped in the column's header cell. If `false`, longer text will be wrapped, per standard browser rules. */
     noWrapHead: PropTypes.bool,
-    /** Default: `false`. If `true`, longer text will NOT be wrapped in the column's body cell. If `false`, longer text will be wrapped, per standard browser rules. */
+    /** **Default: `false`.** If `true`, longer text will NOT be wrapped in the column's body cell. If `false`, longer text will be wrapped, per standard browser rules. */
     noWrapBody: PropTypes.bool,
   })).isRequired,
   data: PropTypes.array.isRequired,

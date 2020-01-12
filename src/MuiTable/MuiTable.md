@@ -32,7 +32,8 @@ const mockData = [
     {field: 'id', title: 'Id', type: 'numeric'},
     {field: 'active', title: 'Active', type: 'boolean'},
     {field: 'name', title: 'Name', type: 'string'},
-    {field: 'dateCreated', title: 'Date Created', type: 'date', noWrap: false},
+    {field: 'dateCreated', title: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD'},
+    {field: 'dateCreated', title: 'Day', type: 'date', typeDateFormat: 'dddd'},
     {field: 'gender', title: 'Gender', type: 'string'},
     {field: 'income', title: 'Income', type: 'currency'},
   ]}
