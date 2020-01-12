@@ -19,4 +19,4 @@ MuiHeadCell.propTypes = {
   title: PropTypes.string,
   noWrapHead: PropTypes.bool,
 };
-export default MuiHeadCell;
+export default React.memo(MuiHeadCell);
