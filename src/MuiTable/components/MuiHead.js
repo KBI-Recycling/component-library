@@ -18,12 +18,11 @@ MuiHead.defaultProps = {
   noWrap: true,
 };
 MuiHead.propTypes = {
-  columns: PropTypes.arrayOf(
-    PropTypes.shape({
-      field: PropTypes.string.isRequired,
-      title: PropTypes.string,
-      noWrap: PropTypes.bool,
-    }),
-  ).isRequired,
+  columns: PropTypes.arrayOf(PropTypes.shape({
+    field: PropTypes.string.isRequired,
+    title: PropTypes.string,
+    noWrapHead: PropTypes.bool,
+    noWrapBody: PropTypes.bool,
+  })).isRequired,
 };
 export default MuiHead;

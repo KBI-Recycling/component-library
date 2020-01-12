@@ -3,20 +3,20 @@ import PropTypes from 'prop-types';
 import {Typography, TableCell} from '@material-ui/core';
 
 const MuiHeadCell = (props) => {
-  const {field, title, noWrap} = props;
+  const {field, title, noWrapHead} = props;
   return (
     <TableCell key={field}>
-      <Typography noWrap={noWrap}>{title || field}</Typography>
+      <Typography noWrap={noWrapHead}>{title || field}</Typography>
     </TableCell>
   );
 };
 
 MuiHeadCell.defaultProps = {
-  noWrap: true,
+  noWrapHead: true,
 };
 MuiHeadCell.propTypes = {
   field: PropTypes.string.isRequired,
   title: PropTypes.string,
-  noWrap: PropTypes.bool,
+  noWrapHead: PropTypes.bool,
 };
 export default MuiHeadCell;

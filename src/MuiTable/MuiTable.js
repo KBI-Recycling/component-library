@@ -20,7 +20,7 @@ const MuiTable = (props) => {
   const {columns, data} = props;
   return (
     <TableContainer>
-      <Table>
+      <Table size="small">
         <MuiHead columns={columns} />
         <MuiBody columns={columns} data={data} />
       </Table>
@@ -35,14 +35,10 @@ MuiTable.propTypes = {
     field: PropTypes.string.isRequired,
     /** Overwrites default `field` text used in the table header. */
     title: PropTypes.string,
-    /** Default: `true`. If set to false, longer text will be wrapped in table cell. */
-    noWrap: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.shape({
-        head: PropTypes.string,
-        body: PropTypes.number,
-      }),
-    ]),
+    /** Default: `true`. If `true`, longer text will NOT be wrapped in the column's header cell. If `false`, longer text will be wrapped, per standard browser rules. */
+    noWrapHead: PropTypes.bool,
+    /** Default: `false`. If `true`, longer text will NOT be wrapped in the column's body cell. If `false`, longer text will be wrapped, per standard browser rules. */
+    noWrapBody: PropTypes.bool,
   })).isRequired,
   data: PropTypes.array.isRequired,
 };
