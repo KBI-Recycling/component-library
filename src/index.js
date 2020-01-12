@@ -15,6 +15,9 @@ import {default as WeightField} from './Formik/WeightField';
 export {default as ValidationExample} from './TestComponent/ValidationExample';
 export * from './TestComponent/ValidationExample';
 
+export {default as MuiTable} from './MuiTable/MuiTable';
+export * from './MuiTable/MuiTable';
+
 export const Formik = {
   FormikForm,
   SubmitButton,

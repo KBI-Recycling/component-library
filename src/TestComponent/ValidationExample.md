@@ -1,4 +1,4 @@
-Hello example:
+ValidationExample example:
 
 ```js
 <ValidationExample />

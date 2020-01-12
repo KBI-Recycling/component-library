@@ -14,6 +14,10 @@ module.exports = {
       components: 'src/TestComponent/**/*.js',
     },
     {
+      name: 'MuiTable',
+      components: 'src/MuiTable/MuiTable.js',
+    },
+    {
       name: 'Formik Components',
       components: [
         'src/Formik/FormikForm.js',
