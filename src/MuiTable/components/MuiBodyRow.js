@@ -5,10 +5,9 @@ import MuiBodyCell from './MuiBodyCell';
 
 const MuiBodyRow = (props) => {
   const {columns, row} = props;
-  console.log({columns, row});
   return (
     <TableRow>
-      {columns.map((column, cIndex) => <MuiBodyCell key={cIndex} column={column} row={row} />)}
+      {columns.map((column, index) => <MuiBodyCell key={index} field={row[column.field]} type={column.type} />)}
     </TableRow>
   );
 };

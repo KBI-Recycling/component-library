@@ -14,7 +14,8 @@
   "author": "Daniel Kinsbursky",
   "license": "ISC",
   "dependencies": {
-    "lodash.get": "^4.4.2"
+    "lodash.get": "^4.4.2",
+    "moment": "^2.24.0"
   },
   "peerDependencies": {
     "@material-ui/core": "4.x.x",
