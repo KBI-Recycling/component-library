@@ -20,7 +20,7 @@ const MuiTable = (props) => {
   const {columns, data} = props;
   return (
     <TableContainer>
-      <Table size="small">
+      <Table component='div'>
         <MuiHead columns={columns} />
         <MuiBody columns={columns} data={data} />
       </Table>

@@ -6,8 +6,8 @@ import MuiHeadCell from './MuiHeadCell';
 const MuiHead = (props) => {
   const {columns} = props;
   return (
-    <TableHead>
-      <TableRow>
+    <TableHead component='div'>
+      <TableRow component='div'>
         {columns.map((column, index) => <MuiHeadCell key={index} {...column} />)}
       </TableRow>
     </TableHead>

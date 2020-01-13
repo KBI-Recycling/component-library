@@ -15,29 +15,29 @@ const MuiBodyCell = (props) => {
     },
   }), []);
   if (type === 'boolean') {
-    return <TableCell>
+    return <TableCell component='div'>
       {field ? <Check /> : <Close />}
     </TableCell>;
   }
   if (type === 'numeric') {
-    return <TableCell>
+    return <TableCell component='div'>
       <Typography {...typographyProps}>{field.toLocaleString()}</Typography>
     </TableCell>;
   }
   if (type === 'date') {
-    return <TableCell>
+    return <TableCell component='div'>
       <Typography {...typographyProps}>
         {moment(field).format(typeDateFormat || 'MM/DD/YYYY')}
       </Typography>
     </TableCell>;
   }
   if (type === 'currency') {
-    return <TableCell>
+    return <TableCell component='div'>
       <Typography {...typographyProps}>{field.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</Typography>
     </TableCell>;
   }
   return (
-    <TableCell>
+    <TableCell component='div'>
       <Typography {...typographyProps}>{field}</Typography>
     </TableCell>
   );

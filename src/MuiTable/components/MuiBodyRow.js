@@ -6,7 +6,7 @@ import MuiBodyCell from './MuiBodyCell';
 const MuiBodyRow = (props) => {
   const {columns, row} = props;
   return (
-    <TableRow>
+    <TableRow component='div'>
       {columns.map((column, index) => {
         const {field, ...otherProps} = column;
         return <MuiBodyCell key={index} field={row[field]} {...otherProps} />;

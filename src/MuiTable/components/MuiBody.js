@@ -6,7 +6,7 @@ import MuiBodyRow from './MuiBodyRow';
 const MuiBody = (props) => {
   const {columns, data} = props;
   return (
-    <TableBody>
+    <TableBody component='div'>
       {data.map((row, index) => <MuiBodyRow key={index} columns={columns} row={row} />)}
     </TableBody>
   );
