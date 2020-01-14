@@ -4,9 +4,14 @@ import {TableRow} from '@material-ui/core';
 import MuiBodyCell from './MuiBodyCell';
 
 const MuiBodyRow = (props) => {
-  const {columns, row} = props;
+  const {columns, row, style} = props;
+  console.log(style);
+  console.log(columns.map((column, index) => {
+    const {field, ...otherProps} = column;
+    return <MuiBodyCell key={index} field={row[field]} {...otherProps} />;
+  }));
   return (
-    <TableRow component='div'>
+    <TableRow component='div' style={style}>
       {columns.map((column, index) => {
         const {field, ...otherProps} = column;
         return <MuiBodyCell key={index} field={row[field]} {...otherProps} />;

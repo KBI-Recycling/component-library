@@ -5,10 +5,14 @@ import MuiHeadCell from './MuiHeadCell';
 
 const MuiHead = (props) => {
   const {columns} = props;
+  console.log(columns);
   return (
     <TableHead component='div'>
       <TableRow component='div'>
-        {columns.map((column, index) => <MuiHeadCell key={index} {...column} />)}
+        {columns.map((column, index) => <MuiHeadCell key={index} {...column} style={{
+          flexBasis: false,
+          height: 42,
+        }} />)}
       </TableRow>
     </TableHead>
   );

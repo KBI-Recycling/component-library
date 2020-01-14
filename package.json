@@ -15,7 +15,9 @@
   "license": "ISC",
   "dependencies": {
     "lodash.get": "^4.4.2",
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "react-virtualized-auto-sizer": "^1.0.2",
+    "react-window": "^1.8.5"
   },
   "peerDependencies": {
     "@material-ui/core": "4.x.x",

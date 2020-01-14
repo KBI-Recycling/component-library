@@ -20,7 +20,7 @@ const MuiTable = (props) => {
   const {columns, data} = props;
   return (
     <TableContainer>
-      <Table component='div'>
+      <Table component='div' size='small'>
         <MuiHead columns={columns} />
         <MuiBody columns={columns} data={data} />
       </Table>
@@ -45,5 +45,7 @@ MuiTable.propTypes = {
     noWrapBody: PropTypes.bool,
   })).isRequired,
   data: PropTypes.array.isRequired,
+  /** Default: 'medium'. Affects the height and padding of table cells. */
+  size: PropTypes.oneOf(['small', 'medium']),
 };
 export default MuiTable;
