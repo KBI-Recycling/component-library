@@ -19,8 +19,8 @@ import MuiBody from './components/MuiBody';
 const MuiTable = (props) => {
   const {columns, data} = props;
   return (
-    <TableContainer>
-      <Table component='div'>
+    <TableContainer style={{height: '250px'}}>
+      <Table component='div' size='small'>
         <MuiHead columns={columns} />
         <MuiBody columns={columns} data={data} />
       </Table>
