@@ -5,9 +5,10 @@ import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
 
 /**
- * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop; see <a href='https://material-ui.com/api/text-field/' target="_blank">
- * TextField API</a> for details.
- * This component returns the string value associated with the selected option's "optionKey" property.
+ * A component that wraps Material UI Autocomplete with Formik form context. This component returns the string value associated with the selected
+ * option's "optionKey" property. Commonly used props are described below in the PROPS & METHODS section. Less common props can also be passed;
+ * see <a href='https://material-ui.com/api/autocomplete/' target="_blank">AutoComplete API</a>. Underlying TextField component can be modified through
+ * the "textFieldProps" prop; see <a href='https://material-ui.com/api/text-field/' target="_blank"> TextField API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
@@ -26,7 +27,6 @@ const AutoComplete = props => {
     autoSelect,
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
-    disableOpenOnFocus: true,
     id: name,
     getOptionLabel: (option, state) => {
       if (typeof option === 'string') return option;
@@ -112,7 +112,7 @@ AutoComplete.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
-  /** Object to stylize the underlying MUI TextField component.  */
+  /** Object to pass props to underlying MUI TextField component.  */
   textFieldProps: PropTypes.object,
 };
 export default AutoComplete;

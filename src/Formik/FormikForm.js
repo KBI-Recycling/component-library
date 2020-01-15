@@ -54,6 +54,6 @@ FormikForm.propTypes = {
   /** Your form submission handler. It is passed your forms values and the "FormikBag". ***Signature:*** `(values, formikBag) => {}` */
   onSubmit: PropTypes.func,
   /** A <a href='https://github.com/jquense/yup'>Yup schema</a> or a function that returns a Yup schema. This is used for validation. Errors are mapped by key to the inner component's `errors`. Its keys should match those of `values`. */ //eslint-disable-line
-  validationSchema: PropTypes.func,
+  validationSchema: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 export default FormikForm;
