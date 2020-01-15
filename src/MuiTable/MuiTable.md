@@ -33,7 +33,7 @@ const mockData = [
     {accessor: 'active', Header: 'Active', type: 'boolean'},
     {accessor: 'name', Header: 'Name', type: 'string'},
     {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD'},
-    {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd'},
+    {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd', disableSortBy: true},
     {accessor: 'gender', Header: 'Gender', type: 'string'},
     {accessor: 'income', Header: 'Income', type: 'currency'},
   ]}

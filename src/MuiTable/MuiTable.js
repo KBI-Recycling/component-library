@@ -6,7 +6,10 @@ import {useTable, useSortBy} from 'react-table';
 import moment from 'moment';
 
 /**
- * A test component used to try out Formik components with validation.
+ * A component that wraps <a href='https://www.npmjs.com/package/react-table target='_blank'>react-table</a> hooks
+ * with <a href='https://material-ui.com/components/tables/' target='_blank'>Material UI Table</a> components. Commonly used react-table
+ * props are described below in the PROPS & METHODS section. Less common props can also be passed; see
+ * <a href='https://github.com/tannerlinsley/react-table/blob/HEAD/docs/api/README.md' target='_blank'>react-table API</a> for details.
  *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
@@ -70,7 +73,7 @@ const MuiTable = (props) => {
             {headerGroup.headers.map(column => (
               <TableCell {...column.getHeaderProps(column.getSortByToggleProps())}>
                 {column.render('Header')}
-                <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />
+                {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
               </TableCell>
             ))}
           </TableRow>
@@ -101,7 +104,9 @@ MuiTable.propTypes = {
     accessor: PropTypes.string.isRequired,
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
-    /** Used to compare 2 rows of data and order them correctly. If a **function** is passed, it must be **memoized.** String options: `basic`, `datetime`, `alphanumeric`. Defaults to alphanumericDefaults to `alphanumeric`. */ //eslint-disable-line
+    /** Defaults to `false`. If set to `true`, the sorting for this column will be disabled. */
+    disableSortBy: PropTypes.bool,
+    /** Used to compare 2 rows of data and order them correctly. String options include: `basic`, `datetime`, and `alphanumeric`. Defaults to `alphanumeric`. If a function is passed, it **must** be memoized. **Function signature**: `(rowA: <Row>, rowB: <Row>, columnID: String, desc: Bool) => return 1 || -1`. */ //eslint-disable-line
     sortType: PropTypes.oneOfType([
       PropTypes.oneOf(['alphanumeric', 'basic', 'datetime']),
       PropTypes.func,
