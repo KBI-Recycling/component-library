@@ -2,8 +2,6 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Table, TableHead, TableBody, TableRow, TableCell} from '@material-ui/core';
 import {Check, Close} from '@material-ui/icons';
-// import MuiHead from './components/MuiHead';
-// import MuiBody from './components/MuiBody';
 import {useTable} from 'react-table';
 import moment from 'moment';
 
@@ -69,10 +67,6 @@ const MuiTable = (props) => {
           );
         })}
       </TableBody>
-      {/*
-      <MuiHead columns={columns} />
-      <MuiBody columns={columns} data={data} />
-      */}
     </Table>
   );
 };
