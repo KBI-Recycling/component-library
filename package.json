@@ -16,7 +16,8 @@
   "dependencies": {
     "lodash.get": "^4.4.2",
     "moment": "^2.24.0",
-    "react-table": "^7.0.0-rc.15"
+    "react-table": "^7.0.0-rc.15",
+    "react-window": "^1.8.5"
   },
   "peerDependencies": {
     "@material-ui/core": "4.x.x",

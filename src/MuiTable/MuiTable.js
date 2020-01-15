@@ -2,8 +2,9 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel} from '@material-ui/core';
 import {Check, Close} from '@material-ui/icons';
-import {useTable, useSortBy} from 'react-table';
+import {useTable, useSortBy, useBlockLayout} from 'react-table';
 import moment from 'moment';
+import {FixedSizeList} from 'react-window';
 
 /**
  * A component that wraps <a href='https://www.npmjs.com/package/react-table target='_blank'>react-table</a> hooks
@@ -21,6 +22,12 @@ import moment from 'moment';
  */
 
 const MuiTable = (props) => {
+  const defaultColumn = React.useMemo(
+    () => ({
+      width: 150,
+    }),
+    [],
+  );
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -63,15 +70,32 @@ const MuiTable = (props) => {
       return column;
     });
   }, [props.columns]);
-  const {getTableProps, headerGroups, rows, prepareRow} = useTable({columns, data}, useSortBy);
+  const {getTableProps, getTableBodyProps, headerGroups, rows, totalColumnsWidth, prepareRow} = useTable({columns, data, defaultColumn}, useSortBy, useBlockLayout);
+
+  const RenderRow = React.useCallback(
+    ({index, style}) => {
+      const row = rows[index];
+      prepareRow(row);
+      return (
+        <TableRow component='div' {...row.getRowProps({style})}>
+          {row.cells.map(cell => (
+            <TableCell component='div' {...cell.getCellProps()}>
+              {cell.render('Cell')}
+            </TableCell>
+          ))}
+        </TableRow>
+      );
+    },
+    [prepareRow, rows],
+  );
 
   return (
-    <Table size='small' {...getTableProps()}>
-      <TableHead>
+    <Table component='div' size='small' {...getTableProps()}>
+      <TableHead component='div'>
         {headerGroups.map(headerGroup => (
-          <TableRow {...headerGroup.getHeaderGroupProps()}>
+          <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <TableCell {...column.getHeaderProps(column.getSortByToggleProps())}>
+              <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
                 {column.render('Header')}
                 {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
               </TableCell>
@@ -79,19 +103,16 @@ const MuiTable = (props) => {
           </TableRow>
         ))}
       </TableHead>
-      <TableBody>
-        {rows.map((row, i) => {
-          prepareRow(row);
-          return (
-            <TableRow {...row.getRowProps()}>
-              {row.cells.map(cell => (
-                <TableCell {...cell.getCellProps()}>
-                  {cell.render('Cell')}
-                </TableCell>
-              ))}
-            </TableRow>
-          );
-        })}
+
+      <TableBody component='div' {...getTableBodyProps()}>
+        <FixedSizeList
+          height={400}
+          itemCount={rows.length}
+          itemSize={35}
+          width={totalColumnsWidth}
+        >
+          {RenderRow}
+        </FixedSizeList>
       </TableBody>
     </Table>
   );
