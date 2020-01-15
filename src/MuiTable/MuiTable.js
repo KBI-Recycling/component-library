@@ -1,8 +1,8 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Table, TableHead, TableBody, TableRow, TableCell} from '@material-ui/core';
+import {Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel} from '@material-ui/core';
 import {Check, Close} from '@material-ui/icons';
-import {useTable} from 'react-table';
+import {useTable, useSortBy} from 'react-table';
 import moment from 'moment';
 
 /**
@@ -24,21 +24,43 @@ const MuiTable = (props) => {
   const columns = useMemo(() => {
     return props.columns.map(column => {
       if (column.type === 'boolean') {
-        return {...column, Cell: ({cell}) => cell.value ? <Check /> : <Close />}; //eslint-disable-line
+        return {
+          ...column,
+          Cell: ({cell}) => cell.value ? <Check /> : <Close />, //eslint-disable-line
+          sortType: column.sortType || 'basic',
+        };
       }
       if (column.type === 'date') {
-        return {...column, Cell: ({cell}) => moment(cell.value).format(column.typeDateFormat || 'MM/DD/YYYY')};
+        const basicDateSortType = (rowA, rowB, columnID, desc) => {
+          const momentRowA = moment(rowA.values[columnID]);
+          const momentRowB = moment(rowB.values[columnID]);
+          if (momentRowA.isBefore(momentRowB)) return -1;
+          else return 1;
+        };
+        return {
+          ...column,
+          Cell: ({cell}) => moment(cell.value).format(column.typeDateFormat || 'MM/DD/YYYY'),
+          sortType: column.sortType || basicDateSortType,
+        };
       }
       if (column.type === 'numeric') {
-        return {...column, Cell: ({cell}) => cell.value.toLocaleString()};
+        return {
+          ...column,
+          Cell: ({cell}) => cell.value.toLocaleString(),
+          sortType: column.sortType || 'alphanumeric',
+        };
       }
       if (column.type === 'currency') {
-        return {...column, Cell: ({cell}) => cell.value.toLocaleString('en-US', {style: 'currency', currency: 'USD'})};
+        return {
+          ...column,
+          Cell: ({cell}) => cell.value.toLocaleString('en-US', {style: 'currency', currency: 'USD'}),
+          sortType: column.sortType || 'alphanumeric',
+        };
       }
       return column;
     });
   }, [props.columns]);
-  const {getTableProps, headerGroups, rows, prepareRow} = useTable({columns, data});
+  const {getTableProps, headerGroups, rows, prepareRow} = useTable({columns, data}, useSortBy);
 
   return (
     <Table size='small' {...getTableProps()}>
@@ -46,8 +68,9 @@ const MuiTable = (props) => {
         {headerGroups.map(headerGroup => (
           <TableRow {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <TableCell {...column.getHeaderProps()}>
+              <TableCell {...column.getHeaderProps(column.getSortByToggleProps())}>
                 {column.render('Header')}
+                <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />
               </TableCell>
             ))}
           </TableRow>
@@ -74,18 +97,20 @@ const MuiTable = (props) => {
 MuiTable.propTypes = {
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */
   columns: PropTypes.arrayOf(PropTypes.shape({
-    /** Property that controls the header and data to be displayed in each column. Will be used in the table header by default; but can be overwritten by more descriptive `title` property. */
-    field: PropTypes.string.isRequired,
-    /** Overwrites default `field` text used in the table header. */
-    title: PropTypes.string,
+    /** Property that controls the header and data to be displayed in each column. Will be used as the table header by default; but can be overwritten by more descriptive `Header` property. */
+    accessor: PropTypes.string.isRequired,
+    /** Overwrites default `accessor` title used in the table header. */
+    Header: PropTypes.string,
+    /** Used to compare 2 rows of data and order them correctly. If a **function** is passed, it must be **memoized.** String options: `basic`, `datetime`, `alphanumeric`. Defaults to alphanumericDefaults to `alphanumeric`. */ //eslint-disable-line
+    sortType: PropTypes.oneOfType([
+      PropTypes.oneOf(['alphanumeric', 'basic', 'datetime']),
+      PropTypes.func,
+    ]),
     /** Data type: 'boolean', 'numeric', 'date', 'currency' */
     type: PropTypes.string,
     /** **Default: 'MM/DD/YYYY'.** Used to format date data types. Takes a string of tokens and replaces them with their corresponding values. See <a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js Format Docs</a> for details. */ //eslint-disable-line
     typeDateFormat: PropTypes.string,
-    /** **Default: `true`.** If `true`, longer text will NOT be wrapped in the column's header cell. If `false`, longer text will be wrapped, per standard browser rules. */
-    noWrapHead: PropTypes.bool,
-    /** **Default: `false`.** If `true`, longer text will NOT be wrapped in the column's body cell. If `false`, longer text will be wrapped, per standard browser rules. */
-    noWrapBody: PropTypes.bool,
+
   })).isRequired,
   data: PropTypes.array.isRequired,
 };
