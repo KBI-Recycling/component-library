@@ -34,6 +34,7 @@ const AutoComplete = props => {
       else if (typeof option === 'object') return option[optionKey];
       else return '';
     },
+    ListboxProps: {style: {maxHeight: '200px'}},
     options,
     onBlur: e => {
       form.setFieldTouched(field.name, true);
