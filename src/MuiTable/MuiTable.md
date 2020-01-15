@@ -29,13 +29,13 @@ const mockData = [
 <MuiTable
   data={mockData}
   columns={[
-    {field: 'id', title: 'Id', type: 'numeric'},
-    {field: 'active', title: 'Active', type: 'boolean'},
-    {field: 'name', title: 'Name', type: 'string'},
-    {field: 'dateCreated', title: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD'},
-    {field: 'dateCreated', title: 'Day', type: 'date', typeDateFormat: 'dddd'},
-    {field: 'gender', title: 'Gender', type: 'string'},
-    {field: 'income', title: 'Income', type: 'currency'},
+    {accessor: 'id', Header: 'Id', type: 'numeric'},
+    {accessor: 'active', Header: 'Active', type: 'boolean'},
+    {accessor: 'name', Header: 'Name', type: 'string'},
+    {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD'},
+    {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd'},
+    {accessor: 'gender', Header: 'Gender', type: 'string'},
+    {accessor: 'income', Header: 'Income', type: 'currency'},
   ]}
 />
 ```

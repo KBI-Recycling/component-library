@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {TableContainer, Table} from '@material-ui/core';
-import MuiHead from './components/MuiHead';
-import MuiBody from './components/MuiBody';
+import {Table, TableHead, TableBody, TableRow, TableCell} from '@material-ui/core';
+import {Check, Close} from '@material-ui/icons';
+// import MuiHead from './components/MuiHead';
+// import MuiBody from './components/MuiBody';
+import {useTable} from 'react-table';
+import moment from 'moment';
 
 /**
  * A test component used to try out Formik components with validation.
@@ -17,14 +20,60 @@ import MuiBody from './components/MuiBody';
  */
 
 const MuiTable = (props) => {
-  const {columns, data} = props;
+  const data = useMemo(() => {
+    return props.data;
+  }, [props.data]);
+  const columns = useMemo(() => {
+    return props.columns.map(column => {
+      if (column.type === 'boolean') {
+        return {...column, Cell: ({cell}) => cell.value ? <Check /> : <Close />}; //eslint-disable-line
+      }
+      if (column.type === 'date') {
+        return {...column, Cell: ({cell}) => moment(cell.value).format(column.typeDateFormat || 'MM/DD/YYYY')};
+      }
+      if (column.type === 'numeric') {
+        return {...column, Cell: ({cell}) => cell.value.toLocaleString()};
+      }
+      if (column.type === 'currency') {
+        return {...column, Cell: ({cell}) => cell.value.toLocaleString('en-US', {style: 'currency', currency: 'USD'})};
+      }
+      return column;
+    });
+  }, [props.columns]);
+  const {getTableProps, headerGroups, rows, prepareRow} = useTable({columns, data});
+
   return (
-    <TableContainer style={{height: '250px'}}>
-      <Table component='div' size='small'>
-        <MuiHead columns={columns} />
-        <MuiBody columns={columns} data={data} />
-      </Table>
-    </TableContainer>
+    <Table size='small' {...getTableProps()}>
+      <TableHead>
+        {headerGroups.map(headerGroup => (
+          <TableRow {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map(column => (
+              <TableCell {...column.getHeaderProps()}>
+                {column.render('Header')}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableHead>
+      <TableBody>
+        {rows.map((row, i) => {
+          prepareRow(row);
+          return (
+            <TableRow {...row.getRowProps()}>
+              {row.cells.map(cell => (
+                <TableCell {...cell.getCellProps()}>
+                  {cell.render('Cell')}
+                </TableCell>
+              ))}
+            </TableRow>
+          );
+        })}
+      </TableBody>
+      {/*
+      <MuiHead columns={columns} />
+      <MuiBody columns={columns} data={data} />
+      */}
+    </Table>
   );
 };
 
