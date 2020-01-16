@@ -101,7 +101,7 @@ const MuiTable = (props) => {
   // console.log(document.getElementById('top-level-table-wrapper')?.offsetWidth);
   console.log(height, width); // Where does column width come from? header cells and body cells seemingly do not share a width.
   return (
-    <div id='top-level-table-wrapper'>
+    <div id='top-level-table-wrapper' style={{overflowX: 'scroll'}}>
       <Table component='div' size='small' {...getTableProps()}>
         <TableHead component='div'>
           {headerGroups.map(headerGroup => (
