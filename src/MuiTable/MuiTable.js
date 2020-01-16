@@ -1,11 +1,11 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel} from '@material-ui/core';
+import {Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Typography} from '@material-ui/core';
 import {Check, Close} from '@material-ui/icons';
-import {useTable, useSortBy, useBlockLayout} from 'react-table';
+import {useTable, useSortBy, useBlockLayout, useFlexLayout} from 'react-table';
 import moment from 'moment';
 import {FixedSizeList} from 'react-window';
-
+import AutoSizer from 'react-virtualized-auto-sizer';
 /**
  * A component that wraps <a href='https://www.npmjs.com/package/react-table target='_blank'>react-table</a> hooks
  * with <a href='https://material-ui.com/components/tables/' target='_blank'>Material UI Table</a> components. Commonly used react-table
@@ -20,11 +20,21 @@ import {FixedSizeList} from 'react-window';
  * @public
  *
  */
+let height = window.innerHeight;
+let width = window.innerWidth;
+const reportWindowSize = () => {
+  console.log('Height: ', window.innerHeight);
+  console.log('Width: ', window.innerWidth);
+  height = window.innerHeight;
+  width = window.innerWidth;
+};
+
+window.onresize = reportWindowSize;
 
 const MuiTable = (props) => {
   const defaultColumn = React.useMemo(
     () => ({
-      width: 150,
+      minWidth: 30,
     }),
     [],
   );
@@ -70,7 +80,7 @@ const MuiTable = (props) => {
       return column;
     });
   }, [props.columns]);
-  const {getTableProps, getTableBodyProps, headerGroups, rows, totalColumnsWidth, prepareRow} = useTable({columns, data, defaultColumn}, useSortBy, useBlockLayout);
+  const {getTableProps, getTableBodyProps, headerGroups, rows, totalColumnsWidth, prepareRow} = useTable({columns, data, defaultColumn}, useSortBy, useFlexLayout);
 
   const RenderRow = React.useCallback(
     ({index, style}) => {
@@ -80,7 +90,7 @@ const MuiTable = (props) => {
         <TableRow component='div' {...row.getRowProps({style})}>
           {row.cells.map(cell => (
             <TableCell component='div' {...cell.getCellProps()}>
-              {cell.render('Cell')}
+              <Typography noWrap={true}>{cell.render('Cell')}</Typography>  {/* noWrap === {text-overflow: ellipsis}  */}
             </TableCell>
           ))}
         </TableRow>
@@ -88,33 +98,35 @@ const MuiTable = (props) => {
     },
     [prepareRow, rows],
   );
-
+  // console.log(document.getElementById('top-level-table-wrapper')?.offsetWidth);
+  console.log(height, width); // Where does column width come from? header cells and body cells seemingly do not share a width.
   return (
-    <Table component='div' size='small' {...getTableProps()}>
-      <TableHead component='div'>
-        {headerGroups.map(headerGroup => (
-          <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                {column.render('Header')}
-                {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableHead>
-
-      <TableBody component='div' {...getTableBodyProps()}>
-        <FixedSizeList
-          height={400}
-          itemCount={rows.length}
-          itemSize={35}
-          width={totalColumnsWidth}
-        >
-          {RenderRow}
-        </FixedSizeList>
-      </TableBody>
-    </Table>
+    <div id='top-level-table-wrapper'>
+      <Table component='div' size='small' {...getTableProps()}>
+        <TableHead component='div'>
+          {headerGroups.map(headerGroup => (
+            <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableHead>
+        <TableBody component='div' {...getTableBodyProps()}>
+          <FixedSizeList
+            height={400}
+            itemCount={rows.length}
+            itemSize={35}
+            width={totalColumnsWidth} // this is the total width of the table (duh)
+          >
+            {RenderRow}
+          </FixedSizeList>
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 

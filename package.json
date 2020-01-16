@@ -17,6 +17,7 @@
     "lodash.get": "^4.4.2",
     "moment": "^2.24.0",
     "react-table": "^7.0.0-rc.15",
+    "react-virtualized-auto-sizer": "^1.0.2",
     "react-window": "^1.8.5"
   },
   "peerDependencies": {
