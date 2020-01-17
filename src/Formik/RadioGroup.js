@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {Field, useField} from 'formik';
-import {FormControl, FormHelperText, FormLabel} from '@material-ui/core';
+import {FormControl, FormControlLabel, FormHelperText, FormLabel, Radio} from '@material-ui/core';
 import MuiRadioGroup from '@material-ui/core/RadioGroup';
 
 /**
@@ -19,7 +19,7 @@ import MuiRadioGroup from '@material-ui/core/RadioGroup';
  *
  */
 const RadioGroup = (props) => {
-  const {children, disabled, helperText, id, label, margin, name, onChange, required, row, ...otherProps} = props;
+  const {disabled, helperText, id, label, margin, name, onChange, radios, required, row, ...otherProps} = props;
   const [field, meta, helpers] = useField(name); //eslint-disable-line
   const formControlProps = useCallback((form) => {
     return {
@@ -41,7 +41,9 @@ const RadioGroup = (props) => {
       {formik => (
         <FormControl component="fieldset" id={name} {...formControlProps(formik.form)} {...otherProps}>
           <FormLabel component="legend">{label || name}</FormLabel>
-          <MuiRadioGroup {...formik.field} row={row}>{children}</MuiRadioGroup>
+          <MuiRadioGroup {...formik.field} row={row}>
+            {radios.map((radio, index) => <RadioField key={index} {...radio} />)}
+          </MuiRadioGroup>
           {(meta.touched && meta.error) && <FormHelperText error={true}>{meta.error}</FormHelperText>}
           {helperText && !(meta.touched && meta.error) && <FormHelperText>{helperText}</FormHelperText>}
         </FormControl>
@@ -57,8 +59,6 @@ RadioGroup.defaultProps = {
   row: false,
 };
 RadioGroup.propTypes = {
-  /** The content of the component. */
-  children: PropTypes.array,
   /** If `true`, the `FormControl` element will be disabled. */
   disabled: PropTypes.bool,
   /** If `true`, the label will be displayed in an error state. */
@@ -75,9 +75,34 @@ RadioGroup.propTypes = {
   name: PropTypes.string.isRequired,
   /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
   onChange: PropTypes.func,
+  /** Prop describing the radio inputs to be rendered */
+  radios: PropTypes.arrayOf(PropTypes.shape({
+    /** The text to be used in each individual radio's enclosing label element. */
+    label: PropTypes.string.isRequired,
+    /** The value of the Radio component. */
+    value: PropTypes.string.isRequired,
+    /** An object of props to be passed to Checkbox component; see <a href='https://material-ui.com/api/checkbox/' target='_blank'>Checkbox API</a> for details. */
+    RadioProps: PropTypes.object,
+  })).isRequired,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
   /** Display group of elements in a compact row. */
   row: PropTypes.bool,
 };
+
+const RadioField = (props) => {
+  const {RadioProps, label, value} = props;
+  const radioProps = {
+    color: 'primary',
+    ...RadioProps,
+  };
+
+  return <FormControlLabel label={label} value={value} control={<Radio {...radioProps} />} />;
+};
+RadioField.propTypes = {
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
+  RadioProps: PropTypes.object,
+};
+
 export default RadioGroup;

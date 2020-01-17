@@ -104,11 +104,11 @@ const ValidationExample = () => {
                 <WeightField name='Weight' />
               </Grid>
               <Grid item xs={12}>
-                <RadioGroup name='Radio'>
-                  <FormControlLabel value="Gerry" control={<Radio />} label="Gerry" />
-                  <FormControlLabel value="Dan" control={<Radio />} label="Dan" />
-                  <FormControlLabel value="Chris" control={<Radio />} label="Chris" />
-                </RadioGroup>
+                <RadioGroup name='Radio' radios={[
+                  {value: 'Gerry', label: 'Gerry'},
+                  {value: 'Dan', label: 'Dan'},
+                  {value: 'Chris', label: 'Chris'},
+                ]} />
               </Grid>
               <Grid item xs={12}>
                 <SwitchField name='Switch' />
