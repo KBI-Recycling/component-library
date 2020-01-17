@@ -35,15 +35,15 @@ const colorRadios = [
           <RadioGroup name='Developers' row id='RadioGroup:Row' radios={basicRadios} />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Typography variant='caption'>Basic</Typography>
+          <Typography variant='caption'>Colors</Typography>
           <RadioGroup name='Color1' id='RadioGroup:Color1' radios={colorRadios} />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Typography variant='caption'>Basic</Typography>
+          <Typography variant='caption'>Colors</Typography>
           <RadioGroup name='Color2' id='RadioGroup:Color2' radios={colorRadios} />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Typography variant='caption'>Basic</Typography>
+          <Typography variant='caption'>Colors</Typography>
           <RadioGroup name='Color3' id='RadioGroup:Color3' radios={colorRadios} />
         </Grid>
         <Grid item xs={12} sm={4}>
