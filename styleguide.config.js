@@ -18,6 +18,10 @@ module.exports = {
       components: 'src/MuiTable/MuiTable.js',
     },
     {
+      name: 'MobileTable',
+      components: 'src/MobileTable/MobileTable.js',
+    },
+    {
       name: 'Formik Components',
       components: [
         'src/Formik/FormikForm.js',

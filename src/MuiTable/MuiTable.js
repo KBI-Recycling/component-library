@@ -48,6 +48,7 @@ const MuiTable = (props) => {
           ...column,
           Cell: ({cell}) => cell.value ? <Check /> : <Close />, //eslint-disable-line
           sortType: column.sortType || 'basic',
+          width: 75,
         };
       }
       if (column.type === 'date') {
@@ -102,7 +103,7 @@ const MuiTable = (props) => {
   console.log(height, width); // Where does column width come from? header cells and body cells seemingly do not share a width.
   return (
     <div id='top-level-table-wrapper' style={{overflowX: 'scroll'}}>
-      <Table component='div' size='small' {...getTableProps()}>
+      <Table size='small' {...getTableProps()} style={{tableLayout: 'auto'}}>
         <TableHead component='div'>
           {headerGroups.map(headerGroup => (
             <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>

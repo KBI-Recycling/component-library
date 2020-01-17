@@ -18,6 +18,9 @@ export * from './TestComponent/ValidationExample';
 export {default as MuiTable} from './MuiTable/MuiTable';
 export * from './MuiTable/MuiTable';
 
+export {default as MobileTable} from './MobileTable/MobileTable';
+export * from './MobileTable/MobileTable';
+
 export const Formik = {
   FormikForm,
   SubmitButton,
