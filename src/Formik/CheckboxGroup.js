@@ -59,9 +59,9 @@ CheckboxGroup.propTypes = {
   /** Prop describing the checkboxes to be rendered */
   boxes: PropTypes.arrayOf(PropTypes.shape({
     /** The text to be used in each individual checkboxes enclosing label element. */
-    label: PropTypes.string,
+    label: PropTypes.string.isRequired,
     /** The value of the Checkbox component. */
-    value: PropTypes.string,
+    value: PropTypes.string.isRequired,
     /** An object of props to be passed to Checkbox component; see <a href='https://material-ui.com/api/checkbox/' target='_blank'>Checkbox API</a> for details. */
     CheckboxProps: PropTypes.object,
   })).isRequired,
