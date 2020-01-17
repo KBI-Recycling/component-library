@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
-import {Field} from 'formik';
+import {Field, useField} from 'formik';
 import {FormControl, FormHelperText, FormLabel} from '@material-ui/core';
 import MuiRadioGroup from '@material-ui/core/RadioGroup';
 
@@ -19,41 +19,64 @@ import MuiRadioGroup from '@material-ui/core/RadioGroup';
  *
  */
 const RadioGroup = (props) => {
-  const {children, label, name, row, ...otherProps} = props;
+  const {children, disabled, helperText, id, label, margin, name, onChange, required, row, ...otherProps} = props;
+  const [field, meta, helpers] = useField(name); //eslint-disable-line
   const formControlProps = useCallback((form) => {
     return {
-      disabled: form.isSubmitting,
+      disabled: disabled || form.isSubmitting,
       error: Boolean(form.touched[name] && form.errors[name]),
       fullWidth: true,
-      margin: 'dense',
-      ...otherProps,
+      id: id || name,
+      margin,
+      required,
+      onChange: event => {
+        field.onChange(event);
+        if (onChange) onChange({event, field, form, meta});
+      },
     };
-  }, [name, otherProps]);
+  }, [disabled, field, id, margin, meta, name, onChange, required]);
 
   return (
     <Field name={name}>
       {formik => (
-        <FormControl component="fieldset" id={name} {...formControlProps(formik.form)}>
+        <FormControl component="fieldset" id={name} {...formControlProps(formik.form)} {...otherProps}>
           <FormLabel component="legend">{label || name}</FormLabel>
           <MuiRadioGroup {...formik.field} row={row}>{children}</MuiRadioGroup>
-          {formik.form.touched[name] && formik.form.errors[name] && <FormHelperText error={true}>{formik.form.errors[name]}</FormHelperText>}
+          {(meta.touched && meta.error) && <FormHelperText error={true}>{meta.error}</FormHelperText>}
+          {helperText && !(meta.touched && meta.error) && <FormHelperText>{helperText}</FormHelperText>}
         </FormControl>
       )}
     </Field>
   );
 };
+
 RadioGroup.defaultProps = {
+  disabled: false,
+  error: false,
+  margin: 'none',
   row: false,
 };
 RadioGroup.propTypes = {
   /** The content of the component. */
   children: PropTypes.array,
+  /** If `true`, the `FormControl` element will be disabled. */
+  disabled: PropTypes.bool,
+  /** If `true`, the label will be displayed in an error state. */
+  error: PropTypes.bool,
+  /** The helper text content. ***Note:*** Formik error messages take priority over hardcoded helper text content. */
+  helperText: PropTypes.node,
+  /** The `id` of the input element. Use this prop to make label and helperText accessible for screen readers. If not set, `id` will default to `name` prop. */
+  id: PropTypes.string,
   /** The `label` content. If not set, `label` will default to `name` prop.  */
   label: PropTypes.string,
+  /** If `dense` or `normal`, will adjust vertical spacing of this and contained components. */
+  margin: PropTypes.oneOf(['none', 'dense', 'normal']),
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the input's `value` is changed. */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
   onChange: PropTypes.func,
+  /** If `true`, the label is displayed as required and the input element will be required. */
+  required: PropTypes.bool,
   /** Display group of elements in a compact row. */
   row: PropTypes.bool,
 };
