@@ -32,24 +32,26 @@ const MobileTable = (props) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  // {display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingRight: ''}
   console.log('MobileTable');
   return (
-
-    <TableContainer style={{height}}>
-      <Table component='div' size='small'>
-        <MuiHead columns={columns} />
-        <MuiBodyRow columns={columns} data={(rowsPerPage > 0 ?
-          data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) :
-          data
-        )} />
-        <TablePaginationActions
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-        />
-      </Table>
-    </TableContainer>
+    <div style={{position: 'relative'}}>
+      <TableContainer style={{height}}>
+        <Table component='div' size='small'>
+          <MuiHead columns={columns} />
+          <MuiBodyRow columns={columns} data={(rowsPerPage > 0 ?
+            data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) :
+            data
+          )} />
+        </Table>
+      </TableContainer>
+      <TablePaginationActions
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+      />
+    </div>
 
   );
 };

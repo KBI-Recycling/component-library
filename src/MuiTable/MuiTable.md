@@ -37,5 +37,6 @@ const mockData = [
     {accessor: 'gender', Header: 'Gender', type: 'string'},
     {accessor: 'income', Header: 'Income', type: 'currency'},
   ]}
+  includePagination={true}
 />
 ```

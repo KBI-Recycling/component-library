@@ -1,11 +1,18 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Typography} from '@material-ui/core';
+import {makeStyles, useTheme} from '@material-ui/core/styles';
+import {TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Typography, IconButton} from '@material-ui/core';
+import MuiPagination from './components/MuiPagination';
 import {Check, Close} from '@material-ui/icons';
-import {useTable, useSortBy, useBlockLayout, useFlexLayout} from 'react-table';
+import {useTable, useSortBy, usePagination, useFlexLayout} from 'react-table';
 import moment from 'moment';
-import {FixedSizeList} from 'react-window';
-import AutoSizer from 'react-virtualized-auto-sizer';
+// import {FixedSizeList} from 'react-window';
+// import AutoSizer from 'react-virtualized-auto-sizer';
+// import TablePaginationActions from './components/TablePaginationActions';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 /**
  * A component that wraps <a href='https://www.npmjs.com/package/react-table target='_blank'>react-table</a> hooks
  * with <a href='https://material-ui.com/components/tables/' target='_blank'>Material UI Table</a> components. Commonly used react-table
@@ -20,18 +27,17 @@ import AutoSizer from 'react-virtualized-auto-sizer';
  * @public
  *
  */
-let height = window.innerHeight;
-let width = window.innerWidth;
-const reportWindowSize = () => {
-  console.log('Height: ', window.innerHeight);
-  console.log('Width: ', window.innerWidth);
-  height = window.innerHeight;
-  width = window.innerWidth;
-};
 
-window.onresize = reportWindowSize;
+const useStyles = makeStyles(theme => ({
+  root: {
+    flexShrink: 0,
+    marginLeft: theme.spacing(2.5),
+  },
+}));
 
 const MuiTable = (props) => {
+  const classes = useStyles();
+  const theme = useTheme();
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
@@ -81,52 +87,51 @@ const MuiTable = (props) => {
       return column;
     });
   }, [props.columns]);
-  const {getTableProps, getTableBodyProps, headerGroups, rows, totalColumnsWidth, prepareRow} = useTable({columns, data, defaultColumn}, useSortBy, useFlexLayout);
 
-  const RenderRow = React.useCallback(
-    ({index, style}) => {
-      const row = rows[index];
-      prepareRow(row);
-      return (
-        <TableRow component='div' {...row.getRowProps({style})}>
-          {row.cells.map(cell => (
-            <TableCell component='div' {...cell.getCellProps()}>
-              <Typography noWrap={true}>{cell.render('Cell')}</Typography>  {/* noWrap === {text-overflow: ellipsis}  */}
-            </TableCell>
-          ))}
-        </TableRow>
-      );
-    },
-    [prepareRow, rows],
+  const {getTableProps, getTableBodyProps, headerGroups, page, totalColumnsWidth, prepareRow, canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage} = useTable(
+    {columns, data, defaultColumn, initalState: {pageIndex: 1}},
+    useSortBy,
+    useFlexLayout,
+    usePagination,
   );
-  // console.log(document.getElementById('top-level-table-wrapper')?.offsetWidth);
-  console.log(height, width); // Where does column width come from? header cells and body cells seemingly do not share a width.
+
   return (
-    <div id='top-level-table-wrapper' style={{overflowX: 'scroll'}}>
-      <Table size='small' {...getTableProps()} style={{tableLayout: 'auto'}}>
-        <TableHead component='div'>
-          {headerGroups.map(headerGroup => (
-            <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody component='div' {...getTableBodyProps()}>
-          <FixedSizeList
-            height={400}
-            itemCount={rows.length}
-            itemSize={35}
-            width={totalColumnsWidth} // this is the total width of the table (duh)
-          >
-            {RenderRow}
-          </FixedSizeList>
-        </TableBody>
-      </Table>
+    <div id='top-level-table-wrapper' style={{position: 'relative'}}>
+      <TableContainer>
+        <Table size='small' {...getTableProps()} style={{tableLayout: 'auto'}}>
+          <TableHead component='div'>
+            {headerGroups.map(headerGroup => (
+              <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableHead>
+          <TableBody component='div' {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <TableRow component='div' {...row.getRowProps()}>
+                  {row.cells.map(cell => {
+                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {props.includePagination && <MuiPagination {...{canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage}} />}
     </div>
   );
 };
@@ -151,6 +156,38 @@ MuiTable.propTypes = {
     typeDateFormat: PropTypes.string,
 
   })).isRequired,
-  data: PropTypes.array.isRequired,
+  /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /** If 'true', shows icons responsible for controlling table paging. */
+  includePagination: PropTypes.bool,
 };
 export default MuiTable;
+
+/*
+<FixedSizeList
+            height={400}
+            itemCount={rows.length}
+            itemSize={35}
+            width={totalColumnsWidth} // this is the total width of the table (duh)
+          >
+            {RenderRow}
+          </FixedSizeList>
+
+
+          const RenderRow = React.useCallback(
+    ({index, style}) => {
+      const row = rows[index];
+      prepareRow(row);
+      return (
+        <TableRow component='div' {...row.getRowProps({style})}>
+          {row.cells.map(cell => (
+            <TableCell component='div' {...cell.getCellProps()}>
+              <Typography noWrap={true}>{cell.render('Cell')}</Typography>  {/* noWrap === {text-overflow: ellipsis}  }
+              </TableCell>
+              ))}
+            </TableRow>
+          );
+        },
+        [prepareRow, rows],
+      );
+          */
