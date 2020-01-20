@@ -51,6 +51,7 @@ const SubmitButton = (props) => {
     // Hardcoding buttonPropsMemo to {margin: 0} to ensure margin style only applied in wrapperPropsMemo.
     style: {
       position: 'relative',
+      display: 'inline',
       margin: style?.margin || 0,
       marginTop: style?.marginTop || 0,
       marginRight: style?.marginRight || 0,
