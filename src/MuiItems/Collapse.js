@@ -6,7 +6,7 @@ const Collapse = (props) => {
   const [collapseState, setCollapseState] = useState(false);
   const [renderState, setRenderState] = useState(false);
   const [timer, setTimer] = useState(null);
-  // const [initialLoad, setInitialLoad] = useState(null);
+  const [initialLoad, setInitialLoad] = useState(true);
   const timeout = useMemo(() => {
     let enter = 500;
     let exit = 500;
@@ -26,7 +26,8 @@ const Collapse = (props) => {
   useEffect(() => {
     const expandCollapse = () => {
       setRenderState(true);
-      setTimeout(() => setCollapseState(true), 100);
+      if (initialLoad) setCollapseState(true);
+      else setTimeout(() => setCollapseState(true), 100);
     };
     const closeCollapse = () => {
       setTimer(setTimeout(() => setRenderState(false), timeout.exit + 100));
@@ -34,7 +35,10 @@ const Collapse = (props) => {
     };
     if (props.in) expandCollapse();
     else closeCollapse();
-  }, [props.in, timeout.exit]);
+  }, [initialLoad, props.in, timeout.exit]);
+  useEffect(() => {
+    setInitialLoad(false);
+  }, []);
 
   console.log({enter: timeout.enter, exit: timeout.exit, renderState, collapseState});
   if (!renderState) return null;
