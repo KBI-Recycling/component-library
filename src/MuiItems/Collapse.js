@@ -2,6 +2,18 @@ import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import MuiCollapse from '@material-ui/core/Collapse';
 
+/**
+ * A component that enhances Material UI Collapse by only rendering JSX within an expanded Collapse.
+ *
+ * @version 1.0.0
+ * @author [Gerry Blackmon](https://github.com/gblackiv)
+ * @author [Daniel Kinsbursky](https://github.com/kbi-daniel)
+ * @author [Chris Voss](https://github.com/ChrisJVoss)
+ * @param {object} props Properties passed down from parent component.
+ * @return {JSX} A react JSX component.
+ * @public
+ *
+ */
 const Collapse = (props) => {
   const [collapseState, setCollapseState] = useState(false);
   const [renderState, setRenderState] = useState(false);
@@ -47,14 +59,11 @@ const Collapse = (props) => {
 };
 
 Collapse.defaultProps = {
-  collapsedHeight: '0px',
   timeout: 500,
 };
 Collapse.propTypes = {
   /** The content that gets rendered by Collapse transition (e.g. `<Collapse>{children}</Collapse>`) */
   children: PropTypes.node.isRequired,
-  /** The height of the container when collapsed. */
-  collapsedHeight: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** If true, the component will transition in. */
   in: PropTypes.bool.isRequired,
   /** The duration for the transition, in milliseconds. You may specify a single timeout for all transitions, or individually with an object. Set to 'auto' to automatically calculate transition time based on height. */ //eslint-disable-line
