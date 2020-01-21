@@ -6,6 +6,7 @@ const Collapse = (props) => {
   const [collapseState, setCollapseState] = useState(false);
   const [renderState, setRenderState] = useState(false);
   const [timer, setTimer] = useState(null);
+  // const [initialLoad, setInitialLoad] = useState(null);
   const timeout = useMemo(() => {
     let enter = 500;
     let exit = 500;
@@ -28,8 +29,7 @@ const Collapse = (props) => {
       setTimeout(() => setCollapseState(true), 100);
     };
     const closeCollapse = () => {
-      const rt = setTimeout(() => setRenderState(false), timeout.exit + 100);
-      setTimer(rt);
+      setTimer(setTimeout(() => setRenderState(false), timeout.exit + 100));
       setCollapseState(false);
     };
     if (props.in) expandCollapse();
