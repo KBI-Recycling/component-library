@@ -2,10 +2,10 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Typography, IconButton} from '@material-ui/core';
-import MuiPagination from './components/MuiPagination';
 import {Check, Close} from '@material-ui/icons';
 import {useTable, useSortBy, usePagination, useFlexLayout} from 'react-table';
 import moment from 'moment';
+import {MuiHead, MuiPagination, MuiBody} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -88,7 +88,7 @@ const MuiTable = (props) => {
     });
   }, [props.columns]);
 
-  const {getTableProps, getTableBodyProps, headerGroups, page, totalColumnsWidth, prepareRow, canPreviousPage,
+  const {getTableProps, getTableBodyProps, headerGroups, page, rows, totalColumnsWidth, prepareRow, canPreviousPage,
     canNextPage,
     pageOptions,
     pageCount,
@@ -105,33 +105,11 @@ const MuiTable = (props) => {
     <div id='top-level-table-wrapper' style={{position: 'relative'}}>
       <TableContainer>
         <Table size='small' {...getTableProps()} style={{tableLayout: 'auto'}}>
-          <TableHead component='div'>
-            {headerGroups.map(headerGroup => (
-              <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render('Header')}
-                    {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-          <TableBody component='div' {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row);
-              return (
-                <TableRow component='div' {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
+          <MuiHead headerGroups={headerGroups} />
+          <MuiBody rows={page || rows} getTableBodyProps={getTableBodyProps} prepareRow={prepareRow} />
         </Table>
       </TableContainer>
-      {props.includePagination && <MuiPagination {...{canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage}} />}
+      {props.includePagination && <MuiPagination {...{canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, canPreviousPage}} />}
     </div>
   );
 };
@@ -190,4 +168,32 @@ export default MuiTable;
         },
         [prepareRow, rows],
       );
+
+
+                <TableHead component='div'>
+            {headerGroups.map(headerGroup => (
+              <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map(column => (
+                  <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableHead>
+
+
+          <TableBody component='div' {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <TableRow component='div' {...row.getRowProps()}>
+                  {row.cells.map(cell => {
+                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
           */

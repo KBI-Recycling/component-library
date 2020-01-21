@@ -15,7 +15,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const MuiPagination = ({gotoPage, canPreviousPage, previousPage, nextPage, canNextPage, pageCount}) => {
+const MuiPagination = (props) => {
+  const {gotoPage, canPreviousPage, previousPage, nextPage, canNextPage, pageCount} = props;
+  console.log(canPreviousPage);
+  console.log(canNextPage);
+  console.log(pageCount);
   const classes = useStyles();
   const theme = useTheme();
   return (
