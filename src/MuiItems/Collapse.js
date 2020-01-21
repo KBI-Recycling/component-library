@@ -30,7 +30,7 @@ const Collapse = (props) => {
       else setTimeout(() => setCollapseState(true), 100);
     };
     const closeCollapse = () => {
-      setTimer(setTimeout(() => setRenderState(false), timeout.exit + 100));
+      if (!initialLoad) setTimer(setTimeout(() => setRenderState(false), timeout.exit + 100));
       setCollapseState(false);
     };
     if (props.in) expandCollapse();
@@ -40,7 +40,6 @@ const Collapse = (props) => {
     setInitialLoad(false);
   }, []);
 
-  console.log({enter: timeout.enter, exit: timeout.exit, renderState, collapseState});
   if (!renderState) return null;
   return (
     <MuiCollapse in={collapseState} timeout={timeout}>{props.children}</MuiCollapse>
