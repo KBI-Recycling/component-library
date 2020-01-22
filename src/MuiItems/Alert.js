@@ -23,7 +23,10 @@ const Alert = (props) => {
     icon,
     role,
     severity,
-    style,
+    style: {
+      margin: '16px 0px',
+      ...style,
+    },
     variant,
   }), [closeText, color, icon, role, severity, style, variant]);
   const transitionProps = useMemo(() => ({
@@ -43,7 +46,7 @@ const Alert = (props) => {
   }), [props.in, props.timeout]);
 
   return (
-    <Collapse {...transitionProps}>
+    <Collapse {...transitionProps} style={{width: '100%'}}>
       <MuiAlert {...alertProps} onClose={props.onClose}>
         <Fade {...transitionProps}>
           <div>
