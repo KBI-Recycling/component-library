@@ -14,6 +14,13 @@ module.exports = {
       components: 'src/TestComponent/**/*.js',
     },
     {
+      name: 'Mui Items',
+      components: [
+        'src/MuiItems/Alert.js',
+        'src/MuiItems/Collapse.js',
+      ],
+    },
+    {
       name: 'Formik Components',
       components: [
         'src/Formik/FormikForm.js',
