@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Collapse} from '@material-ui/core';
+import {Collapse, Fade} from '@material-ui/core';
 import {Alert as MuiAlert, AlertTitle} from '@material-ui/lab';
 
 /**
@@ -16,16 +16,17 @@ import {Alert as MuiAlert, AlertTitle} from '@material-ui/lab';
  *
  */
 const Alert = (props) => {
-  const {closeText, color, icon, role, severity, variant} = props;
+  const {closeText, color, icon, role, severity, style, variant} = props;
   const alertProps = useMemo(() => ({
     closeText,
     color,
     icon,
     role,
     severity,
+    style,
     variant,
-  }), [closeText, color, icon, role, severity, variant]);
-  const collapseProps = useMemo(() => ({
+  }), [closeText, color, icon, role, severity, style, variant]);
+  const transitionProps = useMemo(() => ({
     in: props.in,
     timeout: (() => {
       let enter = 500;
@@ -42,10 +43,14 @@ const Alert = (props) => {
   }), [props.in, props.timeout]);
 
   return (
-    <Collapse {...collapseProps}>
+    <Collapse {...transitionProps}>
       <MuiAlert {...alertProps} onClose={props.onClose}>
-        {props.title && <AlertTitle>{props.title}</AlertTitle>}
-        {props.text}
+        <Fade {...transitionProps}>
+          <div>
+            {props.title && <AlertTitle>{props.title}</AlertTitle>}
+            {props.text}
+          </div>
+        </Fade>
       </MuiAlert>
     </Collapse>
   );
@@ -55,6 +60,7 @@ Alert.defaultProps = {
   closeText: 'Close',
   in: true,
   role: 'alert',
+  timeout: 500,
   variant: 'standard',
 };
 Alert.propTypes = {
@@ -72,9 +78,11 @@ Alert.propTypes = {
   role: PropTypes.string,
   /** The severity of the alert. This defines the color and icon used. */
   severity: PropTypes.oneOf(['error', 'info', 'success', 'warning']),
+  /** Pass style object to Alert component. */
+  style: PropTypes.object,
   /** The string content of the Alert component. */
   text: PropTypes.string.isRequired,
-  /** The duration for the collapse transition, in milliseconds. You may specify a single timeout for all transitions, or individually with an object. */
+  /** The duration for the collapse transition, in milliseconds. You may specify a single timeout for all transitions, or individually with an object e.g. {enter: 500, exit: 1000}. */
   timeout: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.shape({enter: PropTypes.number, exit: PropTypes.number}),

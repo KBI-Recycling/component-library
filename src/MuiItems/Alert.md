@@ -28,7 +28,7 @@ const [showAlert, setShowAlert] = useState(true);
   <div style={{height: '8px'}} />
   <Alert in={showAlert} onClose={() => setShowAlert(false)} timeout={{enter: 2000, exit: 3000}} text='timeout={{enter: 2000, exit: 3000}}' />
   <Button variant='outlined' style={{marginTop: '8px'}} onClick={() => setShowAlert(true)}>
-    Trigger Error
+    Trigger Alert
   </Button>
 </Fragment>
 ```
