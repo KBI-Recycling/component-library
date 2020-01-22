@@ -16,6 +16,7 @@ module.exports = {
     {
       name: 'Mui Items',
       components: [
+        'src/MuiItems/Alert.js',
         'src/MuiItems/Collapse.js',
       ],
     },
