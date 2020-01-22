@@ -66,7 +66,7 @@ Collapse.propTypes = {
   children: PropTypes.node.isRequired,
   /** If true, the component will transition in. */
   in: PropTypes.bool.isRequired,
-  /** The duration for the transition, in milliseconds. You may specify a single timeout for all transitions, or individually with an object. Set to 'auto' to automatically calculate transition time based on height. */ //eslint-disable-line
+  /** The duration for the transition, in milliseconds. You may specify a single timeout for all transitions, or individually with an object. */
   timeout: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.shape({enter: PropTypes.number, exit: PropTypes.number}),

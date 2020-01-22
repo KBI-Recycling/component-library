@@ -25,8 +25,24 @@ const Alert = (props) => {
     severity,
     variant,
   }), [closeText, color, icon, role, severity, variant]);
+  const collapseProps = useMemo(() => ({
+    in: props.in,
+    timeout: (() => {
+      let enter = 500;
+      let exit = 500;
+      if (typeof props.timeout === 'number') {
+        enter = props.timeout;
+        exit = props.timeout;
+      } else if (typeof props.timeout === 'object') {
+        if (props.timeout.enter && typeof props.timeout.enter === 'number') enter = props.timeout.enter;
+        if (props.timeout.exit && typeof props.timeout.exit === 'number') exit = props.timeout.exit;
+      }
+      return {enter, exit};
+    })(),
+  }), [props.in, props.timeout]);
+
   return (
-    <Collapse in={props.text}>
+    <Collapse {...collapseProps}>
       <MuiAlert {...alertProps} onClose={props.onClose}>
         {props.title && <AlertTitle>{props.title}</AlertTitle>}
         {props.text}
@@ -37,6 +53,7 @@ const Alert = (props) => {
 
 Alert.defaultProps = {
   closeText: 'Close',
+  in: true,
   role: 'alert',
   variant: 'standard',
 };
@@ -47,6 +64,8 @@ Alert.propTypes = {
   color: PropTypes.oneOf(['error', 'info', 'success', 'warning']),
   /** Override the icon displayed before the children. Unless provided, the icon is mapped to the value of the `severity` prop. */
   icon: PropTypes.node,
+  /** If true, the component will transition in. */
+  in: PropTypes.bool.isRequired,
   /** Callback fired when the component requests to be closed. When provided and no action prop is set, a close icon button is displayed that triggers the callback when clicked. **Signature: function(event: object) => void** */ //eslint-disable-line
   onClose: PropTypes.func,
   /** The ARIA role attribute of the element. */
@@ -55,6 +74,11 @@ Alert.propTypes = {
   severity: PropTypes.oneOf(['error', 'info', 'success', 'warning']),
   /** The string content of the Alert component. */
   text: PropTypes.string.isRequired,
+  /** The duration for the collapse transition, in milliseconds. You may specify a single timeout for all transitions, or individually with an object. */
+  timeout: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.shape({enter: PropTypes.number, exit: PropTypes.number}),
+  ]),
   /** You can use the `AlertTitle` component to display a formatted title above the text content. */
   title: PropTypes.string,
   /** The variant to use. */
