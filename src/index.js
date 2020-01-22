@@ -18,6 +18,12 @@ import {default as RadioGroup} from './Formik/RadioGroup';
 export {default as ValidationExample} from './TestComponent/ValidationExample';
 export * from './TestComponent/ValidationExample';
 
+export {default as Alert} from './MuiItems/Alert';
+export * from './MuiItems/Alert';
+
+export {default as Collapse} from './MuiItems/Collapse';
+export * from './MuiItems/Collapse';
+
 export const Formik = {
   FormikForm,
   SubmitButton,
