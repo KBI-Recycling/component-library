@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Typography, TableCell, TableSortLabel} from '@material-ui/core';
+import {Typography, TableCell, TableSortLabel, TextField, InputAdornment} from '@material-ui/core';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 const MuiHeadCell = (props) => {
   const {noWrapHead, column} = props;
@@ -8,17 +9,18 @@ const MuiHeadCell = (props) => {
     <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
       <Typography noWrap={noWrapHead}>
         {column.render('Header')}
+        {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
       </Typography>
-      {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
+      <div>{column.canFilter ? column.render('Filter') : null}</div>
     </TableCell>
   );
 };
 
 MuiHeadCell.defaultProps = {
-  noWrapHead: false,
+  noWrapHead: true,
 };
 MuiHeadCell.propTypes = {
   column: PropTypes.object,
   noWrapHead: PropTypes.bool,
 };
-export default React.memo(MuiHeadCell);
+export default MuiHeadCell;

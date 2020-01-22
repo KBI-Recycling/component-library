@@ -1,18 +1,15 @@
+/* eslint-disable require-jsdoc */
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
-import {TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Typography, IconButton} from '@material-ui/core';
-import {Check, Close} from '@material-ui/icons';
-import {useTable, useSortBy, usePagination, useFlexLayout} from 'react-table';
+import {TableContainer, Table, TextField, InputAdornment} from '@material-ui/core';
+import {Check, Close, FilterList} from '@material-ui/icons';
+import {useTable, useSortBy, usePagination, useFlexLayout, useFilters} from 'react-table';
 import moment from 'moment';
 import {MuiHead, MuiPagination, MuiBody} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 /**
  * A component that wraps <a href='https://www.npmjs.com/package/react-table target='_blank'>react-table</a> hooks
  * with <a href='https://material-ui.com/components/tables/' target='_blank'>Material UI Table</a> components. Commonly used react-table
@@ -35,12 +32,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function DefaultColumnFilter({
+  column,
+}) {
+  const {filterValue, setFilter} = column;
+  console.log(column);
+  return (
+    <TextField
+      value={filterValue || ''}
+      onClick={e => e.stopPropagation()} // This prevents column sorting when a user selects the filter input field.
+      onChange={e => setFilter(e.target.value || undefined)}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <FilterList />
+          </InputAdornment>
+        ),
+      }}
+    />
+  );
+}
+
 const MuiTable = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
+      Filter: DefaultColumnFilter,
     }),
     [],
   );
@@ -88,7 +107,7 @@ const MuiTable = (props) => {
     });
   }, [props.columns]);
 
-  const {getTableProps, getTableBodyProps, headerGroups, page, rows, totalColumnsWidth, prepareRow, canPreviousPage,
+  const {getTableProps, getTableBodyProps, headerGroups, page, rows, prepareRow, canPreviousPage,
     canNextPage,
     pageOptions,
     pageCount,
@@ -96,8 +115,8 @@ const MuiTable = (props) => {
     nextPage,
     previousPage} = useTable(
     {columns, data, defaultColumn, initalState: {pageIndex: 1}},
+    useFilters,
     useSortBy,
-    useFlexLayout,
     usePagination,
   );
 
