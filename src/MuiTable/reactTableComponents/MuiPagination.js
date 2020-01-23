@@ -19,6 +19,7 @@ const MuiPagination = (props) => {
   const {gotoPage, canPreviousPage, previousPage, nextPage, canNextPage, pageCount} = props;
   const classes = useStyles();
   const theme = useTheme();
+  if (!canPreviousPage && !canNextPage) return null;
   return (
     <div className={classes.root} style={{position: 'absolute', top: '50%', right: 0, display: 'flex', flexDirection: 'column-reverse', marginTop: '-96px', backgroundColor: `rgba(0, 0, 0, 0.3)`}}>
       <IconButton

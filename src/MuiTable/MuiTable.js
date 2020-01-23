@@ -1,12 +1,12 @@
 /* eslint-disable require-jsdoc */
-import React, {useMemo, useState, useEffect} from 'react';
+import React, {useMemo, useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
-import {TableContainer, Table, TextField, InputAdornment, IconButton} from '@material-ui/core';
-import {Check, Close, FilterList, NavigateBefore, NavigateNext} from '@material-ui/icons';
+import {TableContainer, Table} from '@material-ui/core';
+import {Check, Close} from '@material-ui/icons';
 import {useTable, useSortBy, usePagination, useFlexLayout, useFilters} from 'react-table';
 import moment from 'moment';
-import {MuiHead, MuiPagination, MuiBody} from './reactTableComponents';
+import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateRange} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -32,77 +32,50 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const DefaultColumnFilter = React.memo(function DefaultColumnFilter({column}) {
-  const {filterValue, setFilter, changeFilter, filterTypes} = column;
-  const [filterType, setFilterType] = useState('text');
-  console.log(column);
-  const handleClick = () => {
-    console.log(filterType);
-    setFilterType(filterTypes[filterType].next);
-    changeFilter(column.index, filterType);
-  };
-
-  return (
-    <TextField
-      value={filterValue || ''}
-      onClick={e => e.stopPropagation()} // This prevents column sorting when a user selects the filter input field.
-      onChange={e => setFilter(e.target.value || undefined)}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <IconButton onClick={handleClick} style={{padding: 0}}>
-              <FilterList />
-            </IconButton>
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
-});
 
 const MuiTable = (props) => {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [stateColumns, setStateColumns] = useState(props.columns);
-  const filterTypes = React.useMemo(() => ({
-    startsWith: (rows, id, filterValue) => {
-      return rows.filter(row => {
-        const rowValue = row.values[id];
-        return rowValue !== undefined ?
-          String(rowValue)
-            .toLowerCase()
-            .startsWith(String(filterValue).toLowerCase()) :
-          true;
-      });
-    },
-    betweenDate: (rows, ids, filterValue) => {
-      const [min, max] = filterValue || [];
-      console.log('Min and Max', min, max);
-      return rows.filter(row => {
-        // console.log(row);
-        return ids.some(id => {
-          const rowValue = row.values[id];
-          if (min && max) {
-            return moment(rowValue).isAfter(min) && moment(rowValue).isBefore(max);
-          } else if (min) {
-            return moment(rowValue).isAfter(min);
-          } else if (max) {
-            return moment(rowValue).isBefore(max);
-          }
-        });
-      });
-    },
-  }));
+  // const classes = useStyles();
+  // const theme = useTheme();
+  const [stateColumns, setStateColumns] = useState([]);
+  const [savedFilters, setSavedFilters] = useState({});
+  const skipPageResetRef = React.useRef();
+
+  useEffect(() => {
+    console.log('Saved filters', savedFilters);
+    const columnsWithSavedFilters = Object.keys(savedFilters);
+    if (columnsWithSavedFilters.length) {
+      const mergedColumns = [...props.columns];
+      columnsWithSavedFilters.forEach(index => mergedColumns[index].filter = savedFilters[index]);
+      skipPageResetRef.current = true;
+      setStateColumns(mergedColumns);
+    } else {
+      skipPageResetRef.current = true;
+      setStateColumns(props.columns);
+    }
+  }, [props.columns, savedFilters]);
+  React.useEffect(() => {
+    // After the table has updated, always remove the flag
+    skipPageResetRef.current = false;
+  }, [stateColumns]);
+  const filterTypes = {
+    startsWith: startsWith,
+    dateRange: dateRange,
+  };
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
-      Filter: DefaultColumnFilter,
+      Filter: (props) => {
+        if (props.column.filter === 'dateRange') return <DateRangeFilter {...props} />;
+        else return <DefaultColumnFilter {...props} />;
+      },
     }),
     [],
   );
+
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
+
   const columns = useMemo(() => {
     return stateColumns.map(column => {
       if (column.type === 'boolean') {
@@ -146,9 +119,10 @@ const MuiTable = (props) => {
         const newColumns = [...stateColumns];
         newColumns.splice(index, 1, newColumn);
         setStateColumns(newColumns);
+        setSavedFilters({...savedFilters, [index]: filterType});
       }};
     });
-  }, [stateColumns, setStateColumns]);
+  }, [stateColumns, setStateColumns, savedFilters]);
 
   const {getTableProps, getTableBodyProps, headerGroups, page, rows, prepareRow, canPreviousPage,
     canNextPage,
@@ -157,7 +131,9 @@ const MuiTable = (props) => {
     gotoPage,
     nextPage,
     previousPage} = useTable(
-    {columns, data, defaultColumn, initalState: {pageIndex: 1}, filterTypes},
+    {columns, data, defaultColumn, initalState: {pageIndex: 1}, filterTypes, autoResetPage: !skipPageResetRef,
+      autoResetSortBy: !skipPageResetRef,
+      autoResetFilters: !skipPageResetRef},
     useFilters,
     useSortBy,
     usePagination,
@@ -204,61 +180,54 @@ MuiTable.propTypes = {
   /** If 'true', shows icons responsible for controlling table paging. */
   includePagination: PropTypes.bool,
 };
-export default MuiTable;
-
-/*
-<FixedSizeList
-            height={400}
-            itemCount={rows.length}
-            itemSize={35}
-            width={totalColumnsWidth} // this is the total width of the table (duh)
-          >
-            {RenderRow}
-          </FixedSizeList>
+// export default MuiTable;
 
 
-          const RenderRow = React.useCallback(
-    ({index, style}) => {
-      const row = rows[index];
-      prepareRow(row);
-      return (
-        <TableRow component='div' {...row.getRowProps({style})}>
-          {row.cells.map(cell => (
-            <TableCell component='div' {...cell.getCellProps()}>
-              <Typography noWrap={true}>{cell.render('Cell')}</Typography>  {/* noWrap === {text-overflow: ellipsis}  }
-              </TableCell>
-              ))}
-            </TableRow>
-          );
-        },
-        [prepareRow, rows],
-      );
-
-
-                <TableHead component='div'>
-            {headerGroups.map(headerGroup => (
-              <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render('Header')}
-                    {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableHead>
-
-
-          <TableBody component='div' {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row);
-              return (
-                <TableRow component='div' {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
-                  })}
-                </TableRow>
-              );
-            })}
-          </TableBody>
-          */
+const MuiExample = () => {
+  const [mockData, setData] = useState([
+    {'id': 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64},
+    {'id': 2, 'active': true, 'name': 'Brnaby Elvins', 'dateCreated': new Date('10/22/2019'), 'gender': 'Male', 'income': 19518.39},
+    {'id': 3, 'active': true, 'name': 'Ruben Ledstone', 'dateCreated': new Date('2/10/2019'), 'gender': 'Male', 'income': 37733.55},
+    {'id': 4, 'active': true, 'name': 'Hetty Schafer', 'dateCreated': new Date('12/9/2019'), 'gender': 'Female', 'income': 76929.64},
+    {'id': 5, 'active': true, 'name': 'Alix Temblett', 'dateCreated': new Date('7/10/2019'), 'gender': 'Male', 'income': 63880.22},
+    {'id': 6, 'active': false, 'name': 'Finlay Percifer', 'dateCreated': new Date('2/20/2019'), 'gender': 'Male', 'income': 36163.74},
+    {'id': 7, 'active': true, 'name': 'Huberto Ilyin', 'dateCreated': new Date('8/1/2019'), 'gender': 'Male', 'income': 88836.8},
+    {'id': 8, 'active': true, 'name': 'Noah Dawtre', 'dateCreated': new Date('2/1/2019'), 'gender': 'Male', 'income': 73037.63},
+    {'id': 9, 'active': false, 'name': 'Barby Dunnet', 'dateCreated': new Date('8/29/2019'), 'gender': 'Female', 'income': 11481.06},
+    {'id': 10, 'active': true, 'name': 'Christian Sapey', 'dateCreated': new Date('8/5/2019'), 'gender': 'Male', 'income': 40824.28},
+    {'id': 11, 'active': true, 'name': 'Elaina Dibnah', 'dateCreated': new Date('5/18/2019'), 'gender': 'Female', 'income': 18682.23},
+    {'id': 12, 'active': false, 'name': 'Cristy Lacaze', 'dateCreated': new Date('10/26/2019'), 'gender': 'Female', 'income': 69895.22},
+    {'id': 13, 'active': false, 'name': 'Alfonso Bayley', 'dateCreated': new Date('6/7/2019'), 'gender': 'Male', 'income': 89453.11},
+    {'id': 14, 'active': false, 'name': 'Bronny Turvey', 'dateCreated': new Date('9/13/2019'), 'gender': 'Male', 'income': 76313.46},
+    {'id': 15, 'active': false, 'name': 'Durand Belly', 'dateCreated': new Date('6/25/2019'), 'gender': 'Male', 'income': 59854.94},
+    {'id': 16, 'active': true, 'name': 'Petr Southouse', 'dateCreated': new Date('9/26/2019'), 'gender': 'Male', 'income': 9186.34},
+    {'id': 17, 'active': false, 'name': 'Carmelia Bigley', 'dateCreated': new Date('7/28/2019'), 'gender': 'Female', 'income': 2153.78},
+    {'id': 18, 'active': true, 'name': 'Leonanie Mohammad', 'dateCreated': new Date('10/25/2019'), 'gender': 'Female', 'income': 42177.98},
+    {'id': 19, 'active': false, 'name': 'Genevra Bezemer', 'dateCreated': new Date('4/26/2019'), 'gender': 'Female', 'income': 77570.29},
+    {'id': 20, 'active': false, 'name': 'Marlane Gaisford', 'dateCreated': new Date('9/11/2019'), 'gender': 'Female', 'income': 50463.95},
+  ]);
+  return (
+    <>
+      <button onClick={() => setData([...mockData, {'id': mockData.length + 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64}])}>Add Row</button>
+      <MuiTable
+        data={mockData}
+        columns={[
+          {accessor: 'id', Header: 'Id', type: 'numeric'},
+          {accessor: 'active', Header: 'Active', type: 'boolean', disableFilters: true},
+          {accessor: 'name', Header: 'Name', type: 'string', filter: 'startsWith', filterTypes: {
+            text: {next: 'startsWith'},
+            startsWith: {next: 'text'},
+          }},
+          {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD', sortType: 'datetime', filter: 'dateRange'},
+          {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd', disableSortBy: true},
+          {accessor: 'gender', Header: 'Gender', type: 'string'},
+          {accessor: 'income', Header: 'Income', type: 'currency'},
+        ]}
+        includePagination={true}
+      />
+    </>
+  );
+}
+;
+export default MuiExample
+;
