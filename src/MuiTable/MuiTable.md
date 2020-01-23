@@ -4,6 +4,7 @@ MuiTable example:
 import React, {useMemo} from 'react';
 import {TextField, InputAdornment} from '@material-ui/core'
 import FilterListIcon from '@material-ui/icons/FilterList'
+import DateRangeFilter from './reactTableComponents/DateRangeFilter'
 const mockData = [
   {"id":1,"active":true,"name":"Chloette Manton","dateCreated": new Date('12/24/2019'),"gender":"Female","income":23463.64},
   {"id":2,"active":true,"name":"Brnaby Elvins","dateCreated": new Date("10/22/2019"),"gender":"Male","income":19518.39},
@@ -32,8 +33,11 @@ const mockData = [
   columns={[
     {accessor: 'id', Header: 'Id', type: 'numeric'},
     {accessor: 'active', Header: 'Active', type: 'boolean', disableFilters: true},
-    {accessor: 'name', Header: 'Name', type: 'string'},
-    {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD', sortType: 'datetime'},
+    {accessor: 'name', Header: 'Name', type: 'string', filter: 'startsWith', filterTypes: {
+    text: {next: 'startsWith'},
+    startsWith: {next: 'text'},
+  }},
+    {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD', sortType: 'datetime', Filter: DateRangeFilter, filter: 'betweenDate'},
     {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd', disableSortBy: true},
     {accessor: 'gender', Header: 'Gender', type: 'string'},
     {accessor: 'income', Header: 'Income', type: 'currency'},

@@ -1,9 +1,9 @@
 /* eslint-disable require-jsdoc */
-import React, {useMemo} from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
-import {TableContainer, Table, TextField, InputAdornment} from '@material-ui/core';
-import {Check, Close, FilterList} from '@material-ui/icons';
+import {TableContainer, Table, TextField, InputAdornment, IconButton} from '@material-ui/core';
+import {Check, Close, FilterList, NavigateBefore, NavigateNext} from '@material-ui/icons';
 import {useTable, useSortBy, usePagination, useFlexLayout, useFilters} from 'react-table';
 import moment from 'moment';
 import {MuiHead, MuiPagination, MuiBody} from './reactTableComponents';
@@ -32,11 +32,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function DefaultColumnFilter({
-  column,
-}) {
-  const {filterValue, setFilter} = column;
+const DefaultColumnFilter = React.memo(function DefaultColumnFilter({column}) {
+  const {filterValue, setFilter, changeFilter, filterTypes} = column;
+  const [filterType, setFilterType] = useState('text');
   console.log(column);
+  const handleClick = () => {
+    console.log(filterType);
+    setFilterType(filterTypes[filterType].next);
+    changeFilter(column.index, filterType);
+  };
+
   return (
     <TextField
       value={filterValue || ''}
@@ -45,17 +50,49 @@ function DefaultColumnFilter({
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <FilterList />
+            <IconButton onClick={handleClick} style={{padding: 0}}>
+              <FilterList />
+            </IconButton>
           </InputAdornment>
         ),
       }}
     />
   );
-}
+});
 
 const MuiTable = (props) => {
   const classes = useStyles();
   const theme = useTheme();
+  const [stateColumns, setStateColumns] = useState(props.columns);
+  const filterTypes = React.useMemo(() => ({
+    startsWith: (rows, id, filterValue) => {
+      return rows.filter(row => {
+        const rowValue = row.values[id];
+        return rowValue !== undefined ?
+          String(rowValue)
+            .toLowerCase()
+            .startsWith(String(filterValue).toLowerCase()) :
+          true;
+      });
+    },
+    betweenDate: (rows, ids, filterValue) => {
+      const [min, max] = filterValue || [];
+      console.log('Min and Max', min, max);
+      return rows.filter(row => {
+        // console.log(row);
+        return ids.some(id => {
+          const rowValue = row.values[id];
+          if (min && max) {
+            return moment(rowValue).isAfter(min) && moment(rowValue).isBefore(max);
+          } else if (min) {
+            return moment(rowValue).isAfter(min);
+          } else if (max) {
+            return moment(rowValue).isBefore(max);
+          }
+        });
+      });
+    },
+  }));
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
@@ -67,7 +104,7 @@ const MuiTable = (props) => {
     return props.data;
   }, [props.data]);
   const columns = useMemo(() => {
-    return props.columns.map(column => {
+    return stateColumns.map(column => {
       if (column.type === 'boolean') {
         return {
           ...column,
@@ -103,9 +140,15 @@ const MuiTable = (props) => {
           sortType: column.sortType || 'alphanumeric',
         };
       }
-      return column;
+      return {...column, changeFilter: (index, filterType) => {
+        const newColumn = stateColumns[index];
+        newColumn.filter = filterType;
+        const newColumns = [...stateColumns];
+        newColumns.splice(index, 1, newColumn);
+        setStateColumns(newColumns);
+      }};
     });
-  }, [props.columns]);
+  }, [stateColumns, setStateColumns]);
 
   const {getTableProps, getTableBodyProps, headerGroups, page, rows, prepareRow, canPreviousPage,
     canNextPage,
@@ -114,7 +157,7 @@ const MuiTable = (props) => {
     gotoPage,
     nextPage,
     previousPage} = useTable(
-    {columns, data, defaultColumn, initalState: {pageIndex: 1}},
+    {columns, data, defaultColumn, initalState: {pageIndex: 1}, filterTypes},
     useFilters,
     useSortBy,
     usePagination,
@@ -123,7 +166,7 @@ const MuiTable = (props) => {
   return (
     <div id='top-level-table-wrapper' style={{position: 'relative'}}>
       <TableContainer>
-        <Table size='small' {...getTableProps()} style={{tableLayout: 'auto'}}>
+        <Table component='div' size='small' {...getTableProps()} style={{tableLayout: 'auto'}}>
           <MuiHead headerGroups={headerGroups} />
           <MuiBody rows={page || rows} getTableBodyProps={getTableBodyProps} prepareRow={prepareRow} />
         </Table>
@@ -151,7 +194,10 @@ MuiTable.propTypes = {
     type: PropTypes.string,
     /** **Default: 'MM/DD/YYYY'.** Used to format date data types. Takes a string of tokens and replaces them with their corresponding values. See <a href='https://momentjs.com/docs/#/displaying/format/' target='_blank'>Moment.js Format Docs</a> for details. */ //eslint-disable-line
     typeDateFormat: PropTypes.string,
-
+    /** The name of the filter method to apply to the column. */
+    filter: PropTypes.string,
+    /** An object mimicking a circular linked list. Calling '.next()' should iterate over each filterType option cyclically */
+    filterTypes: PropTypes.shape({'filter1': PropTypes.shape({next: 'filter2'}), 'filter2': PropTypes.shape({next: 'filter1'})}),
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
