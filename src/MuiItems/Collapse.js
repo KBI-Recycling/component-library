@@ -17,7 +17,8 @@ import MuiCollapse from '@material-ui/core/Collapse';
 const Collapse = (props) => {
   const [collapseState, setCollapseState] = useState(false);
   const [renderState, setRenderState] = useState(false);
-  const [timer, setTimer] = useState(null);
+  const [expandTimer, setExpandTimer] = useState(null);
+  const [collapseTimer, setCollapseTimer] = useState(null);
   const [initialLoad, setInitialLoad] = useState(true);
   const timeout = useMemo(() => {
     let enter = 500;
@@ -33,24 +34,27 @@ const Collapse = (props) => {
   }, [props.timeout]);
 
   useEffect(() => {
-    if (timer && props.in) clearTimeout(timer);
-  }, [props.in, timer]);
+    if (collapseTimer && props.in) clearTimeout(collapseTimer);
+    return () => {
+      console.log('unsubscribe', {collapseTimer, expandTimer});
+      if (collapseTimer) clearTimeout(collapseTimer);
+      if (expandTimer) clearTimeout(expandTimer);
+    };
+  }, [collapseTimer, expandTimer, props.in]);
   useEffect(() => {
     const expandCollapse = () => {
       setRenderState(true);
       if (initialLoad) setCollapseState(true);
-      else setTimeout(() => setCollapseState(true), 100);
+      else setExpandTimer(setTimeout(() => setCollapseState(true), 100));
     };
     const closeCollapse = () => {
-      if (!initialLoad) setTimer(setTimeout(() => setRenderState(false), timeout.exit + 100));
+      if (!initialLoad) setCollapseTimer(setTimeout(() => setRenderState(false), timeout.exit + 100));
       setCollapseState(false);
     };
+    if (initialLoad) setInitialLoad(false);
     if (props.in) expandCollapse();
-    else closeCollapse();
+    if (!props.in) closeCollapse();
   }, [initialLoad, props.in, timeout.exit]);
-  useEffect(() => {
-    setInitialLoad(false);
-  }, []);
 
   if (!renderState) return null;
   return (
