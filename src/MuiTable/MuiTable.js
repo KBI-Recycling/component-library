@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {TableContainer, Table} from '@material-ui/core';
 import {Check, Close} from '@material-ui/icons';
-import {useTable, useSortBy, usePagination, useFlexLayout, useFilters} from 'react-table';
+import {useTable, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
 import moment from 'moment';
-import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateRange} from './reactTableComponents';
+import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateRange, useCreateCheckboxes} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -38,7 +38,7 @@ const MuiTable = (props) => {
   // const theme = useTheme();
   const [stateColumns, setStateColumns] = useState([]);
   const [savedFilters, setSavedFilters] = useState({});
-  const skipPageResetRef = React.useRef();
+  const skipPageResetRef = useRef();
 
   useEffect(() => {
     console.log('Saved filters', savedFilters);
@@ -133,10 +133,13 @@ const MuiTable = (props) => {
     previousPage} = useTable(
     {columns, data, defaultColumn, initalState: {pageIndex: 1}, filterTypes, autoResetPage: !skipPageResetRef,
       autoResetSortBy: !skipPageResetRef,
-      autoResetFilters: !skipPageResetRef},
+      autoResetFilters: !skipPageResetRef,
+      autoResetSelectedRows: !skipPageResetRef},
     useFilters,
     useSortBy,
     usePagination,
+    useRowSelect,
+    useCreateCheckboxes,
   );
 
   return (
