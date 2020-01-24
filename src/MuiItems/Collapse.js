@@ -36,7 +36,6 @@ const Collapse = (props) => {
   useEffect(() => {
     if (collapseTimer && props.in) clearTimeout(collapseTimer);
     return () => {
-      console.log('unsubscribe', {collapseTimer, expandTimer});
       if (collapseTimer) clearTimeout(collapseTimer);
       if (expandTimer) clearTimeout(expandTimer);
     };
