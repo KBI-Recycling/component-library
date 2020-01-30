@@ -10,22 +10,7 @@ const Table = (props) => {
     return props.data;
   }, [props.data]);
   const columns = useMemo(() => {
-    return props.columns.map(column => {
-      /*
-      if (column.type === 'boolean' ) {
-          ...column,
-          Cell: (rtProps) => rtProps.cell.value ? <Check /> : <Close />,
-        };
-      }
-      if (column.type === 'numeric' ) {
-        return {
-          ...column,
-          Cell: ({cell: {value}}) => Number(value),
-        };
-      }
-      */
-      return {...column};
-    });
+    return props.columns;
   }, [props.columns]);
   const rtProps = useTable({columns, data});
   console.log({rtProps});
