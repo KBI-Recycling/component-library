@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {TableCell} from '@material-ui/core';
+import {TableCell, TableSortLabel} from '@material-ui/core';
 
 
 const TableHeadCell = (props) => {
   const {column} = props;
   return (
-    <TableCell {...column.getHeaderProps()}>
+    <TableCell {...column.getHeaderProps(column.getSortByToggleProps())}>
       {column.render('Header')}
+      <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />
     </TableCell>
   );
 };
