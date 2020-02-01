@@ -1,10 +1,12 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {useTable, useSortBy} from 'react-table';
-import {Table as MuiTable, TableHead, TableBody} from '@material-ui/core';
+import {useTable, useSortBy, usePagination} from 'react-table';
+import {Table as MuiTable, TableHead, TableBody, TableFooter, TableRow, TableCell} from '@material-ui/core';
 import TableHeadRow from './Table/TableHeadRow';
 import TableBodyRow from './Table/TableBodyRow';
 import moment from 'moment';
+import {Button, ButtonGroup, FormControl, InputLabel, MenuItem, Select, Typography} from '@material-ui/core';
+import {SkipPrevious, NavigateBefore, NavigateNext, SkipNext} from '@material-ui/icons';
 
 const Table = (props) => {
   const data = useMemo(() => {
@@ -45,17 +47,51 @@ const Table = (props) => {
       return rowA.values[columnID].localeCompare(rowB.values[columnID]);
     },
   }), []);
-  const rtProps = useTable({columns, data, sortTypes}, useSortBy);
-  console.log({rtProps});
+  const rtProps = useTable({columns, data, sortTypes}, useSortBy, usePagination);
+  console.log({rtProps, columns});
 
   return (
-    <MuiTable {...rtProps.getTableProps()}>
+    <MuiTable {...rtProps.getTableProps()} size='small'>
       <TableHead>
         {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
       </TableHead>
       <TableBody>
-        {rtProps.rows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
+        {rtProps.page.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={columns.length} style={{padding: '2px 0px'}}>
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <ButtonGroup color='primary' style={{marginRight: '16px'}}>
+                <Button style={{border: '0px', padding: '4px 10px'}} onClick={() => rtProps.gotoPage(0)} disabled={!rtProps.canPreviousPage}>
+                  <SkipPrevious />
+                </Button>
+                <Button style={{border: '0px', padding: '4px 10px'}} onClick={() => rtProps.previousPage()} disabled={!rtProps.canPreviousPage}>
+                  <NavigateBefore />
+                </Button>
+                <Button style={{border: '0px', padding: '4px 10px'}} onClick={() => rtProps.nextPage()} disabled={!rtProps.canNextPage}>
+                  <NavigateNext />
+                </Button>
+                <Button style={{border: '0px', padding: '4px 10px'}} onClick={() => rtProps.gotoPage(rtProps.pageCount - 1)} disabled={!rtProps.canNextPage}>
+                  <SkipNext />
+                </Button>
+              </ButtonGroup>
+              <Typography variant='caption' style={{marginRight: '24px'}}>
+                Page {rtProps.state.pageIndex + 1} of {rtProps.pageOptions.length}
+              </Typography>
+              <FormControl>
+                <Select value={rtProps.state.pageSize} onChange={(e) => rtProps.setPageSize(Number(e.target.value))} SelectDisplayProps={{style: {color: 'rgba(0, 0, 0, 0.54)', fontSize: '.75rem', padding: '0px 24px 0px 8px'}}}>
+                  {[10, 20, 30, 40, 50].map(pageSize => (
+                    <MenuItem key={pageSize} value={pageSize} style={{color: 'rgba(0, 0, 0, 0.54)', fontSize: '.75rem', padding: '4px 8px'}}>
+                      Show {pageSize}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+          </TableCell>
+        </TableRow>
+      </TableFooter>
     </MuiTable>
   );
 };
