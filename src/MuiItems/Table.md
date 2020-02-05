@@ -13,5 +13,11 @@ import sampleData from './Table/sampleData';
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
     {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'M/D/YYYY'},
   ]}
+  paginationOptions={{
+    active: true,
+    pageSizes: [10, 25, 50, 100],
+    initialPageSize: 10,
+    initialPageIndex: 0,
+  }}
 />
 ```
