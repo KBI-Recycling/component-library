@@ -2,6 +2,7 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Button, ButtonGroup, FormControl, MenuItem, Select, TableRow, TableCell, Typography} from '@material-ui/core';
 import {SkipPrevious, NavigateBefore, NavigateNext, SkipNext} from '@material-ui/icons';
+import {makeStyles} from '@material-ui/core/styles';
 
 
 const TableFooterRow = (props) => {
@@ -17,13 +18,9 @@ const TableFooterRow = (props) => {
       padding: '0px 24px 0px 8px',
     },
   }), []);
-  const menuItemStyle = useMemo(() => ({
-    color: 'rgba(0, 0, 0, 0.54)',
-    fontSize: '.75rem',
-    padding: '4px 8px',
-  }), []);
+  const styles = useStyles();
 
-  if (!props.active) return null;
+  if (!props.paginationActive) return null;
   return (
     <TableRow>
       <TableCell colSpan={props.columns.length} style={{padding: '2px 0px'}}>
@@ -47,8 +44,8 @@ const TableFooterRow = (props) => {
           </Typography>
           <FormControl>
             <Select value={state.pageSize} onChange={e => setPageSize(e.target.value)} SelectDisplayProps={selectDisplayStyle}>
-              {props.pageSizes.map(pageSize => (
-                <MenuItem key={pageSize} value={pageSize} style={menuItemStyle}>
+              {props.paginationSizes.map(pageSize => (
+                <MenuItem key={pageSize} value={pageSize} className={styles.menuItem}>
                   {pageSize} Rows
                 </MenuItem>
               ))}
@@ -60,10 +57,17 @@ const TableFooterRow = (props) => {
   );
 };
 
+const useStyles = makeStyles(theme => ({
+  menuItem: {
+    color: 'rgba(0, 0, 0, 0.54)',
+    fontSize: '.75rem',
+    padding: '4px 8px',
+  },
+}));
 TableFooterRow.propTypes = {
-  active: PropTypes.bool,
   columns: PropTypes.array.isRequired,
-  pageSizes: PropTypes.array,
+  paginationActive: PropTypes.bool,
+  paginationSizes: PropTypes.arrayOf(PropTypes.number),
   rtProps: PropTypes.object.isRequired,
 };
 export default TableFooterRow;
