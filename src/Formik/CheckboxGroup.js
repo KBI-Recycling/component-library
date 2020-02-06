@@ -2,12 +2,13 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Field, useField, useFormikContext} from 'formik';
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, FormLabel} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 
 /**
  * A component that wraps Material UI FormControl, FormGroup and Checkbox with Formik form context. Commonly used FormControl props are described below in the PROPS & METHODS
  * section. Less common props can also be passed; see <a href='https://material-ui.com/api/form-control/' target='_blank'>FormControl API</a> for details.
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author [Gerry Blackmon](https://github.com/gblackiv)
  * @author [Daniel Kinsbursky](https://github.com/kbi-daniel)
  * @author [Chris Voss](https://github.com/ChrisJVoss)
@@ -21,7 +22,6 @@ const CheckboxGroup = (props) => {
   const {boxes, disabled, error, helperText, id, label, margin, name, onChange, required, row, ...otherProps} = props;
   const [field, meta, helpers] = useField(name); //eslint-disable-line
   const form = useFormikContext();
-
   const formControlProps = useMemo(() => ({
     component: 'fieldset',
     disabled: disabled || form.isSubmitting,
@@ -35,12 +35,13 @@ const CheckboxGroup = (props) => {
       if (onChange) onChange({event, field, form, meta});
     },
   }), [disabled, error, field, form, id, margin, meta, name, onChange, required]);
+  console.log({row});
 
   return (
     <FormControl {...formControlProps} {...otherProps}>
       <FormLabel component='legend'>{label || name}</FormLabel>
       <FormGroup row={row}>
-        {boxes.map((box, index) => <CheckField name={name} {...box} key={index} />)}
+        {boxes.map((box, index) => <CheckField name={name} {...box} key={index} row={row} />)}
       </FormGroup>
       {(meta.touched && meta.error) && <FormHelperText error={true}>{meta.error}</FormHelperText>}
       {helperText && !(meta.touched && meta.error) && <FormHelperText>{helperText}</FormHelperText>}
@@ -88,16 +89,32 @@ CheckboxGroup.propTypes = {
 };
 
 const CheckField = (props) => {
-  const {CheckboxProps, label, name, value} = props;
+  const classes = useStyles();
+  const {CheckboxProps, label, name, row, value} = props;
+  const formControlProps = useMemo(() => ({
+    label,
+    classes: {root: classes.root, label: classes.label},
+  }), [classes.label, classes.root, label]);
   const checkboxProps = {
     color: 'primary',
+    disableRipple: true,
+    style: {
+      marginTop: '0px',
+      marginBottom: row ? '8px' : '0px',
+      marginLeft: '0px',
+      marginRight: '8px',
+      paddingTop: '0px',
+      paddingBottom: '0px',
+      paddingLeft: '0px',
+      paddingRight: '0px',
+    },
     ...CheckboxProps,
   };
 
   return (
     <Field type='checkbox' name={name} value={value} key={label}>
       {({field}) => (
-        <FormControlLabel {...field} label={label} control={<Checkbox {...checkboxProps} />} />
+        <FormControlLabel {...field} {...formControlProps} control={<Checkbox {...checkboxProps} />} />
       )}
     </Field>
   );
@@ -105,8 +122,21 @@ const CheckField = (props) => {
 CheckField.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string.isRequired,
+  row: PropTypes.bool,
   value: PropTypes.string,
   CheckboxProps: PropTypes.object,
 };
 
+const useStyles = makeStyles({
+  root: {
+    alignItems: 'start',
+    display: 'flex',
+    margin: '5px 0px',
+  },
+  label: {
+    lineHeight: 1.2,
+    marginTop: '2px',
+    marginRight: '16px',
+  },
+});
 export default CheckboxGroup;
