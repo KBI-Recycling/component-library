@@ -79,7 +79,6 @@ const Table = (props) => {
 const useStyles = makeStyles(theme => ({
   tableWrap: {
     display: 'block',
-    // width: '200px',
     maxWidth: '100%',
     overflowX: 'scroll',
     overflowY: 'hidden',
