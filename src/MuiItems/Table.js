@@ -2,12 +2,14 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useSortBy, usePagination} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import TableHeadRow from './Table/TableHeadRow';
 import TableBodyRow from './Table/TableBodyRow';
 import TableFooterRow from './Table/TableFooterRow';
 import moment from 'moment';
 
 const Table = (props) => {
+  const styles = useStyles();
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -58,20 +60,31 @@ const Table = (props) => {
   }, [props.paginationActive, rtProps.page, rtProps.rows]);
 
   return (
-    <MuiTable {...rtProps.getTableProps()} size='small'>
-      <TableHead>
-        {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
-      </TableHead>
-      <TableBody>
-        {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
-      </TableBody>
-      <TableFooter>
-        <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
-      </TableFooter>
-    </MuiTable>
+    <div className={styles.tableWrap}>
+      <MuiTable {...rtProps.getTableProps()} size='small'>
+        <TableHead>
+          {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
+        </TableHead>
+        <TableBody>
+          {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
+        </TableBody>
+        <TableFooter>
+          <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
+        </TableFooter>
+      </MuiTable>
+    </div>
   );
 };
 
+const useStyles = makeStyles(theme => ({
+  tableWrap: {
+    display: 'block',
+    // width: '200px',
+    maxWidth: '100%',
+    overflowX: 'scroll',
+    overflowY: 'hidden',
+  },
+}));
 Table.defaultProps = {
   paginationActive: true,
   paginationInitialIndex: 0,
