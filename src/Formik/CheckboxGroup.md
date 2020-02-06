@@ -21,8 +21,16 @@ const colorBoxes = [
   {label: 'Daniel Kinsbursky', value: 'Daniel', CheckboxProps: {color: 'secondary'}},
   {label: 'Chris Voss', value: 'Chris', CheckboxProps: {color: 'default'}},
 ];
+const hazards = [
+  'Battery is warm to the touch (i.e. above room temperature).',
+  'Battery has signs of heat damage, such as burn marks or warping.',
+  'Battery has exposed/unprotected wires capable of causing an electric shock.',
+  'Battery has signs of physical damage, such as dented, breached, or swollen components.',
+  'Battery has other indicators that it may not be safe to transport as-is.',
+  'None of the above.',
+].map(hazard => ({value: hazard, label: hazard}));
 
-<Formik validateOnChange={false} initialValues={{Developers: [], Colors: ['Gerry', 'Daniel', 'Chris']}}>
+<Formik validateOnChange={false} initialValues={{Developers: [], Hazards: [], Colors: ['Gerry', 'Daniel', 'Chris']}}>
   {formik => (
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
@@ -45,6 +53,10 @@ const colorBoxes = [
         <Grid item xs={12} sm={4}>
           <Typography variant='caption'>Required</Typography>
           <CheckboxGroup name='Developers' id='CheckboxGroup:Colors' boxes={basicBoxes} required />
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <Typography variant='caption'>Long Text</Typography>
+          <CheckboxGroup name='Hazards' id='CheckboxGroup:LongText' boxes={hazards} />
         </Grid>
       </Grid>
     </Form>
