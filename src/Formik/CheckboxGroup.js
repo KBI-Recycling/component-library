@@ -35,7 +35,6 @@ const CheckboxGroup = (props) => {
       if (onChange) onChange({event, field, form, meta});
     },
   }), [disabled, error, field, form, id, margin, meta, name, onChange, required]);
-  console.log({row});
 
   return (
     <FormControl {...formControlProps} {...otherProps}>
