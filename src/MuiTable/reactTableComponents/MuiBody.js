@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {TableBody} from '@material-ui/core';
-import MuiBodyRow from './MuiBodyRow2';
+import MuiBodyRow from './MuiBodyRow';
 
 const MuiBody2 = (props) => {
   const {rows, getTableBodyProps, prepareRow} = props;

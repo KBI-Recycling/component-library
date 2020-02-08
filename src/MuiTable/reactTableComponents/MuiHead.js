@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {TableHead, TableRow} from '@material-ui/core';
-import MuiHeadCell from './MuiHeadCell2';
+import MuiHeadCell from './MuiHeadCell';
 
 const MuiHead2 = (props) => {
   const {headerGroups} = props;

@@ -1,12 +1,13 @@
 /* eslint-disable require-jsdoc */
-import React, {useMemo, useState, useEffect, useRef} from 'react';
+import React, {useMemo, useState, useEffect, useRef, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {TableContainer, Table} from '@material-ui/core';
-import {Check, Close} from '@material-ui/icons';
+import {Check, Close, Save, Edit} from '@material-ui/icons';
 import {useTable, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
 import moment from 'moment';
-import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateRange, useCreateCheckboxes} from './reactTableComponents';
+import isEqual from 'lodash.isequal';
+import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateRange, useCreateCheckboxes, emptyHook, useCreateActions} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -25,12 +26,19 @@ import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, s
  *
  */
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexShrink: 0,
-    marginLeft: theme.spacing(2.5),
-  },
-}));
+// const useStyles = makeStyles(theme => ({
+//   root: {
+//     flexShrink: 0,
+//     marginLeft: theme.spacing(2.5),
+//   },
+// }));
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current || [];
+}
 
 
 const MuiTable = (props) => {
@@ -39,9 +47,7 @@ const MuiTable = (props) => {
   const [stateColumns, setStateColumns] = useState([]);
   const [savedFilters, setSavedFilters] = useState({});
   const skipPageResetRef = useRef();
-
   useEffect(() => {
-    console.log('Saved filters', savedFilters);
     const columnsWithSavedFilters = Object.keys(savedFilters);
     if (columnsWithSavedFilters.length) {
       const mergedColumns = [...props.columns];
@@ -61,6 +67,14 @@ const MuiTable = (props) => {
     startsWith: startsWith,
     dateRange: dateRange,
   };
+  const changeFilter = useCallback((index, filterType) => {
+    const newColumn = stateColumns[index];
+    newColumn.filter = filterType;
+    const newColumns = [...stateColumns];
+    newColumns.splice(index, 1, newColumn);
+    setStateColumns(newColumns);
+    setSavedFilters({...savedFilters, [index]: filterType});
+  }, [stateColumns, savedFilters]);
   const defaultColumn = React.useMemo(
     () => ({
       minWidth: 30,
@@ -113,35 +127,52 @@ const MuiTable = (props) => {
           sortType: column.sortType || 'alphanumeric',
         };
       }
-      return {...column, changeFilter: (index, filterType) => {
-        const newColumn = stateColumns[index];
-        newColumn.filter = filterType;
-        const newColumns = [...stateColumns];
-        newColumns.splice(index, 1, newColumn);
-        setStateColumns(newColumns);
-        setSavedFilters({...savedFilters, [index]: filterType});
-      }};
+      return {...column, changeFilter};
     });
-  }, [stateColumns, setStateColumns, savedFilters]);
+  }, [stateColumns, changeFilter]);
 
-  const {getTableProps, getTableBodyProps, headerGroups, page, rows, prepareRow, canPreviousPage,
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    rows,
+    prepareRow,
+    canPreviousPage,
     canNextPage,
     pageOptions,
     pageCount,
     gotoPage,
     nextPage,
-    previousPage} = useTable(
-    {columns, data, defaultColumn, initalState: {pageIndex: 1}, filterTypes, autoResetPage: !skipPageResetRef,
+    previousPage,
+    selectedFlatRows,
+    state,
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn,
+      initalState: {pageIndex: 1},
+      filterTypes,
+      autoResetPage: !skipPageResetRef,
       autoResetSortBy: !skipPageResetRef,
       autoResetFilters: !skipPageResetRef,
-      autoResetSelectedRows: !skipPageResetRef},
+      autoResetSelectedRows: !skipPageResetRef,
+    },
     useFilters,
     useSortBy,
     usePagination,
     useRowSelect,
-    useCreateCheckboxes,
+    props.actions ? useCreateActions(props.actions) : emptyHook,
+    props.options.selection ? useCreateCheckboxes : emptyHook,
   );
-
+  const prevSelectedRows = usePrevious(selectedFlatRows);
+  useEffect(() => {
+    if (prevSelectedRows.length !== selectedFlatRows.length) {
+      props.onSelectionChange(selectedFlatRows);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFlatRows, props.onSelectionChange]);
   return (
     <div id='top-level-table-wrapper' style={{position: 'relative'}}>
       <TableContainer>
@@ -150,7 +181,7 @@ const MuiTable = (props) => {
           <MuiBody rows={page || rows} getTableBodyProps={getTableBodyProps} prepareRow={prepareRow} />
         </Table>
       </TableContainer>
-      {props.includePagination && <MuiPagination {...{canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, canPreviousPage}} />}
+      {props.options.pagination && <MuiPagination {...{canNextPage, pageOptions, pageCount, gotoPage, nextPage, previousPage, canPreviousPage}} />}
     </div>
   );
 };
@@ -175,13 +206,16 @@ MuiTable.propTypes = {
     typeDateFormat: PropTypes.string,
     /** The name of the filter method to apply to the column. */
     filter: PropTypes.string,
-    /** An object mimicking a circular linked list. Calling '.next()' should iterate over each filterType option cyclically */
+    /** An object mimicking a circular linked list. Calling '.next' should iterate over each filterType option cyclically */
     filterTypes: PropTypes.shape({'filter1': PropTypes.shape({next: 'filter2'}), 'filter2': PropTypes.shape({next: 'filter1'})}),
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
-  /** If 'true', shows icons responsible for controlling table paging. */
-  includePagination: PropTypes.bool,
+  /** Object for toggling table options */
+  options: PropTypes.shape({
+    pagination: PropTypes.bool,
+    selection: PropTypes.bool,
+  }),
 };
 // export default MuiTable;
 
@@ -226,7 +260,24 @@ const MuiExample = () => {
           {accessor: 'gender', Header: 'Gender', type: 'string'},
           {accessor: 'income', Header: 'Income', type: 'currency'},
         ]}
-        includePagination={true}
+        options={{pagination: true, selection: true}}
+        onSelectionChange={(rows) => console.log('Selected Rows', rows)}
+        actions={[
+          {
+            icon: <Save />,
+            tooltip: 'Save User',
+            onClick: (event, rowData) => {
+              console.log('Save Row', rowData);
+            },
+          },
+          {
+            icon: <Edit />,
+            tooltip: 'Save User',
+            onClick: (event, rowData) => {
+              console.log('Edit Row', rowData);
+            },
+          },
+        ]}
       />
     </>
   );

@@ -61,7 +61,7 @@ export const DateRangeFilter = React.memo(function DateRangeFilter({
 );
 
 export const DefaultColumnFilter = React.memo(function DefaultColumnFilter(props) {
-  console.log(props);
+  // console.log(props);
   const {filterValue, setFilter, changeFilter, filterTypes, index} = props.column;
   const [filterType, setFilterType] = useState('text');
   // console.log(column);

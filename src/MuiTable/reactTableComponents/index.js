@@ -1,7 +1,7 @@
-export {default as MuiHead} from './MuiHead2';
-export {default as MuiHeadCell} from './MuiHeadCell2';
+export {default as MuiHead} from './MuiHead';
+export {default as MuiHeadCell} from './MuiHeadCell';
 export {default as MuiPagination} from './MuiPagination';
-export {default as MuiBody} from './MuiBody2';
+export {default as MuiBody} from './MuiBody';
 export {DateRangeFilter, DefaultColumnFilter} from './FilterComponents';
 export {startsWith, dateRange} from './filters';
-export {useCreateCheckboxes} from './hooks';
+export {useCreateCheckboxes, emptyHook, useCreateActions} from './hooks';
