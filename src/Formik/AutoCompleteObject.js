@@ -35,9 +35,8 @@ export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlig
   });
 
   const textFieldProps = useCallback((formik) => {
-    const {field, form, meta} = formik;
+    const {form, meta} = formik;
     return {
-      ...field,
       disabled: form.isSubmitting,
       error: Boolean(meta.touched && meta.error),
       fullWidth: true,
@@ -49,7 +48,6 @@ export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlig
       label: name,
       name: name,
       margin: 'dense',
-      value: field.value,
       ...otherProps,
     };
   }, [name, otherProps]);
@@ -72,7 +70,7 @@ export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlig
       disabled: form.isSubmitting || otherProps.disabled,
       getOptionLabel: option => get(option, optionKey, ''),
       renderInput: params => {
-      // eslint-disable-next-line max-len
+        // eslint-disable-next-line max-len
         return (<TextField {...{...params, InputLabelProps: {...params.InputLabelProps, shrink: !!field.value || shrunkLabel}, inputProps: {...params.inputProps, autoComplete: 'off'}}}
           {...textFieldProps(formik)}
         />);
