@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {TextField} from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
 
@@ -10,7 +11,7 @@ import {Field} from 'formik';
  * see <a href='https://material-ui.com/api/autocomplete/' target="_blank">AutoComplete API</a>. Underlying TextField component can be modified through
  * the "textFieldProps" prop; see <a href='https://material-ui.com/api/text-field/' target="_blank"> TextField API</a> for details.
  *
- * @version 1.0.0
+ * @version 1.0.1
  * @author [Gerry Blackmon](https://github.com/gblackiv)
  * @author [Daniel Kinsbursky](https://github.com/kbi-daniel)
  * @author [Chris Voss](https://github.com/ChrisJVoss)
@@ -21,12 +22,26 @@ import {Field} from 'formik';
  */
 const AutoComplete = props => {
   const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
+  const classes = useStyles();
   const autoCompleteProps = (form, field) => ({
     ...field,
     autoHighlight: true,
     autoSelect,
+    classes: {tagSizeSmall: classes.tagSizeSmall},
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
+    filterOptions: (options, state) => {
+      if (Array.isArray(field.value)) {
+        return options.filter(option => {
+          let showOption = true;
+          field.value.forEach(item => {
+            if (item[optionKey] === option[optionKey]) showOption = false;
+          });
+          return showOption;
+        });
+      }
+      return options;
+    },
     id: name,
     getOptionLabel: (option, state) => {
       if (typeof option === 'string') return option;
@@ -41,7 +56,8 @@ const AutoComplete = props => {
       if (onBlur) onBlur({field, form});
     },
     onChange: (e, value) => {
-      if (value) form.setFieldValue(field.name, value[optionKey]);
+      if (value && !Array.isArray(value)) form.setFieldValue(field.name, value[optionKey]);
+      else if (value && Array.isArray(value)) form.setFieldValue(field.name, value);
       else form.setFieldValue(field.name, '');
       if (onChange) {
         onChange({
@@ -50,6 +66,7 @@ const AutoComplete = props => {
         });
       }
     },
+    size: 'small',
     value: field.value,
     ...otherProps,
   });
@@ -88,9 +105,19 @@ const AutoComplete = props => {
   );
 };
 
+const useStyles = makeStyles({
+  tagSizeSmall: {
+    backgroundColor: 'white',
+    border: '1px solid lightskyblue',
+    borderRadius: '5px',
+  },
+});
 AutoComplete.defaultProps = {
-  fast: false,
   autoSelect: false,
+  disabled: false,
+  fast: false,
+  multiple: false,
+  required: false,
 };
 AutoComplete.propTypes = {
   /** Auto Select (incomplete) */
@@ -101,6 +128,8 @@ AutoComplete.propTypes = {
   fast: PropTypes.bool,
   /** The `label` content. If not set, `label` will default to `name` prop.  */
   label: PropTypes.string,
+  /** If true, formik value must be an array and the input will support multiple selections. */
+  multiple: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
   /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
