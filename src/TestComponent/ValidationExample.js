@@ -44,7 +44,6 @@ const ValidationExample = () => {
     Weight: number().required(),
   });
   const handleSubmit = (values, actions) => {
-    console.log(values);
   };
   const autoProps = useMemo(() => ({
     name: 'Auto',
@@ -71,7 +70,6 @@ const ValidationExample = () => {
         validateOnBlur={true}
       >
         {formik => {
-          // console.log(formik.values.AutoObject);
           return (
             <Form style={{width: '100%'}}>
               <Grid container spacing={1}>

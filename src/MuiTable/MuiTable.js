@@ -7,7 +7,7 @@ import {Check, Close, Save, Edit} from '@material-ui/icons';
 import {useTable, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
 import moment from 'moment';
 import isEqual from 'lodash.isequal';
-import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateRange, useCreateCheckboxes, emptyHook, useCreateActions} from './reactTableComponents';
+import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateBefore, dateAfter, useCreateCheckboxes, emptyHook, useCreateActions, exportToCSV} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -47,6 +47,7 @@ const MuiTable = (props) => {
   const [stateColumns, setStateColumns] = useState([]);
   const [savedFilters, setSavedFilters] = useState({});
   const skipPageResetRef = useRef();
+
   useEffect(() => {
     const columnsWithSavedFilters = Object.keys(savedFilters);
     if (columnsWithSavedFilters.length) {
@@ -59,14 +60,18 @@ const MuiTable = (props) => {
       setStateColumns(props.columns);
     }
   }, [props.columns, savedFilters]);
+
   React.useEffect(() => {
     // After the table has updated, always remove the flag
     skipPageResetRef.current = false;
   }, [stateColumns]);
+
   const filterTypes = {
     startsWith: startsWith,
-    dateRange: dateRange,
+    dateBefore: dateBefore,
+    dateAfter: dateAfter,
   };
+
   const changeFilter = useCallback((index, filterType) => {
     const newColumn = stateColumns[index];
     newColumn.filter = filterType;
@@ -75,11 +80,12 @@ const MuiTable = (props) => {
     setStateColumns(newColumns);
     setSavedFilters({...savedFilters, [index]: filterType});
   }, [stateColumns, savedFilters]);
+
   const defaultColumn = React.useMemo(
     () => ({
-      minWidth: 30,
+      minWidth: 45,
       Filter: (props) => {
-        if (props.column.filter === 'dateRange') return <DateRangeFilter {...props} />;
+        if (props.column.filter === 'dateBefore' || props.column.filter === 'dateAfter') return <DateRangeFilter {...props} />;
         else return <DefaultColumnFilter {...props} />;
       },
     }),
@@ -111,6 +117,7 @@ const MuiTable = (props) => {
           ...column,
           Cell: ({cell}) => moment(cell.value).format(column.typeDateFormat || 'MM/DD/YYYY'),
           sortType: column.sortType || basicDateSortType,
+          changeFilter,
         };
       }
       if (column.type === 'numeric') {
@@ -157,7 +164,7 @@ const MuiTable = (props) => {
       autoResetPage: !skipPageResetRef,
       autoResetSortBy: !skipPageResetRef,
       autoResetFilters: !skipPageResetRef,
-      autoResetSelectedRows: !skipPageResetRef,
+      // autoResetSelectedRows: !skipPageResetRef,
     },
     useFilters,
     useSortBy,
@@ -221,6 +228,8 @@ MuiTable.propTypes = {
 
 
 const MuiExample = () => {
+  let selectedRows = [];
+  const dataTable = document.getElementById('dataTable');
   const [mockData, setData] = useState([
     {'id': 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64},
     {'id': 2, 'active': true, 'name': 'Brnaby Elvins', 'dateCreated': new Date('10/22/2019'), 'gender': 'Male', 'income': 19518.39},
@@ -246,7 +255,10 @@ const MuiExample = () => {
   return (
     <>
       <button onClick={() => setData([...mockData, {'id': mockData.length + 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64}])}>Add Row</button>
+      <button onClick={() => exportToCSV(selectedRows)}>Export Selected</button>
+      <button onClick={() => console.log(selectedRows)}>Show SelectedRows</button>
       <MuiTable
+        id='dataTable'
         data={mockData}
         columns={[
           {accessor: 'id', Header: 'Id', type: 'numeric'},
@@ -255,13 +267,16 @@ const MuiExample = () => {
             text: {next: 'startsWith'},
             startsWith: {next: 'text'},
           }},
-          {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'YYYY/MM/DD', sortType: 'datetime', filter: 'dateRange'},
+          {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'MM/DD/YYYY', sortType: 'datetime', filter: 'dateBefore', filterTypes: {
+            dateBefore: {next: 'dateAfter'},
+            dateAfter: {next: 'dateBefore'},
+          }},
           {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd', disableSortBy: true},
           {accessor: 'gender', Header: 'Gender', type: 'string'},
           {accessor: 'income', Header: 'Income', type: 'currency'},
         ]}
         options={{pagination: true, selection: true}}
-        onSelectionChange={(rows) => console.log('Selected Rows', rows)}
+        onSelectionChange={(rows) => selectedRows = rows}
         actions={[
           {
             icon: <Save />,

@@ -33,7 +33,6 @@ const MobileTable = (props) => {
     setPage(0);
   };
   // {display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingRight: ''}
-  console.log('MobileTable');
   return (
     <div style={{position: 'relative'}}>
       <TableContainer style={{height}}>

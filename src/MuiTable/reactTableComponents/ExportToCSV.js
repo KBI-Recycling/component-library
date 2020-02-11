@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-function exportToCSV(table, includeHeaders = true, metadata) {
+export default function exportToCSV(table, includeHeaders = true, metadata) {
   const rows = Array.from(table.querySelectorAll('tr'));
   if (!includeHeaders && rows[0].querySelectorAll('th').length) {
     rows.shift();

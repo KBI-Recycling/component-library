@@ -7,6 +7,7 @@ export const useCreateCheckboxes = hooks => {
     // Let's make a column for selection
     {
       id: 'selection',
+      disableSortBy: true,
       // The header can use the table's getToggleAllRowsSelectedProps method
       // to render a checkbox
       Header: (props) => {
@@ -20,7 +21,6 @@ export const useCreateCheckboxes = hooks => {
       // The cell can use the individual row's getToggleRowSelectedProps method
       // to the render a checkbox
       Cell: (props) => {
-        // console.log(props.selectedFlatRows, props.row);
         return (
           <div>
             <MuiCheckbox {...props.row.getToggleRowSelectedProps()} />
@@ -33,11 +33,10 @@ export const useCreateCheckboxes = hooks => {
   ]);
 };
 export const useCreateActions = actions => hooks => {
-  console.log(actions);
-  console.log(hooks);
   hooks.flatColumns.push(columns => [
     {
       id: 'actions',
+      disableSortBy: true,
       Header: props => {
         return (
           <div>
