@@ -7,7 +7,7 @@ import {Check, Close, Save, Edit} from '@material-ui/icons';
 import {useTable, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
 import moment from 'moment';
 import isEqual from 'lodash.isequal';
-import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateBefore, dateAfter, useCreateCheckboxes, emptyHook, useCreateActions, exportToCSV} from './reactTableComponents';
+import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateBefore, dateAfter, dateEquals, useCreateCheckboxes, emptyHook, useCreateActions, exportToCSV} from './reactTableComponents';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -70,6 +70,7 @@ const MuiTable = (props) => {
     startsWith: startsWith,
     dateBefore: dateBefore,
     dateAfter: dateAfter,
+    dateEquals: dateEquals,
   };
 
   const changeFilter = useCallback((index, filterType) => {
@@ -85,7 +86,7 @@ const MuiTable = (props) => {
     () => ({
       minWidth: 45,
       Filter: (props) => {
-        if (props.column.filter === 'dateBefore' || props.column.filter === 'dateAfter') return <DateRangeFilter {...props} />;
+        if (props.column.filter === 'dateBefore' || props.column.filter === 'dateAfter' || props.column.filter === 'dateEquals') return <DateRangeFilter {...props} />;
         else return <DefaultColumnFilter {...props} />;
       },
     }),
@@ -138,23 +139,7 @@ const MuiTable = (props) => {
     });
   }, [stateColumns, changeFilter]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    page,
-    rows,
-    prepareRow,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    selectedFlatRows,
-    state,
-  } = useTable(
+  const tableProps = useTable(
     {
       columns,
       data,
@@ -173,13 +158,33 @@ const MuiTable = (props) => {
     props.actions ? useCreateActions(props.actions) : emptyHook,
     props.options.selection ? useCreateCheckboxes : emptyHook,
   );
+  const {getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    rows,
+    prepareRow,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    selectedFlatRows,
+    state} = tableProps;
+  console.log(tableProps);
   const prevSelectedRows = usePrevious(selectedFlatRows);
+  const prevRows = usePrevious(rows);
   useEffect(() => {
     if (prevSelectedRows.length !== selectedFlatRows.length) {
       props.onSelectionChange(selectedFlatRows);
     }
+    if (prevSelectedRows.length !== rows.length) {
+      props.onRowChange(rows);
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedFlatRows, props.onSelectionChange]);
+  }, [selectedFlatRows, props.onSelectionChange, rows, props.onRowChange]);
   return (
     <div id='top-level-table-wrapper' style={{position: 'relative'}}>
       <TableContainer>
@@ -229,6 +234,7 @@ MuiTable.propTypes = {
 
 const MuiExample = () => {
   let selectedRows = [];
+  let remainingRows = [];
   const dataTable = document.getElementById('dataTable');
   const [mockData, setData] = useState([
     {'id': 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64},
@@ -256,7 +262,10 @@ const MuiExample = () => {
     <>
       <button onClick={() => setData([...mockData, {'id': mockData.length + 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64}])}>Add Row</button>
       <button onClick={() => exportToCSV(selectedRows)}>Export Selected</button>
-      <button onClick={() => console.log(selectedRows)}>Show SelectedRows</button>
+      <button onClick={() => {
+        console.log(selectedRows); console.log(remainingRows)
+        ;
+      }}>Show SelectedRows</button>
       <MuiTable
         id='dataTable'
         data={mockData}
@@ -269,14 +278,16 @@ const MuiExample = () => {
           }},
           {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'MM/DD/YYYY', sortType: 'datetime', filter: 'dateBefore', filterTypes: {
             dateBefore: {next: 'dateAfter'},
-            dateAfter: {next: 'dateBefore'},
+            dateAfter: {next: 'dateEquals'},
+            dateEquals: {next: 'dateBefore'},
           }},
           {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd', disableSortBy: true},
           {accessor: 'gender', Header: 'Gender', type: 'string'},
           {accessor: 'income', Header: 'Income', type: 'currency'},
         ]}
         options={{pagination: true, selection: true}}
-        onSelectionChange={(rows) => selectedRows = rows}
+        onSelectionChange={rows => selectedRows = rows}
+        onRowChange={rows => remainingRows = rows}
         actions={[
           {
             icon: <Save />,

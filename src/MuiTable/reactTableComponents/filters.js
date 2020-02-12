@@ -24,3 +24,10 @@ export function dateAfter(rows, id, filterValue) {
     return rowValue !== undefined && moment(rowValue).isAfter(filterValue);
   });
 }
+
+export function dateEquals(rows, id, filterValue) {
+  return rows.filter(row => {
+    const rowValue = row.values[id];
+    return rowValue !== undefined && moment(rowValue).isSame(filterValue);
+  });
+}

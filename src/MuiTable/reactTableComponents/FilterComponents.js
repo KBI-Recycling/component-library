@@ -5,13 +5,10 @@ import {FilterList} from '@material-ui/icons';
 import moment from 'moment';
 
 export const DateRangeFilter = React.memo(function DateRangeFilter(props) {
-  const {filterValue, setFilter, changeFilter, filterTypes, index} = props.column;
-  const [filterType, setFilterType] = useState('dateBefore');
+  const {filterValue, setFilter, changeFilter, filterTypes, index, filter} = props.column;
   const handleClick = () => {
-    setFilterType(filterTypes[filterType].next);
-    changeFilter(index, filterType);
+    changeFilter(index, filterTypes[filter].next);
   };
-
   return (
     <TextField
       value={filterValue || ''}
@@ -38,11 +35,10 @@ export const DateRangeFilter = React.memo(function DateRangeFilter(props) {
 );
 
 export const DefaultColumnFilter = React.memo(function DefaultColumnFilter(props) {
-  const {filterValue, setFilter, changeFilter, filterTypes, index} = props.column;
-  const [filterType, setFilterType] = useState('text');
+  // Add default filter?
+  const {filterValue, setFilter, changeFilter, filterTypes, index, filter} = props.column;
   const handleClick = () => {
-    setFilterType(filterTypes[filterType].next);
-    changeFilter(index, filterType);
+    changeFilter(index, filterTypes[filter].next);
   };
 
   return (
