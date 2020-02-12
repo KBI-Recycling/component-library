@@ -58,7 +58,6 @@ const NumberField = (props) => {
         else return '';
       })(),
       id: id || name,
-      InputProps: {endAdornment: <InputAdornment position="end">No.</InputAdornment>},
       label: label || name,
       margin,
       placeholder,
