@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import MuiTextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import {FastField, Field} from 'formik';
 
 /**
