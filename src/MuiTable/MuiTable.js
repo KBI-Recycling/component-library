@@ -1,14 +1,11 @@
 /* eslint-disable require-jsdoc */
 import React, {useMemo, useState, useEffect, useRef, useCallback} from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {TableContainer, Table} from '@material-ui/core';
 import {Check, Close, Save, Edit} from '@material-ui/icons';
-import {useTable, useGroupBy, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
+import {useTable, useGroupBy, useSortBy, usePagination, useFilters, useRowSelect} from 'react-table';
 import moment from 'moment';
-import isEqual from 'lodash.isequal';
 import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateBefore, dateAfter, dateEquals, useCreateCheckboxes, emptyHook, useCreateActions, exportToCSV} from './reactTableComponents';
-import exportRowsToCSV from './reactTableComponents/ExportRowsToCSV.js';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -27,12 +24,6 @@ import exportRowsToCSV from './reactTableComponents/ExportRowsToCSV.js';
  *
  */
 
-// const useStyles = makeStyles(theme => ({
-//   root: {
-//     flexShrink: 0,
-//     marginLeft: theme.spacing(2.5),
-//   },
-// }));
 const columnHeaders = [
   {accessor: 'id', Header: 'Id'},
   {accessor: 'active', Header: 'Active'},
@@ -49,7 +40,6 @@ function usePrevious(value) {
   });
   return ref.current || [];
 }
-
 
 const MuiTable = (props) => {
   // const classes = useStyles();
@@ -184,14 +174,14 @@ const MuiTable = (props) => {
     previousPage,
     selectedFlatRows,
     state: {groupBy}} = tableProps;
-  console.log(tableProps);
   const prevSelectedRows = usePrevious(selectedFlatRows);
-  const prevRows = usePrevious(rows);
   useEffect(() => {
-    if (prevSelectedRows.length !== selectedFlatRows.length) {
-      props.onSelectionChange(selectedFlatRows);
+    if (props.onSelectionChange) {
+      if (prevSelectedRows.length !== selectedFlatRows.length) {
+        props.onSelectionChange(selectedFlatRows);
+      }
     }
-    if (prevSelectedRows.length !== rows.length) {
+    if (props.onRowChange) {
       props.onRowChange(rows);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,6 +200,12 @@ const MuiTable = (props) => {
 };
 
 MuiTable.propTypes = {
+  /** Row actions. Functions take the form (event, rowData) => do something */
+  actions: PropTypes.arrayOf(PropTypes.shape({
+    icon: PropTypes.node.isRequired,
+    tooltip: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+  })),
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */
   columns: PropTypes.arrayOf(PropTypes.shape({
     /** Property that controls the header and data to be displayed in each column. Will be used as the table header by default; but can be overwritten by more descriptive `Header` property. */
@@ -234,6 +230,10 @@ MuiTable.propTypes = {
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /** Function called with the filtered rows when filtered rows change. (rows) => do something */
+  onRowChange: PropTypes.func,
+  /** Function called with the selected rows when selected rows change. (rows) => do something */
+  onSelectionChange: PropTypes.func,
   /** Object for toggling table options */
   options: PropTypes.shape({
     pagination: PropTypes.bool,
@@ -245,11 +245,10 @@ MuiTable.propTypes = {
 
 const MuiExample = () => {
   let selectedRows = [];
-  let remainingRows = [];
-  const dataTable = document.getElementById('dataTable');
+  const remainingRows = [];
   const [mockData, setData] = useState([
     {'id': 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64},
-    {'id': 2, 'active': true, 'name': 'Brnaby Elvins', 'dateCreated': new Date('10/22/2019'), 'gender': 'Male', 'income': 19518.39},
+    {'id': 2, 'active': true, 'name': 'Barry Soliz', 'dateCreated': new Date('10/22/2019'), 'gender': 'Male', 'income': 19518.39},
     {'id': 3, 'active': true, 'name': 'Ruben Ledstone', 'dateCreated': new Date('2/10/2019'), 'gender': 'Male', 'income': 37733.55},
     {'id': 4, 'active': true, 'name': 'Hetty Schafer', 'dateCreated': new Date('12/9/2019'), 'gender': 'Female', 'income': 76929.64},
     {'id': 5, 'active': true, 'name': 'Alix Temblett', 'dateCreated': new Date('7/10/2019'), 'gender': 'Male', 'income': 63880.22},
@@ -272,25 +271,14 @@ const MuiExample = () => {
   return (
     <>
       <button onClick={() => setData([...mockData, {'id': mockData.length + 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64}])}>Add Row</button>
-      <button onClick={() => exportRowsToCSV(remainingRows, columnHeaders)}>Export Selected</button>
+      <button onClick={() => exportToCSV(remainingRows, columnHeaders, 'Some Metadata')}>Export Filtered</button>
       <button onClick={() => {
         console.log(selectedRows);
         console.log(remainingRows);
-        console.log(remainingRows[0].getRowProps());
-        const originalRows = remainingRows.map(row => Object.values(row.original));
-        console.log(originalRows);
-        const parsedRows = originalRows[0].map(row => {
-          let parsedValue = String(row).replace(/"/g, `""`);
-          parsedValue = /[",\n]/.test(parsedValue) ? `"${parsedValue}"` : parsedValue;
-          return parsedValue;
-        });
-        console.log(parsedRows);
       }}>Show SelectedRows</button>
       <MuiTable
-        id='dataTable'
         data={mockData}
         columns={React.useMemo(() => [
-
           {accessor: 'id', Header: 'Id', type: 'numeric'},
           {accessor: 'active', Header: 'Active', type: 'boolean', disableFilters: true},
           {accessor: 'name', Header: 'Name', type: 'string', filter: 'startsWith', filterTypes: {
@@ -308,7 +296,7 @@ const MuiExample = () => {
         ], [])}
         options={{pagination: true, selection: true}}
         onSelectionChange={rows => selectedRows = rows}
-        onRowChange={rows => remainingRows = rows}
+
         actions={[
           {
             icon: <Save />,
@@ -330,5 +318,4 @@ const MuiExample = () => {
   );
 }
 ;
-export default MuiExample
-;
+export default MuiExample;

@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
@@ -52,7 +52,7 @@ MuiPagination.propTypes = {
   canPreviousPage: PropTypes.bool.isRequired,
   previousPage: PropTypes.func.isRequired,
   nextPage: PropTypes.func.isRequired,
-  canNextPage: PropTypes.func.isRequired,
+  canNextPage: PropTypes.bool.isRequired,
   pageCount: PropTypes.number.isRequired,
 };
 

@@ -33,6 +33,7 @@ export const useCreateCheckboxes = hooks => {
     ...columns,
   ]);
 };
+
 export const useCreateActions = actions => hooks => {
   hooks.flatColumns.push(columns => [
     {
@@ -50,7 +51,7 @@ export const useCreateActions = actions => hooks => {
       Cell: props => {
         return (
           <div>
-            {actions.map(action => <Tooltip title={action.tooltip}><IconButton onClick={e => action.onClick(e, props.row)}>{action.icon}</IconButton></Tooltip>)}
+            {actions.map((action, i) => <Tooltip key={i} title={action.tooltip}><IconButton onClick={e => action.onClick(e, props.row)}>{action.icon}</IconButton></Tooltip>)}
           </div>
         )
         ;

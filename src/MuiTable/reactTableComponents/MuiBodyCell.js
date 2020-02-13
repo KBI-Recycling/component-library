@@ -1,11 +1,8 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Typography, TableCell} from '@material-ui/core';
-import {Check, Close} from '@material-ui/icons';
-import moment from 'moment';
 
-const MuiBodyCell = (props) => {
-  const {field, type, typeDateFormat, cell} = props;
+const MuiBodyCell = ({cell}) => {
   const typographyProps = useMemo(() => ({
     align: 'left',
     noWrap: true,
@@ -16,14 +13,15 @@ const MuiBodyCell = (props) => {
   }), []);
   return (
     <TableCell component='div' {...cell.getCellProps()}>
-      <Typography {...typographyProps}>{cell.render('Cell')}</Typography>
+      <Typography component='div' {...typographyProps}>{cell.render('Cell')}</Typography>
     </TableCell>
   );
 };
 
 MuiBodyCell.propTypes = {
-  field: PropTypes.string,
-  type: PropTypes.oneOf(['boolean', 'numeric', 'date', 'currency']),
-  typeDateFormat: PropTypes.string,
+  cell: PropTypes.shape({
+    getCellProps: PropTypes.func.isRequired,
+    render: PropTypes.func.isRequired,
+  }).isRequired,
 };
 export default React.memo(MuiBodyCell);

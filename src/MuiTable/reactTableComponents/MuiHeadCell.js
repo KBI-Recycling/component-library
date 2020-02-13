@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Typography, TableCell, TableSortLabel, TextField, InputAdornment} from '@material-ui/core';
-import FilterListIcon from '@material-ui/icons/FilterList';
+import {Typography, TableCell, TableSortLabel} from '@material-ui/core';
 
 const MuiHeadCell = (props) => {
   const {noWrapHead, column} = props;
   return (
     <TableCell component='div' {...column.getHeaderProps(column.getSortByToggleProps())}>
-      <Typography noWrap={noWrapHead}>
+      <Typography component='div' noWrap={noWrapHead}>
         {column.render('Header')}
         {!column.disableSortBy && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
       </Typography>

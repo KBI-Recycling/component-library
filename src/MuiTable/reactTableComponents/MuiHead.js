@@ -5,6 +5,7 @@ import MuiHeadCell from './MuiHeadCell';
 
 const MuiHead2 = (props) => {
   const {headerGroups} = props;
+  console.log(headerGroups);
   return (
     <TableHead component='div'>
       {headerGroups.map(headerGroup => {
@@ -29,10 +30,7 @@ MuiHead2.defaultProps = {
 };
 MuiHead2.propTypes = {
   headerGroups: PropTypes.arrayOf(PropTypes.shape({
-    field: PropTypes.string.isRequired,
-    title: PropTypes.string,
-    noWrapHead: PropTypes.bool,
-    noWrapBody: PropTypes.bool,
+    getHeaderGroupProps: PropTypes.func.isRequired,
   })).isRequired,
 };
 export default MuiHead2;

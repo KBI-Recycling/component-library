@@ -1,22 +1,41 @@
 /* eslint-disable require-jsdoc */
-export default function exportToCSV(table, includeHeaders = true, metadata) {
-  const rows = Array.from(table.querySelectorAll('tr'));
-  if (!includeHeaders && rows[0].querySelectorAll('th').length) {
-    rows.shift();
-  }
-  const lines = metadata ? [parseCell(metadata)] : [];
-  const numCols = findLongestRowLength(rows);
+import moment from 'moment';
+import PropTypes from 'prop-types';
 
-  for (const row of rows) {
+export default function exportToCSV(rows, headers, metadata, includeHeaders = true) {
+  const lines = metadata ? [parseCell(metadata)] : [];
+
+  if (includeHeaders) {
     let line = '';
-    for (let i = 0; i < numCols; i++) {
-      if (row.children[i] !== undefined) {
-        line += parseCell(row.children[i]);
+    headers.forEach((header, i, arr) => {
+      line += parseCell(header.Header);
+      if (i < arr.length - 1) {
+        line += ',';
       }
-      line += (i !== (numCols - 1)) ? ',' : '';
-    }
+    });
     lines.push(line);
   }
+
+  rows.forEach(row => {
+    let line = '';
+    headers.forEach((header, i, arr) => {
+      const cellValue = row.original[header.accessor];
+      if (cellValue !== undefined) {
+        if (typeof cellValue === 'number') {
+          line += parseCell(cellValue.toLocaleString());
+        } else if (header.type === 'date') {
+          line += parseCell(moment(cellValue).format(header.typeDateFormat || 'MM/DD/YYYY'));
+        } else {
+          line += parseCell(String(cellValue));
+        }
+      }
+      if (i < arr.length - 1) {
+        line += ',';
+      }
+    });
+    lines.push(line);
+  });
+
   const csvOutput = lines.join('\n');
   const csvBlob = new Blob([csvOutput], {type: 'text/csv'});
   const downloadURL = URL.createObjectURL(csvBlob);
@@ -31,16 +50,29 @@ export default function exportToCSV(table, includeHeaders = true, metadata) {
   }, 500);
   return;
 }
+// not "props" but since we don't use TypeScript...
+exportToCSV.propTypes = {
+  rows: PropTypes.arrayOf(PropTypes.shape({
+    original: PropTypes.object,
+  })).isRequired,
+  headers: PropTypes.arrayOf(PropTypes.shape({
+    accessor: PropTypes.string.isRequired,
+    Header: PropTypes.string,
+    type: PropTypes.string,
+    typeDateFormat: PropTypes.string, // A moment.js recognized date format.
+  })).isRequired,
+  metadata: PropTypes.string,
+  includeHeaders: PropTypes.bool,
+};
 
-function findLongestRowLength(rows) {
-  return rows.reduce((l, row) => row.childElementCount > l ? row.childElementCount : l, 0);
-}
-
-function parseCell(tableCell) {
-  let parsedValue = tableCell.textContent;
+function parseCell(cellValue) {
   // Replace all double quotes with two double quotes
-  parsedValue = parsedValue.replace(/"/g, `""`);
+  cellValue = cellValue.replace(/"/g, `""`);
   // If value contains comma, new-line or double-quote, enclose in double quotes
-  parsedValue = /[",\n]/.test(parsedValue) ? `"${parsedValue}"` : parsedValue;
-  return parsedValue;
+  cellValue = /[",\n]/.test(cellValue) ? `"${cellValue}"` : cellValue;
+  return cellValue;
 }
+
+parseCell.propTypes = {
+  cellValue: PropTypes.string.isRequired,
+};

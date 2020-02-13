@@ -1,10 +1,11 @@
 /* eslint-disable require-jsdoc */
-import React, {useMemo, useState} from 'react';
+import React, {memo} from 'react';
+import PropTypes from 'prop-types';
 import {TextField, InputAdornment, IconButton} from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
 import moment from 'moment';
 
-export const DateRangeFilter = React.memo(function DateRangeFilter(props) {
+export const DateRangeFilter = memo(function DateRangeFilter(props) {
   const {filterValue, setFilter, changeFilter, filterTypes, index, filter} = props.column;
   const handleClick = () => {
     changeFilter(index, filterTypes[filter].next);
@@ -33,8 +34,18 @@ export const DateRangeFilter = React.memo(function DateRangeFilter(props) {
   );
 },
 );
+DateRangeFilter.propTypes = {
+  column: PropTypes.shape({
+    filterValue: PropTypes.string,
+    setFilter: PropTypes.func,
+    changeFilter: PropTypes.func,
+    filterTypes: PropTypes.object,
+    index: PropTypes.number,
+    filter: PropTypes.string,
+  }).isRequired,
+};
 
-export const DefaultColumnFilter = React.memo(function DefaultColumnFilter(props) {
+export const DefaultColumnFilter = memo(function DefaultColumnFilter(props) {
   // Add default filter?
   const {filterValue, setFilter, changeFilter, filterTypes, index, filter} = props.column;
   const handleClick = () => {
@@ -58,3 +69,13 @@ export const DefaultColumnFilter = React.memo(function DefaultColumnFilter(props
     />
   );
 });
+DefaultColumnFilter.propTypes = {
+  column: PropTypes.shape({
+    filterValue: PropTypes.string,
+    setFilter: PropTypes.func,
+    changeFilter: PropTypes.func,
+    filterTypes: PropTypes.object,
+    index: PropTypes.number,
+    filter: PropTypes.string,
+  }).isRequired,
+};
