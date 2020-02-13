@@ -4,6 +4,10 @@ import {FilterList} from '@material-ui/icons';
 
 const DefaultColumnFilter = ({column}) => {
   const {filterValue, setFilter} = column;
+  const filterListProps = useMemo(() => ({
+    style: {paddingRight: '8px', fontSize: '1rem'},
+    onClick: e => setFilter(undefined),
+  }), [setFilter]);
   const inputProps = useMemo(() => ({
     placeholder: column.Header,
     style: {
@@ -13,14 +17,12 @@ const DefaultColumnFilter = ({column}) => {
       maxWidth: filterValue && filterValue.length > column.Header.length ? `${filterValue.length + 1}ch` : `${column.Header.length + 1}ch`,
     },
     value: filterValue || '',
-    onChange: e => {
-      setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
-    },
+    onChange: e => setFilter(e.target.value || undefined), // Set undefined to remove the filter entirely
   }), [column, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
-      <FilterList style={{paddingRight: '8px', fontSize: '1rem'}} />
+      <FilterList {...filterListProps} />
       <input {...inputProps} />
     </div>
   );

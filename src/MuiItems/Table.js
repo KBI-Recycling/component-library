@@ -20,7 +20,14 @@ const Table = (props) => {
           if (column.filterField === 'Select') return SelectColumnFilter;
           else return DefaultColumnFilter;
         })(),
-        filter: 'startsWith',
+        filter: (rows, id, filterValue) => {
+          console.log(rows, id, filterValue);
+          return rows.filter(row => {
+            const cleanRowValue = String(row.values[id]).toLowerCase();
+            const cleanFilterValue = String(filterValue).toLowerCase();
+            return cleanRowValue !== undefined && cleanRowValue.indexOf(cleanFilterValue) !== -1 ? true : false;
+          });
+        },
         sortType: column.type,
       };
     });
@@ -33,8 +40,22 @@ const Table = (props) => {
     pageIndex: props.paginationInitialIndex,
   }), [props.paginationInitialIndex, props.paginationInitialSize]);
 
+  // Get rid of filterTypes...
   const filterTypes = useMemo(() => ({
-    select: (rows, id, filterValue) => {},
+    equals: (rows, id, filterValue) => {
+      return rows.filter(row => {
+        const cleanRowValue = String(row.values[id]).toLowerCase();
+        const cleanFilterValue = String(filterValue).toLowerCase();
+        return cleanRowValue !== undefined && cleanRowValue === cleanFilterValue ? true : false;
+      });
+    },
+    includes: (rows, id, filterValue) => {
+      return rows.filter(row => {
+        const cleanRowValue = String(row.values[id]).toLowerCase();
+        const cleanFilterValue = String(filterValue).toLowerCase();
+        return cleanRowValue !== undefined && cleanRowValue.indexOf(cleanFilterValue) !== -1 ? true : false;
+      });
+    },
     startsWith: (rows, id, filterValue) => {
       return rows.filter(row => {
         const cleanRowValue = String(row.values[id]).toLowerCase();
