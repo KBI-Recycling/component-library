@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import {makeStyles, useTheme} from '@material-ui/core/styles';
 import {TableContainer, Table} from '@material-ui/core';
 import {Check, Close, Save, Edit} from '@material-ui/icons';
-import {useTable, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
+import {useTable, useGroupBy, useSortBy, usePagination, useFlexLayout, useFilters, useRowSelect} from 'react-table';
 import moment from 'moment';
 import isEqual from 'lodash.isequal';
 import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, startsWith, dateBefore, dateAfter, dateEquals, useCreateCheckboxes, emptyHook, useCreateActions, exportToCSV} from './reactTableComponents';
+import exportRowsToCSV from './reactTableComponents/ExportRowsToCSV.js';
 // import {FixedSizeList} from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';
 // import TablePaginationActions from './components/TablePaginationActions';
@@ -32,6 +33,15 @@ import {MuiHead, MuiPagination, MuiBody, DateRangeFilter, DefaultColumnFilter, s
 //     marginLeft: theme.spacing(2.5),
 //   },
 // }));
+const columnHeaders = [
+  {accessor: 'id', Header: 'Id'},
+  {accessor: 'active', Header: 'Active'},
+  {accessor: 'name', Header: 'Name'},
+  {accessor: 'dateCreated', Header: 'Date Created', type: 'date', typeDateFormat: 'MM/DD/YYYY'},
+  {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd'},
+  {accessor: 'gender', Header: 'Gender'},
+  {accessor: 'income', Header: 'Income'},
+];
 function usePrevious(value) {
   const ref = useRef();
   useEffect(() => {
@@ -152,6 +162,7 @@ const MuiTable = (props) => {
       // autoResetSelectedRows: !skipPageResetRef,
     },
     useFilters,
+    useGroupBy,
     useSortBy,
     usePagination,
     useRowSelect,
@@ -172,7 +183,7 @@ const MuiTable = (props) => {
     nextPage,
     previousPage,
     selectedFlatRows,
-    state} = tableProps;
+    state: {groupBy}} = tableProps;
   console.log(tableProps);
   const prevSelectedRows = usePrevious(selectedFlatRows);
   const prevRows = usePrevious(rows);
@@ -261,15 +272,25 @@ const MuiExample = () => {
   return (
     <>
       <button onClick={() => setData([...mockData, {'id': mockData.length + 1, 'active': true, 'name': 'Chloette Manton', 'dateCreated': new Date('12/24/2019'), 'gender': 'Female', 'income': 23463.64}])}>Add Row</button>
-      <button onClick={() => exportToCSV(selectedRows)}>Export Selected</button>
+      <button onClick={() => exportRowsToCSV(remainingRows, columnHeaders)}>Export Selected</button>
       <button onClick={() => {
-        console.log(selectedRows); console.log(remainingRows)
-        ;
+        console.log(selectedRows);
+        console.log(remainingRows);
+        console.log(remainingRows[0].getRowProps());
+        const originalRows = remainingRows.map(row => Object.values(row.original));
+        console.log(originalRows);
+        const parsedRows = originalRows[0].map(row => {
+          let parsedValue = String(row).replace(/"/g, `""`);
+          parsedValue = /[",\n]/.test(parsedValue) ? `"${parsedValue}"` : parsedValue;
+          return parsedValue;
+        });
+        console.log(parsedRows);
       }}>Show SelectedRows</button>
       <MuiTable
         id='dataTable'
         data={mockData}
-        columns={[
+        columns={React.useMemo(() => [
+
           {accessor: 'id', Header: 'Id', type: 'numeric'},
           {accessor: 'active', Header: 'Active', type: 'boolean', disableFilters: true},
           {accessor: 'name', Header: 'Name', type: 'string', filter: 'startsWith', filterTypes: {
@@ -284,7 +305,7 @@ const MuiExample = () => {
           {accessor: 'dateCreated', id: 'Day', Header: 'Day', type: 'date', typeDateFormat: 'dddd', disableSortBy: true},
           {accessor: 'gender', Header: 'Gender', type: 'string'},
           {accessor: 'income', Header: 'Income', type: 'currency'},
-        ]}
+        ], [])}
         options={{pagination: true, selection: true}}
         onSelectionChange={rows => selectedRows = rows}
         onRowChange={rows => remainingRows = rows}

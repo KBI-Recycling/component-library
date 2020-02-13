@@ -8,6 +8,7 @@ export const useCreateCheckboxes = hooks => {
     {
       id: 'selection',
       disableSortBy: true,
+      groupByBoundary: true,
       // The header can use the table's getToggleAllRowsSelectedProps method
       // to render a checkbox
       Header: (props) => {
@@ -37,6 +38,7 @@ export const useCreateActions = actions => hooks => {
     {
       id: 'actions',
       disableSortBy: true,
+      groupByBoundary: true,
       Header: props => {
         return (
           <div>

@@ -7,11 +7,19 @@ const MuiHead2 = (props) => {
   const {headerGroups} = props;
   return (
     <TableHead component='div'>
-      {headerGroups.map(headerGroup => (
-        <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map((column, index) => <MuiHeadCell key={index} column={column} />)}
-        </TableRow>
-      ))}
+      {headerGroups.map(headerGroup => {
+        // console.log('headerGroup', headerGroup);
+        return (
+          <TableRow component='div' {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column, index) => {
+              // console.log('column', column);
+              return (<MuiHeadCell key={index} column={column} />)
+              ;
+            })}
+          </TableRow>
+        )
+        ;
+      })}
     </TableHead>
   );
 };
