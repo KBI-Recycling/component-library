@@ -1,31 +1,48 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {useTable, useSortBy, usePagination} from 'react-table';
+import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import TableHeadRow from './Table/TableHeadRow';
 import TableBodyRow from './Table/TableBodyRow';
 import TableFooterRow from './Table/TableFooterRow';
+import DefaultColumnFilter from './Table/Filters/DefaultColumnFilter';
+import SelectColumnFilter from './Table/Filters/SelectColumnFilter';
 import moment from 'moment';
 
 const Table = (props) => {
   const styles = useStyles();
-  const data = useMemo(() => {
-    return props.data;
-  }, [props.data]);
   const columns = useMemo(() => {
     return props.columns.map(column => {
       return {
         ...column,
+        Filter: (() => {
+          if (column.filterField === 'Select') return SelectColumnFilter;
+          else return DefaultColumnFilter;
+        })(),
+        filter: 'startsWith',
         sortType: column.type,
       };
     });
   }, [props.columns]);
+  const data = useMemo(() => {
+    return props.data;
+  }, [props.data]);
   const initialState = useMemo(() => ({
     pageSize: props.paginationInitialSize,
     pageIndex: props.paginationInitialIndex,
   }), [props.paginationInitialIndex, props.paginationInitialSize]);
 
+  const filterTypes = useMemo(() => ({
+    select: (rows, id, filterValue) => {},
+    startsWith: (rows, id, filterValue) => {
+      return rows.filter(row => {
+        const cleanRowValue = String(row.values[id]).toLowerCase();
+        const cleanFilterValue = String(filterValue).toLowerCase();
+        return cleanRowValue !== undefined ? cleanRowValue.substring(0, cleanFilterValue.length) === cleanFilterValue : true;
+      });
+    },
+  }), []);
   const sortTypes = useMemo(() => ({
     boolean: (rowA, rowB, columnID) => {
       if (rowA.values[columnID] === rowB.values[columnID]) return 0;
@@ -53,7 +70,8 @@ const Table = (props) => {
       return rowA.values[columnID].localeCompare(rowB.values[columnID]);
     },
   }), []);
-  const rtProps = useTable({columns, data, initialState, sortTypes}, useSortBy, usePagination);
+
+  const rtProps = useTable({columns, data, filterTypes, initialState, sortTypes}, useFilters, useSortBy, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;
