@@ -84,7 +84,7 @@ const Table = (props) => {
     },
   }), []);
 
-  const rtProps = useTable({columns, data, initialState, sortTypes}, useFilters, useSortBy, usePagination);
+  const rtProps = useTable({columns, data, disableFilters: props.disableFilters, initialState, sortTypes}, useFilters, useSortBy, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;
@@ -111,11 +111,12 @@ const useStyles = makeStyles(theme => ({
   tableWrap: {
     display: 'block',
     maxWidth: '100%',
-    overflowX: 'scroll',
+    overflowX: 'auto',
     overflowY: 'hidden',
   },
 }));
 Table.defaultProps = {
+  disableFilters: false,
   paginationActive: true,
   paginationInitialIndex: 0,
   paginationInitialSize: 5,
@@ -139,6 +140,8 @@ Table.propTypes = {
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /** If `true`, disables filtering for every column in the entire table. Defaults to `false` */
+  disableFilters: PropTypes.bool,
   /**  If `false`, pagination will be turned off. Defaults to `true`. */
   paginationActive: PropTypes.bool,
   /** Index of the page that should be displayed first when pagination is active. Defaults to `0`. */
