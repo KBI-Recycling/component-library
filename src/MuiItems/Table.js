@@ -21,23 +21,23 @@ const Table = (props) => {
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
-          console.log('filterValue.type', filterValue.type);
-          if (filterValue.type === 'includes') {
+          if (filterValue.type === 'Includes') {
             return rows.filter(row => {
               const cleanRowValue = String(row.values[id]).toLowerCase();
               const cleanFilterValue = String(filterValue.content).toLowerCase();
               return cleanRowValue !== undefined && cleanRowValue.indexOf(cleanFilterValue) !== -1 ? true : false;
             });
           }
-          if (filterValue.type === 'startsWith') {
+          if (filterValue.type === 'Starts') {
             return rows.filter(row => {
               const cleanRowValue = String(row.values[id]).toLowerCase();
               const cleanFilterValue = String(filterValue.content).toLowerCase();
               return cleanRowValue !== undefined ? cleanRowValue.substring(0, cleanFilterValue.length) === cleanFilterValue : true;
             });
           }
-          if (filterValue.type === 'equals') {
+          if (filterValue.type === 'Equals') {
             return rows.filter(row => {
+              if (!filterValue.content) return true;
               const cleanRowValue = String(row.values[id]).toLowerCase();
               const cleanFilterValue = String(filterValue.content).toLowerCase();
               return cleanRowValue !== undefined && cleanRowValue === cleanFilterValue ? true : false;
@@ -55,31 +55,6 @@ const Table = (props) => {
     pageSize: props.paginationInitialSize,
     pageIndex: props.paginationInitialIndex,
   }), [props.paginationInitialIndex, props.paginationInitialSize]);
-
-  // Get rid of filterTypes...
-  const filterTypes = useMemo(() => ({
-    equals: (rows, id, filterValue) => {
-      return rows.filter(row => {
-        const cleanRowValue = String(row.values[id]).toLowerCase();
-        const cleanFilterValue = String(filterValue).toLowerCase();
-        return cleanRowValue !== undefined && cleanRowValue === cleanFilterValue ? true : false;
-      });
-    },
-    includes: (rows, id, filterValue) => {
-      return rows.filter(row => {
-        const cleanRowValue = String(row.values[id]).toLowerCase();
-        const cleanFilterValue = String(filterValue).toLowerCase();
-        return cleanRowValue !== undefined && cleanRowValue.indexOf(cleanFilterValue) !== -1 ? true : false;
-      });
-    },
-    startsWith: (rows, id, filterValue) => {
-      return rows.filter(row => {
-        const cleanRowValue = String(row.values[id]).toLowerCase();
-        const cleanFilterValue = String(filterValue).toLowerCase();
-        return cleanRowValue !== undefined ? cleanRowValue.substring(0, cleanFilterValue.length) === cleanFilterValue : true;
-      });
-    },
-  }), []);
   const sortTypes = useMemo(() => ({
     boolean: (rowA, rowB, columnID) => {
       if (rowA.values[columnID] === rowB.values[columnID]) return 0;
@@ -108,7 +83,7 @@ const Table = (props) => {
     },
   }), []);
 
-  const rtProps = useTable({columns, data, filterTypes, initialState, sortTypes}, useFilters, useSortBy, usePagination);
+  const rtProps = useTable({columns, data, initialState, sortTypes}, useFilters, useSortBy, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;

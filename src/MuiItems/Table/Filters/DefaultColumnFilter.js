@@ -1,14 +1,15 @@
 import React, {useCallback, useMemo} from 'react';
 import PropTypes from 'prop-types';
+import {Tooltip} from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
 
 const DefaultColumnFilter = ({column}) => {
   const {filterValue, setFilter} = column;
   const handleFilterChange = useCallback(() => {
-    if (!filterValue) setFilter({content: '', type: 'includes'});
-    else if (filterValue.type === 'includes') setFilter({...filterValue, type: 'startsWith'});
-    else if (filterValue.type === 'startsWith') setFilter({...filterValue, type: 'equals'});
-    else if (filterValue.type === 'equals') setFilter({...filterValue, type: 'includes'});
+    if (!filterValue) setFilter({content: '', type: 'Includes'});
+    else if (filterValue.type === 'Includes') setFilter({...filterValue, type: 'Starts'});
+    else if (filterValue.type === 'Starts') setFilter({...filterValue, type: 'Equals'});
+    else if (filterValue.type === 'Equals') setFilter({...filterValue, type: 'Includes'});
   }, [filterValue, setFilter]);
   const filterListProps = useMemo(() => ({
     style: {cursor: 'pointer', paddingRight: '8px', fontSize: '1rem'},
@@ -25,14 +26,16 @@ const DefaultColumnFilter = ({column}) => {
     value: filterValue?.content || '',
     onChange: e => {
       const content = e.target.value;
-      const type = filterValue?.type || 'includes';
+      const type = filterValue?.type || 'Includes';
       setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
     },
   }), [column, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
-      <FilterList {...filterListProps} />
+      <Tooltip title={filterValue?.type || 'Includes'}>
+        <FilterList {...filterListProps} />
+      </Tooltip>
       <input {...inputProps} />
     </div>
   );
