@@ -7,7 +7,7 @@ import sampleData from './Table/sampleData';
   data={sampleData}
   columns={[
     {accessor: 'id', Header: 'Id', type: 'numeric'},
-    {accessor: 'active', Header: 'Active', type: 'boolean'},
+    {accessor: 'active', Header: 'Active', type: 'boolean', filterField: 'boolean'},
     {accessor: 'full_name', Header: 'Name', type: 'string', filterDisable: false},
     {accessor: 'gender', Header: 'Gender', type: 'string', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
