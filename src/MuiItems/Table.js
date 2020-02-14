@@ -8,6 +8,7 @@ import TableBodyRow from './Table/TableBodyRow';
 import TableFooterRow from './Table/TableFooterRow';
 import DefaultColumnFilter from './Table/Filters/DefaultColumnFilter';
 import SelectColumnFilter from './Table/Filters/SelectColumnFilter';
+import BooleanColumnFilter from './Table/Filters/BooleanColumnFilter';
 import moment from 'moment';
 
 const Table = (props) => {
@@ -18,6 +19,7 @@ const Table = (props) => {
         ...column,
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
+          if (column.filterField === 'boolean') return BooleanColumnFilter;
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
@@ -41,6 +43,15 @@ const Table = (props) => {
               const cleanRowValue = String(row.values[id]).toLowerCase();
               const cleanFilterValue = String(filterValue.content).toLowerCase();
               return cleanRowValue !== undefined && cleanRowValue === cleanFilterValue ? true : false;
+            });
+          }
+          if (filterValue.type === 'Boolean') {
+            return rows.filter(row => {
+              const cleanRowValue = String(row.values[id]).toLowerCase();
+              const cleanFilterValue = String(filterValue.content).toLowerCase();
+              if (cleanFilterValue === 'indeterminate') return true;
+              else if (cleanRowValue === cleanFilterValue) return true;
+              else return false;
             });
           }
         },
