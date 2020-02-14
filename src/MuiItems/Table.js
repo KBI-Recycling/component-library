@@ -17,7 +17,7 @@ const Table = (props) => {
       return {
         ...column,
         Filter: (() => {
-          if (column.filterField === 'Select') return SelectColumnFilter;
+          if (column.filterField === 'select') return SelectColumnFilter;
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
@@ -44,6 +44,7 @@ const Table = (props) => {
             });
           }
         },
+        disableFilters: column.filterDisable || false,
         sortType: column.type,
       };
     });
@@ -127,6 +128,10 @@ Table.propTypes = {
     accessor: PropTypes.string.isRequired,
     /** By default, 'datetime' column types display as `moment().format('MM/DD/YYYY')`. This property overrides that default format string. See <a href='https://momentjs.com/docs/#/displaying/' target='_blank'>moment.js display docs</a> for more details. */ //eslint-disable-line
     datetimeFormat: PropTypes.string,
+    /** If set to `true`, will disable filtering for this column. Defaults to `false`. */
+    filterDisable: PropTypes.bool,
+    /** Controls the UI input and filter method for the column's filter field. Property must be one of 'text', 'select', or 'date'. Defaults to 'text'. */
+    filterField: PropTypes.oneOf(['text', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
     /** Data type: 'boolean', 'currency', 'datetime', 'numeric', 'string' */
