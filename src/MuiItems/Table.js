@@ -21,12 +21,28 @@ const Table = (props) => {
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
-          console.log(rows, id, filterValue);
-          return rows.filter(row => {
-            const cleanRowValue = String(row.values[id]).toLowerCase();
-            const cleanFilterValue = String(filterValue).toLowerCase();
-            return cleanRowValue !== undefined && cleanRowValue.indexOf(cleanFilterValue) !== -1 ? true : false;
-          });
+          console.log('filterValue.type', filterValue.type);
+          if (filterValue.type === 'includes') {
+            return rows.filter(row => {
+              const cleanRowValue = String(row.values[id]).toLowerCase();
+              const cleanFilterValue = String(filterValue.content).toLowerCase();
+              return cleanRowValue !== undefined && cleanRowValue.indexOf(cleanFilterValue) !== -1 ? true : false;
+            });
+          }
+          if (filterValue.type === 'startsWith') {
+            return rows.filter(row => {
+              const cleanRowValue = String(row.values[id]).toLowerCase();
+              const cleanFilterValue = String(filterValue.content).toLowerCase();
+              return cleanRowValue !== undefined ? cleanRowValue.substring(0, cleanFilterValue.length) === cleanFilterValue : true;
+            });
+          }
+          if (filterValue.type === 'equals') {
+            return rows.filter(row => {
+              const cleanRowValue = String(row.values[id]).toLowerCase();
+              const cleanFilterValue = String(filterValue.content).toLowerCase();
+              return cleanRowValue !== undefined && cleanRowValue === cleanFilterValue ? true : false;
+            });
+          }
         },
         sortType: column.type,
       };
