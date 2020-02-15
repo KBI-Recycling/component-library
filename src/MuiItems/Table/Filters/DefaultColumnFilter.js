@@ -24,7 +24,7 @@ const DefaultColumnFilter = ({column}) => {
     InputLabelProps: {style: {display: 'none'}},
     InputProps: {classes: {root: classes.inputRoot}},
     inputProps: {style: {
-      padding: '0px',
+      padding: '0px 0px 2px 0px',
       maxWidth: filterValue?.content?.length >= 5 ? `${filterValue.content.length + 1}ch` : `5ch`,
     }},
     value: filterValue?.content || '',
