@@ -8,9 +8,7 @@ import './DateColumnFilter.css';
 const DateColumnFilter = ({column}) => {
   const classes = useStyles();
   const {filterValue, setFilter} = column;
-  console.log({filterValue});
   const handleFilterChange = useCallback(() => {
-    console.log({filterValue});
     if (!filterValue) setFilter({content: '', type: 'Before'});
     else if (filterValue.type === 'Before') setFilter({...filterValue, type: 'After'});
     else if (filterValue.type === 'After') setFilter({...filterValue, type: 'Same'});

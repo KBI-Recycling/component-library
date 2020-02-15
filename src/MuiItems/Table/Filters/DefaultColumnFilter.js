@@ -1,9 +1,11 @@
 import React, {useCallback, useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Tooltip} from '@material-ui/core';
+import {TextField, Tooltip} from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
+import {makeStyles} from '@material-ui/core/styles';
 
 const DefaultColumnFilter = ({column}) => {
+  const classes = useStyles();
   const {filterValue, setFilter} = column;
   const handleFilterChange = useCallback(() => {
     if (!filterValue) setFilter({content: '', type: 'Starts'});
@@ -16,31 +18,41 @@ const DefaultColumnFilter = ({column}) => {
     onClick: handleFilterChange,
   }), [handleFilterChange]);
   const inputProps = useMemo(() => ({
-    placeholder: column.Header,
-    style: {
-      border: '0px',
-      fontFamily: 'monospace',
-      fontSize: '1rem',
-      maxWidth: filterValue && filterValue.length > column.Header.length ? `${filterValue.length + 1}ch` : `${column.Header.length + 1}ch`,
-    },
+    classes: {root: classes.formControlRoot},
+    placeholder: 'Type',
+    FormHelperTextProps: {style: {display: 'none'}},
+    InputLabelProps: {style: {display: 'none'}},
+    InputProps: {classes: {root: classes.inputRoot}},
+    inputProps: {style: {
+      padding: '0px',
+      maxWidth: filterValue?.content?.length >= 5 ? `${filterValue.content.length + 1}ch` : `5ch`,
+    }},
     value: filterValue?.content || '',
     onChange: e => {
       const content = e.target.value;
       const type = filterValue?.type || 'Includes';
       setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
     },
-  }), [column, filterValue, setFilter]);
+  }), [classes.formControlRoot, classes.inputRoot, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
       <Tooltip title={filterValue?.type || 'Includes'}>
         <FilterList {...filterListProps} />
       </Tooltip>
-      <input {...inputProps} />
+      <TextField {...inputProps} />
     </div>
   );
 };
 
+const useStyles = makeStyles(theme => ({
+  formControlRoot: {margin: '0px'},
+  inputRoot: {
+    fontFamily: 'monospace',
+    fontSize: '1rem',
+    padding: '0px',
+  },
+}));
 DefaultColumnFilter.propTypes = {
   column: PropTypes.object.isRequired,
 };
