@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import TableHeadRow from './Table/TableHeadRow';
-import TableBodyRow from './Table/TableBodyRow';
-import TableFooterRow from './Table/TableFooterRow';
-import DefaultColumnFilter from './Table/Filters/DefaultColumnFilter';
-import SelectColumnFilter from './Table/Filters/SelectColumnFilter';
-import BooleanColumnFilter from './Table/Filters/BooleanColumnFilter';
+import {TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
+import {BooleanColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 
 const Table = (props) => {
