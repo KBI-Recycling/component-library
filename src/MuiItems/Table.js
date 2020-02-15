@@ -4,7 +4,7 @@ import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
-import {BooleanColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
+import {BooleanColumnFilter, DateColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 
 const Table = (props) => {
@@ -16,6 +16,7 @@ const Table = (props) => {
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
           if (column.filterField === 'boolean') return BooleanColumnFilter;
+          if (column.filterField === 'date') return DateColumnFilter;
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
@@ -47,6 +48,26 @@ const Table = (props) => {
               const cleanFilterValue = String(filterValue.content).toLowerCase();
               if (cleanFilterValue === 'indeterminate') return true;
               else if (cleanRowValue === cleanFilterValue) return true;
+              else return false;
+            });
+          }
+          if (filterValue.type === 'Before') {
+            return rows.filter(row => {
+              if (moment(row.values[id]).isBefore(filterValue.content)) return true;
+              if (moment(row.values[id]).isSame(filterValue.content)) return true;
+              else return false;
+            });
+          }
+          if (filterValue.type === 'After') {
+            return rows.filter(row => {
+              if (moment(row.values[id]).isAfter(filterValue.content)) return true;
+              if (moment(row.values[id]).isSame(filterValue.content)) return true;
+              else return false;
+            });
+          }
+          if (filterValue.type === 'Same') {
+            return rows.filter(row => {
+              if (moment(row.values[id]).isSame(filterValue.content)) return true;
               else return false;
             });
           }
@@ -139,7 +160,7 @@ Table.propTypes = {
     /** If set to `true`, will disable filtering for this column. Defaults to `false`. */
     filterDisable: PropTypes.bool,
     /** Controls the UI input and filter method for the column's filter field. Property must be one of 'text', 'select', or 'date'. Defaults to 'text'. */
-    filterField: PropTypes.oneOf(['text', 'select']),
+    filterField: PropTypes.oneOf(['text', 'boolean', 'date', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
     /** Data type: 'boolean', 'currency', 'datetime', 'numeric', 'string' */
