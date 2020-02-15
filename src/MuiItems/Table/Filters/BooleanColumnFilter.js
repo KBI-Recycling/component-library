@@ -2,17 +2,20 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Checkbox, Tooltip} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {FilterList} from '@material-ui/icons';
+import {CheckBoxOutlineBlank, Close, Done, FilterList} from '@material-ui/icons';
 
 const BooleanColumnFilter = ({column}) => {
   const classes = useStyles();
   const {filterValue, setFilter} = column;
   const checkboxProps = useMemo(() => ({
     checked: filterValue?.content === 'true' ? true : false,
+    checkedIcon: <Done />,
     classes: {root: classes.root},
     color: 'default',
     disableRipple: true,
+    icon: <Close />,
     indeterminate: !filterValue || filterValue?.content === 'indeterminate' ? true : false,
+    indeterminateIcon: <CheckBoxOutlineBlank />,
     onChange: e => {
       const type = 'Boolean';
       const content = (() => {
