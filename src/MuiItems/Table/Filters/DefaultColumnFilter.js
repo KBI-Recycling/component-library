@@ -6,7 +6,7 @@ import {FilterList} from '@material-ui/icons';
 const DefaultColumnFilter = ({column}) => {
   const {filterValue, setFilter} = column;
   const handleFilterChange = useCallback(() => {
-    if (!filterValue) setFilter({content: '', type: 'Includes'});
+    if (!filterValue) setFilter({content: '', type: 'Starts'});
     else if (filterValue.type === 'Includes') setFilter({...filterValue, type: 'Starts'});
     else if (filterValue.type === 'Starts') setFilter({...filterValue, type: 'Equals'});
     else if (filterValue.type === 'Equals') setFilter({...filterValue, type: 'Includes'});
