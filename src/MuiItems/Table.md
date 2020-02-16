@@ -7,15 +7,15 @@ import sampleData from './Table/sampleData';
   data={sampleData}
   columns={[
     {accessor: 'id', Header: 'Id', type: 'numeric'},
-    {accessor: 'active', Header: 'Active', type: 'boolean', filterField: 'boolean'},
-    {accessor: 'full_name', Header: 'Name', type: 'string', filterDisable: false},
+    {accessor: 'active', Header: 'Active', type: 'boolean'},
+    {accessor: 'full_name', Header: 'Name', type: 'string', filterDisable: true},
     {accessor: 'gender', Header: 'Gender', type: 'string', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
     {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'M/D/YYYY', filterField: 'date'},
   ]}
   paginationActive={true}
   paginationSizes={[5, 10, 25, 50]}
-  paginationInitialSize={10}
+  paginationInitialSize={5}
   paginationInitialIndex={0}
 />
 ```

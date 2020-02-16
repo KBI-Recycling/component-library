@@ -16,7 +16,9 @@ const Table = (props) => {
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
           if (column.filterField === 'boolean') return BooleanColumnFilter;
-          if (column.filterField === 'date') return DateColumnFilter;
+          if (column.filterField === 'datetime') return DateColumnFilter;
+          if (column.type === 'datetime') return DateColumnFilter;
+          if (column.type === 'boolean') return BooleanColumnFilter;
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
@@ -155,15 +157,15 @@ Table.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.shape({
     /** Property that controls the header and data to be displayed in each column. Will be used as the table header by default; but can be overwritten by more descriptive `Header` property. */
     accessor: PropTypes.string.isRequired,
-    /** By default, 'datetime' column types display as `moment().format('MM/DD/YYYY')`. This property overrides that default format string. See <a href='https://momentjs.com/docs/#/displaying/' target='_blank'>moment.js display docs</a> for more details. */ //eslint-disable-line
+    /** Property only affects 'datetime' column types and overrides default display format (i.e. 'MM/DD/YYYY'). To override format, a string can be passed that conforms to <a href='https://momentjs.com/docs/#/displaying/' target='_blank'>moment.js display docs.</a> */ //eslint-disable-line
     datetimeFormat: PropTypes.string,
     /** If set to `true`, will disable filtering for this column. Defaults to `false`. */
     filterDisable: PropTypes.bool,
-    /** Controls the UI input and filter method for the column's filter field. Property must be one of 'text', 'select', or 'date'. Defaults to 'text'. */
-    filterField: PropTypes.oneOf(['text', 'boolean', 'date', 'select']),
+    /** Controls the UI input and filter method for the column's filter field. Property must be one of 'text', 'boolean', 'datetime', or 'select'. Defaults to 'text'. */
+    filterField: PropTypes.oneOf(['text', 'boolean', 'datetime', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
-    /** Data type: 'boolean', 'currency', 'datetime', 'numeric', 'string' */
+    /** Controls  default column formatting, sorting and filtering. Available types include: 'boolean', 'currency', 'datetime', 'numeric', 'string'. Defaults to 'string'. */
     type: PropTypes.string,
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
