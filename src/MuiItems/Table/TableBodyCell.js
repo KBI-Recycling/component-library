@@ -38,12 +38,12 @@ const ActionsButtonGroup = ({cell}) => {
   return (
     <ButtonGroup size='small'>
       {cell.column.actions.map((action, i) => {
-        const Icon = () => action.icon;
+        const Icon = action.icon;
         if (!action?.tooltip) return <Button style={actionsButtonStyle} onClick={event => action.onClick({event})}><Icon /></Button>;
         return (
           <Tooltip key={i} title={action.tooltip}>
             <Button style={actionsButtonStyle} onClick={event => action.onClick({event, rowData: cell.row.original, rowIndex: cell.row.index})}>
-              <Icon style={{height: '100px'}} />
+              <Icon />
             </Button>
           </Tooltip>
         );

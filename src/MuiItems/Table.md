@@ -16,14 +16,14 @@ import {Edit, Save} from '@material-ui/icons';
   ]}
   actionsPerRow={[
     {
-      icon: <Save />,
+      icon: Save,
       tooltip: 'Save User',
       onClick: (action) => {
         console.log('Save Row', action);
       },
     },
     {
-      icon: <Edit />,
+      icon: Edit,
       tooltip: 'Edit User',
       onClick: (action) => {
         console.log('Edit Row', action);
