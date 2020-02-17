@@ -6,8 +6,9 @@ import moment from 'moment';
 const TableBodyCell = (props) => {
   const {cell} = props;
   const typoProps = useMemo(() => ({
+    style: {whiteSpace: cell.column.wrapBodyText || 'nowrap'},
     variant: 'caption',
-  }), []);
+  }), [cell.column.wrapBodyText]);
 
   return (
     <TableCell {...cell.getCellProps()}>

@@ -185,6 +185,10 @@ Table.propTypes = {
     filterField: PropTypes.oneOf(['text', 'boolean', 'datetime', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
+    /** Controls whether text will wrap inside Table's Body cell.  Defaults to 'false'. */
+    wrapBodyText: PropTypes.boolean,
+    /** Controls whether text will wrap inside Table's Head cell.  Defaults to 'false'. */
+    wrapHeadText: PropTypes.boolean,
     /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', and 'numeric'. Defaults to 'alphanumeric'. */
     type: PropTypes.string,
   })).isRequired,
