@@ -1,15 +1,35 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {TableCell} from '@material-ui/core';
+import {ButtonGroup, Button, TableCell, Tooltip} from '@material-ui/core';
 import {Check, Close} from '@material-ui/icons';
 import moment from 'moment';
 
 
 const TableBodyCell = (props) => {
   const {cell} = props;
+  const actionsButtonStyle = useMemo(() => ({
+    border: '0px',
+    padding: '0px',
+  }), []);
   return (
     <TableCell {...cell.getCellProps()}>
       {cell.render((({cell}) => {
+        if (cell.column.actions) {
+          return (
+            <ButtonGroup size='small'>
+              {cell.column.actions.map((action, i) => {
+                if (!action?.tooltip) return <Button style={actionsButtonStyle} onClick={event => action.onClick({event})}>{action.icon}</Button>;
+                return (
+                  <Tooltip key={i} title={action.tooltip}>
+                    <Button style={actionsButtonStyle} onClick={event => action.onClick({event, rowData: cell.row.original, rowIndex: cell.row.index})}>
+                      {action.icon}
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+            </ButtonGroup>
+          );
+        }
         if (cell.column.type === 'boolean') {
           return cell.value ? <Check /> : <Close />;
         }

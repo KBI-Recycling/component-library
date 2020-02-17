@@ -2,6 +2,7 @@ Table Example:
 
 ```js
 import sampleData from './Table/sampleData';
+import {Edit, Save} from '@material-ui/icons';
 
 <Table
   data={sampleData}
@@ -12,6 +13,22 @@ import sampleData from './Table/sampleData';
     {accessor: 'gender', Header: 'Gender', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
     {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'M/D/YYYY', filterField: 'datetime'},
+  ]}
+  actionsPerRow={[
+    {
+      icon: <Save />,
+      tooltip: 'Save User',
+      onClick: (action) => {
+        console.log('Save Row', action);
+      },
+    },
+    {
+      icon: <Edit />,
+      tooltip: 'Edit User',
+      onClick: (action) => {
+        console.log('Edit Row', action);
+      },
+    },
   ]}
   paginationActive={true}
   paginationSizes={[5, 10, 25, 50]}

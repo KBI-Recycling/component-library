@@ -10,7 +10,7 @@ import moment from 'moment';
 const Table = (props) => {
   const styles = useStyles();
   const columns = useMemo(() => {
-    return props.columns.map(column => {
+    const tableColumns = props.columns.map(column => {
       return {
         ...column,
         Filter: (() => {
@@ -78,7 +78,17 @@ const Table = (props) => {
         sortType: column.type || 'alphanumeric',
       };
     });
-  }, [props.columns]);
+    if (props.actionsPerRow.length > 0) {
+      tableColumns.unshift({
+        id: 'actions',
+        disableFilters: true,
+        disableSortBy: true,
+        Header: 'Actions',
+        actions: props.actionsPerRow,
+      });
+    }
+    return tableColumns;
+  }, [props.actionsPerRow, props.columns]);
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -146,6 +156,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 Table.defaultProps = {
+  actionsPerRow: [],
   disableFilters: false,
   paginationActive: true,
   paginationInitialIndex: 0,
@@ -153,6 +164,15 @@ Table.defaultProps = {
   paginationSizes: [5, 10, 15],
 };
 Table.propTypes = {
+  /**  Property defines the actions that will be clickable on every row in the table. */
+  actionsPerRow: PropTypes.arrayOf(PropTypes.shape({
+    /**  The icon that will be displayed for the action. */
+    icon: PropTypes.node.isRequired,
+    /** The tooltip that will be displayed when the user hover over the action icon. */
+    tooltip: PropTypes.string,
+    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, rowData, rowIndex}) => {}` */
+    onClick: PropTypes.func.isRequired,
+  })),
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */
   columns: PropTypes.arrayOf(PropTypes.shape({
     /** Property that controls the header and data to be displayed in each column. Will be used as the table header by default; but can be overwritten by more descriptive `Header` property. */
