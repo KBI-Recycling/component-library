@@ -11,7 +11,7 @@ import sampleData from './Table/sampleData';
     {accessor: 'full_name', Header: 'Name', filterDisable: true},
     {accessor: 'gender', Header: 'Gender', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
-    {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'M/D/YYYY', filterField: 'date'},
+    {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'M/D/YYYY', filterField: 'datetime'},
   ]}
   paginationActive={true}
   paginationSizes={[5, 10, 25, 50]}

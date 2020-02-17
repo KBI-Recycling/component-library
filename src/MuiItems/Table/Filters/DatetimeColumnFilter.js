@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {FormControl, Input, Tooltip} from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
-import './DateColumnFilter.css';
+import './DatetimeColumnFilter.css';
 
-const DateColumnFilter = ({column}) => {
+const DatetimeColumnFilter = ({column}) => {
   const classes = useStyles();
   const {filterValue, setFilter} = column;
   const handleFilterChange = useCallback(() => {
@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     'padding': '0px 0px 2px 0px',
   },
 }));
-DateColumnFilter.propTypes = {
+DatetimeColumnFilter.propTypes = {
   column: PropTypes.object.isRequired,
 };
-export default DateColumnFilter;
+export default DatetimeColumnFilter;

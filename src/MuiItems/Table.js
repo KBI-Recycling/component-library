@@ -4,7 +4,7 @@ import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
-import {BooleanColumnFilter, DateColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
+import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 
 const Table = (props) => {
@@ -16,8 +16,8 @@ const Table = (props) => {
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
           if (column.filterField === 'boolean') return BooleanColumnFilter;
-          if (column.filterField === 'datetime') return DateColumnFilter;
-          if (column.type === 'datetime') return DateColumnFilter;
+          if (column.filterField === 'datetime') return DatetimeColumnFilter;
+          if (column.type === 'datetime') return DatetimeColumnFilter;
           if (column.type === 'boolean') return BooleanColumnFilter;
           else return DefaultColumnFilter;
         })(),
