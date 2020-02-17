@@ -75,7 +75,7 @@ const Table = (props) => {
           }
         },
         disableFilters: column.filterDisable || false,
-        sortType: column.type,
+        sortType: column.type || 'alphanumeric',
       };
     });
   }, [props.columns]);
@@ -109,7 +109,7 @@ const Table = (props) => {
       if (rowA.values[columnID] > rowB.values[columnID]) return 1;
       if (rowA.values[columnID] < rowB.values[columnID]) return -1;
     },
-    string: (rowA, rowB, columnID) => {
+    alphanumeric: (rowA, rowB, columnID) => {
       return rowA.values[columnID].localeCompare(rowB.values[columnID]);
     },
   }), []);
@@ -165,7 +165,7 @@ Table.propTypes = {
     filterField: PropTypes.oneOf(['text', 'boolean', 'datetime', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
-    /** Controls  default column formatting, sorting and filtering. Available types include: 'boolean', 'currency', 'datetime', 'numeric', 'string'. Defaults to 'string'. */
+    /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', and 'numeric'. Defaults to 'alphanumeric'. */
     type: PropTypes.string,
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */

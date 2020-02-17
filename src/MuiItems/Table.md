@@ -8,8 +8,8 @@ import sampleData from './Table/sampleData';
   columns={[
     {accessor: 'id', Header: 'Id', type: 'numeric'},
     {accessor: 'active', Header: 'Active', type: 'boolean'},
-    {accessor: 'full_name', Header: 'Name', type: 'string', filterDisable: true},
-    {accessor: 'gender', Header: 'Gender', type: 'string', filterField: 'select'},
+    {accessor: 'full_name', Header: 'Name', filterDisable: true},
+    {accessor: 'gender', Header: 'Gender', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
     {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'M/D/YYYY', filterField: 'date'},
   ]}
