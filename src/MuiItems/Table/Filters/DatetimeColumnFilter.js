@@ -9,7 +9,7 @@ const DatetimeColumnFilter = ({column}) => {
   const classes = useStyles();
   const {filterValue, setFilter} = column;
   const handleFilterChange = useCallback(() => {
-    if (!filterValue) setFilter({content: '', type: 'Before'});
+    if (!filterValue) setFilter({content: '', type: 'After'});
     else if (filterValue.type === 'Before') setFilter({...filterValue, type: 'After'});
     else if (filterValue.type === 'After') setFilter({...filterValue, type: 'Same'});
     else if (filterValue.type === 'Same') setFilter({...filterValue, type: 'Before'});
@@ -19,6 +19,7 @@ const DatetimeColumnFilter = ({column}) => {
     onClick: handleFilterChange,
   }), [handleFilterChange]);
   const inputProps = useMemo(() => ({
+    inputProps: {autoComplete: 'off'},
     classes: {input: classes.input},
     type: 'date',
     onChange: e => {
