@@ -9,6 +9,11 @@ import moment from 'moment';
 
 const Table = (props) => {
   const styles = useStyles();
+  const autoResets = useMemo(() => ({
+    autoResetSortBy: false,
+    autoResetFilters: false,
+    autoResetPage: false,
+  }), []);
   const columns = useMemo(() => {
     const tableColumns = props.columns.map(column => {
       return {
@@ -124,7 +129,7 @@ const Table = (props) => {
     },
   }), []);
 
-  const rtProps = useTable({columns, data, disableFilters: props.disableFilters, initialState, sortTypes}, useFilters, useSortBy, usePagination);
+  const rtProps = useTable({...autoResets, columns, data, disableFilters: props.disableFilters, initialState, sortTypes}, useFilters, useSortBy, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;
