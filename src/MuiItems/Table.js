@@ -20,8 +20,6 @@ const Table = (props) => {
         ...column,
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
-          if (column.filterField === 'boolean') return BooleanColumnFilter;
-          if (column.filterField === 'datetime') return DatetimeColumnFilter;
           if (column.type === 'datetime') return DatetimeColumnFilter;
           if (column.type === 'boolean') return BooleanColumnFilter;
           else return DefaultColumnFilter;
