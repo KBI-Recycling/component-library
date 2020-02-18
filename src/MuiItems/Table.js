@@ -167,7 +167,7 @@ Table.propTypes = {
   /**  Property defines the actions that will be clickable on every row in the table. */
   actionsPerRow: PropTypes.arrayOf(PropTypes.shape({
     /**  The icon that will be displayed for the action. */
-    icon: PropTypes.node.isRequired,
+    icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
     /** The tooltip that will be displayed when the user hover over the action icon. */
     tooltip: PropTypes.string,
     /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, rowData, rowIndex}) => {}` */
