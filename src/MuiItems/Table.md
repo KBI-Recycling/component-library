@@ -1,11 +1,22 @@
 Table Example:
 
 ```js
+import React, {Fragment, useCallback, useState} from 'react';
 import sampleData from './Table/sampleData';
+import {Button} from '@material-ui/core';
 import {Edit, Save} from '@material-ui/icons';
 
+const [rows, setRows] = useState(5);
+const handleAddRows = useCallback(() => {
+  setRows(rows + 5);
+}, [rows]);
+
+<Fragment>
 <Table
-  data={sampleData}
+  data={sampleData.filter((row, index) => {
+    if (index < rows) return true;
+    return false;
+  })}
   columns={[
     {accessor: 'id', Header: 'Id', type: 'numeric'},
     {accessor: 'active', Header: 'Active', type: 'boolean'},
@@ -35,4 +46,6 @@ import {Edit, Save} from '@material-ui/icons';
   paginationInitialSize={5}
   paginationInitialIndex={0}
 />
+<Button onClick={handleAddRows}>Add 5 Rows</Button>
+</Fragment>
 ```
