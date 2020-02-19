@@ -58,6 +58,7 @@ const Table = (props) => {
           }
           if (filterValue.type === 'Before') {
             return rows.filter(row => {
+              if (!moment(filterValue.content).isValid()) return true;
               if (moment(row.values[id]).isBefore(filterValue.content)) return true;
               if (moment(row.values[id]).isSame(filterValue.content)) return true;
               else return false;
@@ -65,6 +66,7 @@ const Table = (props) => {
           }
           if (filterValue.type === 'After') {
             return rows.filter(row => {
+              if (!moment(filterValue.content).isValid()) return true;
               if (moment(row.values[id]).isAfter(filterValue.content)) return true;
               if (moment(row.values[id]).isSame(filterValue.content)) return true;
               else return false;
@@ -72,6 +74,7 @@ const Table = (props) => {
           }
           if (filterValue.type === 'Same') {
             return rows.filter(row => {
+              if (!moment(filterValue.content).isValid()) return true;
               if (moment(row.values[id]).isSame(filterValue.content)) return true;
               else return false;
             });
