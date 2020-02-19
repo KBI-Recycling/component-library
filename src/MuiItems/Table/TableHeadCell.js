@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {TableCell, TableSortLabel} from '@material-ui/core';
+import {TableCell, TableSortLabel, Typography} from '@material-ui/core';
 
 
 const TableHeadCell = (props) => {
@@ -8,14 +8,24 @@ const TableHeadCell = (props) => {
   const tableCellProps = useMemo(() => ({
     style: {
       cursor: column.canSort ? 'pointer' : 'inherit',
+      lineHeight: 1,
+      padding: '5px',
       whiteSpace: column.wrapHeadText || 'nowrap',
     },
   }), [column.canSort, column.wrapHeadText]);
+  const typographyProps = useMemo(() => ({
+    style: {display: 'inline', fontWeight: 600},
+    variant: 'subtitle2',
+  }), []);
+  const sortLabelProps = useMemo(() => ({
+    active: column.isSorted,
+    direction: column.isSortedDesc ? 'desc' : 'asc',
+  }), [column.isSorted, column.isSortedDesc]);
 
   return (
     <TableCell {...column.getHeaderProps(column.getSortByToggleProps())} {...tableCellProps}>
-      {column.render('Header')}
-      {column.canSort && <TableSortLabel active={column.isSorted} direction={column.isSortedDesc ? 'desc' : 'asc'} />}
+      <Typography {...typographyProps}>{column.render('Header')}</Typography>
+      {column.canSort && <TableSortLabel {...sortLabelProps} />}
     </TableCell>
   );
 };

@@ -5,13 +5,21 @@ import moment from 'moment';
 
 const TableBodyCell = (props) => {
   const {cell} = props;
+  const tableCellProps = useMemo(() => ({
+    style: {
+      padding: (() => {
+        if (cell.column.actions) return '0px';
+        else return '5px';
+      })(),
+    },
+  }), [cell.column.actions]);
   const typoProps = useMemo(() => ({
     style: {whiteSpace: cell.column.wrapBodyText || 'nowrap'},
-    variant: 'caption',
+    variant: 'body2',
   }), [cell.column.wrapBodyText]);
 
   return (
-    <TableCell {...cell.getCellProps()}>
+    <TableCell {...cell.getCellProps()} {...tableCellProps}>
       {cell.render((({cell}) => {
         if (cell.column.actions) return <ActionsButtonGroup cell={cell} />;
         if (cell.column.type === 'boolean') return <Typography {...typoProps}>{cell.value ? 'True' : 'False'}</Typography>;
