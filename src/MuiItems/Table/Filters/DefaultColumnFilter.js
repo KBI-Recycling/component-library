@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {TextField, Tooltip} from '@material-ui/core';
+import {InputAdornment, TextField, Tooltip} from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -14,7 +14,7 @@ const DefaultColumnFilter = ({column}) => {
     else if (filterValue.type === 'Equals') setFilter({...filterValue, type: 'Includes'});
   }, [filterValue, setFilter]);
   const filterListProps = useMemo(() => ({
-    style: {cursor: 'pointer', paddingRight: '8px', fontSize: '1rem'},
+    style: {cursor: 'pointer', fontSize: '1rem'},
     onClick: handleFilterChange,
   }), [handleFilterChange]);
   const inputProps = useMemo(() => ({
@@ -22,7 +22,16 @@ const DefaultColumnFilter = ({column}) => {
     placeholder: 'Type',
     FormHelperTextProps: {style: {display: 'none'}},
     InputLabelProps: {style: {display: 'none'}},
-    InputProps: {classes: {root: classes.inputRoot}},
+    InputProps: {
+      classes: {root: classes.inputRoot},
+      endAdornment: (
+        <InputAdornment position='end'>
+          <Tooltip title={filterValue?.type || 'Includes'}>
+            <FilterList {...filterListProps} />
+          </Tooltip>
+        </InputAdornment>
+      ),
+    },
     inputProps: {
       autoComplete: 'off',
       style: {
@@ -36,13 +45,10 @@ const DefaultColumnFilter = ({column}) => {
       const type = filterValue?.type || 'Includes';
       setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
     },
-  }), [classes.formControlRoot, classes.inputRoot, filterValue, setFilter]);
+  }), [classes.formControlRoot, classes.inputRoot, filterListProps, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
-      <Tooltip title={filterValue?.type || 'Includes'}>
-        <FilterList {...filterListProps} />
-      </Tooltip>
       <TextField {...inputProps} />
     </div>
   );

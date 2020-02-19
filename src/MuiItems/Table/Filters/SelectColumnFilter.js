@@ -1,7 +1,6 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {FormControl, NativeSelect, Tooltip} from '@material-ui/core';
-import {FilterList} from '@material-ui/icons';
+import {FormControl, NativeSelect} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 const SelectColumnFilter = ({column}) => {
@@ -27,9 +26,6 @@ const SelectColumnFilter = ({column}) => {
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
-      <Tooltip title={filterValue?.type || 'Equals'}>
-        <FilterList style={{paddingRight: '8px', fontSize: '1rem'}} />
-      </Tooltip>
       <FormControl className={classes.margin}>
         <NativeSelect {...selectProps}>
           <option value=''>All</option>
