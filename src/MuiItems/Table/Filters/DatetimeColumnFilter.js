@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {FormControl, Input, Tooltip} from '@material-ui/core';
+import {FormControl, Input, InputAdornment, Tooltip} from '@material-ui/core';
 import {FilterList} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
 import './DatetimeColumnFilter.css';
@@ -15,10 +15,17 @@ const DatetimeColumnFilter = ({column}) => {
     else if (filterValue.type === 'Same') setFilter({...filterValue, type: 'Before'});
   }, [filterValue, setFilter]);
   const filterListProps = useMemo(() => ({
-    style: {cursor: 'pointer', paddingRight: '8px', fontSize: '1rem'},
+    style: {cursor: 'pointer', fontSize: '1rem'},
     onClick: handleFilterChange,
   }), [handleFilterChange]);
   const inputProps = useMemo(() => ({
+    endAdornment: (
+      <InputAdornment position='end'>
+        <Tooltip title={filterValue?.type || 'Before'}>
+          <FilterList {...filterListProps} />
+        </Tooltip>
+      </InputAdornment>
+    ),
     inputProps: {autoComplete: 'off'},
     classes: {input: classes.input},
     type: 'date',
@@ -28,13 +35,10 @@ const DatetimeColumnFilter = ({column}) => {
       if (!content) setFilter(undefined);
       else setFilter({content, type});
     },
-  }), [classes.input, filterValue, setFilter]);
+  }), [classes.input, filterListProps, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
-      <Tooltip title={filterValue?.type || 'Before'}>
-        <FilterList {...filterListProps} />
-      </Tooltip>
       <FormControl className={classes.margin}>
         <Input {...inputProps} />
       </FormControl>
