@@ -135,7 +135,7 @@ const Table = (props) => {
 
   return (
     <div className={styles.tableWrap}>
-      <MuiTable {...rtProps.getTableProps()} size='small'>
+      <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
           {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
         </TableHead>
