@@ -40,7 +40,7 @@ export default TableBodyCell;
 const ActionsButtonGroup = ({cell}) => {
   const actionsButtonStyle = useMemo(() => ({
     border: '0px',
-    padding: '0px',
+    padding: '4px 0px 0px 0px',
   }), []);
 
   return (
