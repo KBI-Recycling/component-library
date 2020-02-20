@@ -19,7 +19,6 @@ const DefaultColumnFilter = ({column}) => {
   }), [handleFilterChange]);
   const inputProps = useMemo(() => ({
     classes: {root: classes.formControlRoot},
-    placeholder: 'Type',
     FormHelperTextProps: {style: {display: 'none'}},
     InputLabelProps: {style: {display: 'none'}},
     InputProps: {
@@ -36,16 +35,17 @@ const DefaultColumnFilter = ({column}) => {
       autoComplete: 'off',
       style: {
         padding: '0px 0px 2px 0px',
-        maxWidth: filterValue?.content?.length >= 5 ? `${filterValue.content.length + 1}ch` : `5ch`,
+        width: filterValue?.content?.length >= column.Header.length ? `${filterValue.content.length + 1}ch` : `${column.Header.length}ch`,
       },
     },
+    placeholder: column.Header,
     value: filterValue?.content || '',
     onChange: e => {
       const content = e.target.value;
       const type = filterValue?.type || 'Includes';
       setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
     },
-  }), [classes.formControlRoot, classes.inputRoot, filterListProps, filterValue, setFilter]);
+  }), [classes.formControlRoot, classes.inputRoot, column.Header, filterListProps, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
