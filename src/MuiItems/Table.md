@@ -41,6 +41,22 @@ const handleAddRows = useCallback(() => {
       },
     },
   ]}
+  actionsPerTable={[
+    {
+      icon: Save,
+      tooltip: 'New User',
+      onClick: (action) => {
+        console.log('New User', action);
+      },
+    },
+    {
+      icon: Edit,
+      tooltip: 'New Pencil',
+      onClick: (action) => {
+        console.log('New Pencil', action);
+      },
+    },
+  ]}
   paginationActive={true}
   paginationSizes={[5, 10, 25, 50]}
   paginationInitialSize={5}

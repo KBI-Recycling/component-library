@@ -138,7 +138,7 @@ const Table = (props) => {
 
   return (
     <div className={styles.tableWrap}>
-      <SpeedDialActions />
+      <SpeedDialActions actions={props.actionsPerTable} />
       <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
           {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
@@ -165,6 +165,7 @@ const useStyles = makeStyles(theme => ({
 }));
 Table.defaultProps = {
   actionsPerRow: [],
+  actionsPerTable: [],
   disableFilters: false,
   paginationActive: true,
   paginationInitialIndex: 0,
@@ -179,6 +180,15 @@ Table.propTypes = {
     /** The tooltip that will be displayed when the user hover over the action icon. */
     tooltip: PropTypes.string,
     /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, rowData, rowIndex}) => {}` */
+    onClick: PropTypes.func.isRequired,
+  })),
+  /**  Property defines the actions that will be displayed in Material UI SpeedDial component. */
+  actionsPerTable: PropTypes.arrayOf(PropTypes.shape({
+    /**  The icon that will be displayed for the action. */
+    icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
+    /** The tooltip that will be displayed when the user hover over the action icon. */
+    tooltip: PropTypes.string,
+    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event}) => {}` */
     onClick: PropTypes.func.isRequired,
   })),
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */
