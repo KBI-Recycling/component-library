@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
+import {SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 
@@ -138,6 +138,7 @@ const Table = (props) => {
 
   return (
     <div className={styles.tableWrap}>
+      <SpeedDialActions />
       <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
           {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
@@ -159,6 +160,7 @@ const useStyles = makeStyles(theme => ({
     maxWidth: '100%',
     overflowX: 'auto',
     overflowY: 'hidden',
+    position: 'relative',
   },
 }));
 Table.defaultProps = {
