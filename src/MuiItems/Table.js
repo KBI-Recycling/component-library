@@ -5,6 +5,7 @@ import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui
 import {makeStyles} from '@material-ui/core/styles';
 import {SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
+import {StickyContainer} from 'react-sticky';
 import moment from 'moment';
 
 const Table = (props) => {
@@ -137,20 +138,22 @@ const Table = (props) => {
   }, [props.paginationActive, rtProps.page, rtProps.rows]);
 
   return (
-    <div className={styles.tableWrap}>
-      <SpeedDialActions actions={props.actionsPerTable} />
-      <MuiTable {...rtProps.getTableProps()}>
-        <TableHead>
-          {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
-        </TableHead>
-        <TableBody>
-          {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
-        </TableBody>
-        <TableFooter>
-          <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
-        </TableFooter>
-      </MuiTable>
-    </div>
+    <StickyContainer>
+      <div className={styles.tableWrap}>
+        <SpeedDialActions actions={props.actionsPerTable} />
+        <MuiTable {...rtProps.getTableProps()}>
+          <TableHead>
+            {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
+          </TableHead>
+          <TableBody>
+            {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
+          </TableBody>
+          <TableFooter>
+            <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
+          </TableFooter>
+        </MuiTable>
+      </div>
+    </StickyContainer>
   );
 };
 

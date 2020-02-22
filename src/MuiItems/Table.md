@@ -6,7 +6,7 @@ import sampleData from './Table/sampleData';
 import {Button} from '@material-ui/core';
 import {Edit, Save} from '@material-ui/icons';
 
-const [rows, setRows] = useState(5);
+const [rows, setRows] = useState(25);
 const handleAddRows = useCallback(() => {
   setRows(rows + 5);
 }, [rows]);
@@ -59,7 +59,7 @@ const handleAddRows = useCallback(() => {
   ]}
   paginationActive={true}
   paginationSizes={[5, 10, 25, 50]}
-  paginationInitialSize={5}
+  paginationInitialSize={25}
   paginationInitialIndex={0}
 />
 <Button onClick={handleAddRows}>Add 5 Rows</Button>
