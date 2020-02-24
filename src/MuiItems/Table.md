@@ -59,7 +59,7 @@ const handleAddRows = useCallback(() => {
   ]}
   paginationActive={true}
   paginationSizes={[5, 10, 25, 50]}
-  paginationInitialSize={25}
+  paginationInitialSize={10}
   paginationInitialIndex={0}
 />
 <Button onClick={handleAddRows}>Add 5 Rows</Button>

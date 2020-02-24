@@ -10,11 +10,17 @@ import moment from 'moment';
 
 const Table = (props) => {
   const styles = useStyles();
-  const autoResets = useMemo(() => ({
+  const baseConfig = useMemo(() => ({
     autoResetSortBy: false,
     autoResetFilters: false,
     autoResetPage: false,
-  }), []);
+    data: props.data,
+    disableFilters: props.disableFilters,
+    initialState: {
+      pageSize: props.paginationInitialSize,
+      pageIndex: props.paginationInitialIndex,
+    },
+  }), [props.data, props.disableFilters, props.paginationInitialIndex, props.paginationInitialSize]);
   const columns = useMemo(() => {
     const tableColumns = props.columns.map(column => {
       return {
@@ -96,13 +102,6 @@ const Table = (props) => {
     }
     return tableColumns;
   }, [props.actionsPerRow, props.columns]);
-  const data = useMemo(() => {
-    return props.data;
-  }, [props.data]);
-  const initialState = useMemo(() => ({
-    pageSize: props.paginationInitialSize,
-    pageIndex: props.paginationInitialIndex,
-  }), [props.paginationInitialIndex, props.paginationInitialSize]);
   const sortTypes = useMemo(() => ({
     boolean: (rowA, rowB, columnID) => {
       if (rowA.values[columnID] === rowB.values[columnID]) return 0;
@@ -131,7 +130,7 @@ const Table = (props) => {
     },
   }), []);
 
-  const rtProps = useTable({...autoResets, columns, data, disableFilters: props.disableFilters, initialState, sortTypes}, useFilters, useSortBy, usePagination);
+  const rtProps = useTable({...baseConfig, columns, sortTypes}, useFilters, useSortBy, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;
