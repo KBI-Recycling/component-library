@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Button, ButtonGroup, FormControl, MenuItem, Select, TableRow, TableCell, Typography} from '@material-ui/core';
+import {Button, ButtonGroup, FormControl, Hidden, MenuItem, Select, TableRow, TableCell, Typography} from '@material-ui/core';
 import {SkipPrevious, NavigateBefore, NavigateNext, SkipNext} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
 
@@ -9,7 +9,7 @@ const TableFooterRow = (props) => {
   const {canNextPage, canPreviousPage, gotoPage, nextPage, state, pageOptions, previousPage, setPageSize} = props.rtProps;
   const pagiButtonStyle = useMemo(() => ({
     border: '0px',
-    padding: '4px 10px',
+    padding: '4px 8px',
   }), []);
   const selectDisplayStyle = useMemo(() => ({
     style: {
@@ -25,7 +25,7 @@ const TableFooterRow = (props) => {
     <TableRow>
       <TableCell colSpan={props.columns.length} style={{padding: '2px 0px'}}>
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <ButtonGroup color='primary' style={{marginRight: '16px'}}>
+          <ButtonGroup color='primary' style={{marginRight: '8px'}}>
             <Button style={pagiButtonStyle} disabled={!canPreviousPage} onClick={() => gotoPage(0)} >
               <SkipPrevious />
             </Button>
@@ -39,10 +39,7 @@ const TableFooterRow = (props) => {
               <SkipNext />
             </Button>
           </ButtonGroup>
-          <Typography variant='caption' style={{marginRight: '24px'}}>
-            Page {state.pageIndex + 1} of {pageOptions.length}
-          </Typography>
-          <FormControl>
+          <FormControl style={{marginRight: '16px'}}>
             <Select value={state.pageSize} onChange={e => setPageSize(e.target.value)} SelectDisplayProps={selectDisplayStyle}>
               {props.paginationSizes.map(pageSize => (
                 <MenuItem key={pageSize} value={pageSize} className={styles.menuItem}>
@@ -51,6 +48,11 @@ const TableFooterRow = (props) => {
               ))}
             </Select>
           </FormControl>
+          <Hidden xsDown>
+            <Typography variant='caption' style={{marginRight: '24px'}}>
+              Page {state.pageIndex + 1} of {pageOptions.length}
+            </Typography>
+          </Hidden>
         </div>
       </TableCell>
     </TableRow>
