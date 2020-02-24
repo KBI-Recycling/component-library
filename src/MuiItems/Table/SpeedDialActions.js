@@ -8,12 +8,16 @@ const SpeedDialActions = (props) => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
   const [position, setPosition] = useState(null);
+  const [scrolling, setScrolling] = useState(false);
   const actions = useMemo(() => {
     return [...props.actions];
   }, [props.actions]);
 
-  const scrollEffect = useCallback(({prevPos, currPos}) => {
-    setPosition({...currPos});
+  const scrollEffect = useCallback(({currPosition, scrolling}) => {
+    if (!scrolling) {
+      setPosition({...currPosition});
+      setScrolling(false);
+    } else if (scrolling) setScrolling(true);
   }, []);
   useScrollPosition(scrollEffect, [props.tableEl], props.tableEl);
 
@@ -21,11 +25,12 @@ const SpeedDialActions = (props) => {
     ariaLabel: 'Table Actions',
     classes: {fab: styles.fab},
     direction: 'down',
-    hidden: (actions.length === 0 || !props.tableEl) ? true : false,
+    hidden: (actions.length === 0 || scrolling) ? true : false,
     icon: <SpeedDialIcon />,
     onClick: () => setOpen(!open),
     open,
-  }), [actions.length, open, props.tableEl, styles.fab]);
+    transitionDuration: {enter: 250, exit: 100},
+  }), [actions.length, open, scrolling, styles.fab]);
   const speedDialSticky = useCallback(() => {
     const getLeftPosition = ({rightPadding}) => {
       return (position?.right || 0) - rightPadding + 'px';
@@ -57,7 +62,6 @@ const SpeedDialActions = (props) => {
     };
   }, [styles.staticTooltipLabel]);
 
-  if (!position) return null;
   return (
     <SpeedDial {...speedDialMemo} {...speedDialSticky()}>
       {actions.map((action, index) => {
