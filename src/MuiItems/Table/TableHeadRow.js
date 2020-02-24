@@ -5,20 +5,21 @@ import TableHeadCell from './TableHeadCell';
 import TableHeadFilter from './TableHeadFilter';
 
 const TableHeadRow = (props) => {
-  const {headerGroup} = props;
+  const {disableFilters, headerGroup} = props;
   return (
     <Fragment>
       <TableRow {...headerGroup.getHeaderGroupProps()}>
         {headerGroup.headers.map((column, columnIndex) => <TableHeadCell key={columnIndex} column={column} />)}
       </TableRow>
-      <TableRow>
+      {!disableFilters && <TableRow>
         {headerGroup.headers.map((column, columnIndex) => <TableHeadFilter key={columnIndex} column={column} />)}
-      </TableRow>
+      </TableRow>}
     </Fragment>
   );
 };
 
 TableHeadRow.propTypes = {
+  disableFilters: PropTypes.bool,
   headerGroup: PropTypes.object.isRequired,
 };
 export default TableHeadRow;

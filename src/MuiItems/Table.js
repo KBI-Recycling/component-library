@@ -147,7 +147,7 @@ const Table = (props) => {
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
       <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
-          {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
+          {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={props.disableFilters} />)}
         </TableHead>
         <TableBody>
           {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
