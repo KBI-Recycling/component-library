@@ -28,7 +28,7 @@ const SpeedDialActions = (props) => {
     hidden: (actions.length === 0 || scrolling) ? true : false,
     icon: <SpeedDialIcon />,
     onClick: () => setOpen(!open),
-    open,
+    open: open && !scrolling,
     transitionDuration: {enter: 250, exit: 100},
   }), [actions.length, open, scrolling, styles.fab]);
   const speedDialSticky = useCallback(() => {
