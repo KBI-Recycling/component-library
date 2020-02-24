@@ -1,15 +1,15 @@
-import React, {useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
-import {StickyContainer} from 'react-sticky';
 import moment from 'moment';
 
 const Table = (props) => {
   const styles = useStyles();
+  const [tableEl, setTableEl] = useState(null);
   const baseConfig = useMemo(() => ({
     autoResetSortBy: false,
     autoResetFilters: false,
@@ -130,6 +130,12 @@ const Table = (props) => {
     },
   }), []);
 
+  const getMuiTableRef = () => {
+    const MuiTable = document.getElementById('MuiTable');
+    if (MuiTable) setTableEl(MuiTable);
+  };
+  useEffect(getMuiTableRef, []);
+
   const rtProps = useTable({...baseConfig, columns, sortTypes}, useFilters, useSortBy, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
@@ -137,22 +143,20 @@ const Table = (props) => {
   }, [props.paginationActive, rtProps.page, rtProps.rows]);
 
   return (
-    <StickyContainer>
-      <div id='MuiTable' className={styles.tableWrap}>
-        <SpeedDialActions actions={props.actionsPerTable} />
-        <MuiTable {...rtProps.getTableProps()}>
-          <TableHead>
-            {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
-          </TableHead>
-          <TableBody>
-            {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
-          </TableBody>
-          <TableFooter>
-            <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
-          </TableFooter>
-        </MuiTable>
-      </div>
-    </StickyContainer>
+    <div id='MuiTable' className={styles.tableWrap}>
+      {tableEl && <SpeedDialActions actions={props.actionsPerTable} tableEl={tableEl} />}
+      <MuiTable {...rtProps.getTableProps()}>
+        <TableHead>
+          {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}
+        </TableHead>
+        <TableBody>
+          {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
+        </TableBody>
+        <TableFooter>
+          <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
+        </TableFooter>
+      </MuiTable>
+    </div>
   );
 };
 

@@ -1,40 +1,39 @@
-import React, {useEffect, useMemo, useCallback, useState} from 'react';
+import React, {useMemo, useCallback, useState} from 'react';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
 import {SpeedDial, SpeedDialAction, SpeedDialIcon} from '@material-ui/lab';
-import {Sticky} from 'react-sticky';
+import {useScrollPosition} from './Hooks/useScrollPosition';
 
 const SpeedDialActions = (props) => {
   const styles = useStyles();
   const [open, setOpen] = useState(false);
-  const [tableEl, setTableEl] = useState(null);
+  const [position, setPosition] = useState(null);
   const actions = useMemo(() => {
     return [...props.actions];
   }, [props.actions]);
 
-  useEffect(() => {
-    const MuiTable = document.getElementById('MuiTable');
-    if (MuiTable) setTableEl(MuiTable);
+  const scrollEffect = useCallback(({prevPos, currPos}) => {
+    setPosition({...currPos});
   }, []);
+  useScrollPosition(scrollEffect, [props.tableEl], props.tableEl);
 
   const speedDialMemo = useMemo(() => ({
     ariaLabel: 'Table Actions',
     classes: {fab: styles.fab},
     direction: 'down',
-    hidden: (actions.length === 0 || !tableEl) ? true : false,
+    hidden: (actions.length === 0 || !props.tableEl) ? true : false,
     icon: <SpeedDialIcon />,
     onClick: () => setOpen(!open),
     open,
-  }), [actions.length, open, styles.fab, tableEl]);
+  }), [actions.length, open, props.tableEl, styles.fab]);
   const speedDialSticky = useCallback(() => {
-    const tableBoundClient = tableEl?.getBoundingClientRect();
     const getLeftPosition = ({rightPadding}) => {
-      return (tableBoundClient?.right || 0) - rightPadding + 'px';
+      return (position?.right || 0) - rightPadding + 'px';
     };
     const getTopPosition = ({topPadding, bottomPadding}) => {
-      const top = tableBoundClient?.top;
-      const bottom = tableBoundClient?.bottom;
-      const height = tableBoundClient?.height;
+      const top = position?.top;
+      const bottom = position?.bottom;
+      const height = position?.height;
       const topAdjustment = () => {
         if (top > 0) return 0; // Top of table still visible; Do not adjust FAB;
         else if (top <= 0 && bottom >= bottomPadding) return Math.abs(top); // Adjust FAB with scroll;
@@ -48,7 +47,7 @@ const SpeedDialActions = (props) => {
       left: getLeftPosition({rightPadding: 64}),
     };
     return {style};
-  }, [tableEl]);
+  }, [position]);
   const speedDialActionProps = useCallback((action) => {
     return {
       classes: {staticTooltipLabel: styles.staticTooltipLabel},
@@ -58,18 +57,14 @@ const SpeedDialActions = (props) => {
     };
   }, [styles.staticTooltipLabel]);
 
+  if (!position) return null;
   return (
-    <Sticky disableCompensation>{stickyProps => {
-      return (
-        <SpeedDial {...speedDialMemo} {...speedDialSticky(stickyProps)}>
-          {actions.map((action, index) => {
-            const Icon = action.icon;
-            return <SpeedDialAction key={index} icon={<Icon />} {...speedDialActionProps(action)} />;
-          })}
-        </SpeedDial>
-      );
-    }}
-    </Sticky>
+    <SpeedDial {...speedDialMemo} {...speedDialSticky()}>
+      {actions.map((action, index) => {
+        const Icon = action.icon;
+        return <SpeedDialAction key={index} icon={<Icon />} {...speedDialActionProps(action)} />;
+      })}
+    </SpeedDial>
   );
 };
 
@@ -85,5 +80,6 @@ const useStyles = makeStyles(theme => ({
 }));
 SpeedDialActions.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tableEl: PropTypes.object,
 };
 export default SpeedDialActions;
