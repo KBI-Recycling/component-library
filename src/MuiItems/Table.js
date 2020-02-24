@@ -139,7 +139,7 @@ const Table = (props) => {
 
   return (
     <StickyContainer>
-      <div className={styles.tableWrap}>
+      <div id='MuiTable' className={styles.tableWrap}>
         <SpeedDialActions actions={props.actionsPerTable} />
         <MuiTable {...rtProps.getTableProps()}>
           <TableHead>
