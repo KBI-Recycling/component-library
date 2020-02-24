@@ -32,7 +32,11 @@ export const useScrollPosition = (effect, deps, element, useWindow = false, wait
     };
     handlePosition(); // Get initial position of element on first load;
     window.addEventListener('scroll', handlePosition); // Get subsequent position of element on scroll;
+    window.addEventListener('resize', handlePosition); // Get subsequent position of element on window resize;
 
-    return () => window.removeEventListener('scroll', handlePosition);
+    return () => {
+      window.removeEventListener('scroll', handlePosition);
+      window.removeEventListener('resize', handlePosition);
+    };
   }, deps);
 };
