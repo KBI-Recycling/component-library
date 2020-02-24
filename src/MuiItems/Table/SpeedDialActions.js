@@ -75,12 +75,9 @@ const SpeedDialActions = (props) => {
 
 const useStyles = makeStyles(theme => ({
   fab: {
-    'width': '48px',
-    'height': '48px',
-    'opacity': 0.40,
-    '&:hover': {
-      'opacity': 0.6,
-    },
+    'width': '40px',
+    'height': '40px',
+    'opacity': 0.6,
   },
   staticTooltipLabel: {
     whiteSpace: 'nowrap',
