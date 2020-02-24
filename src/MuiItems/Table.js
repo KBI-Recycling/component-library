@@ -144,7 +144,7 @@ const Table = (props) => {
 
   return (
     <div id='MuiTable' className={styles.tableWrap}>
-      {tableEl && <SpeedDialActions actions={props.actionsPerTable} tableEl={tableEl} />}
+      {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
       <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
           {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} />)}

@@ -29,6 +29,7 @@ const SpeedDialActions = (props) => {
     icon: <SpeedDialIcon />,
     onClick: () => setOpen(!open),
     open: open && !scrolling,
+    FabProps: {style: {opacity: open ? 1 : 0.4}},
     transitionDuration: {enter: 250, exit: 100},
   }), [actions.length, open, scrolling, styles.fab]);
   const speedDialSticky = useCallback(() => {
@@ -56,11 +57,26 @@ const SpeedDialActions = (props) => {
   const speedDialActionProps = useCallback((action) => {
     return {
       classes: {staticTooltipLabel: styles.staticTooltipLabel},
-      onClick: () => alert(action.onClick),
+      onClick: event => action.onClick({
+        event,
+        data: props.rtProps.data,
+        rows: props.rtProps.rows,
+        flatRows: props.rtProps.flatRows,
+        preFilteredRows: props.rtProps.preFilteredRows,
+        preFilteredFlatRows: props.rtProps.preFilteredFlatRows,
+        filteredRows: props.rtProps.filteredRows,
+        filteredFlatRows: props.rtProps.filteredFlatRows,
+        preSortedRows: props.rtProps.preSortedRows,
+        sortedRows: props.rtProps.sortedRows,
+        headers: props.rtProps.headers,
+        flatHeaders: props.rtProps.flatHeaders,
+        columns: props.rtProps.columns,
+        flatColumns: props.rtProps.flatColumns,
+      }),
       tooltipOpen: true,
       tooltipTitle: action.tooltip,
     };
-  }, [styles.staticTooltipLabel]);
+  }, [props.rtProps, styles.staticTooltipLabel]);
 
   return (
     <SpeedDial {...speedDialMemo} {...speedDialSticky()}>
@@ -76,7 +92,6 @@ const useStyles = makeStyles(theme => ({
   fab: {
     'width': '40px',
     'height': '40px',
-    'opacity': 0.6,
   },
   staticTooltipLabel: {
     whiteSpace: 'nowrap',
@@ -84,6 +99,7 @@ const useStyles = makeStyles(theme => ({
 }));
 SpeedDialActions.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.object).isRequired,
+  rtProps: PropTypes.object.isRequired,
   tableEl: PropTypes.object,
 };
 export default SpeedDialActions;
