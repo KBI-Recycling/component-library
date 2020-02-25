@@ -217,7 +217,7 @@ Table.propTypes = {
     icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
     /** The tooltip that will be displayed when the user hover over the action icon. */
     tooltip: PropTypes.string,
-    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event}) => {}` */
+    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatColumns, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
     onClick: PropTypes.func.isRequired,
   })),
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */
@@ -232,12 +232,12 @@ Table.propTypes = {
     filterField: PropTypes.oneOf(['text', 'boolean', 'datetime', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
+    /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', and 'numeric'. Defaults to 'alphanumeric'. */
+    type: PropTypes.string,
     /** Controls whether text will wrap inside Table's Body cell.  Defaults to 'false'. */
     wrapBodyText: PropTypes.boolean,
     /** Controls whether text will wrap inside Table's Head cell.  Defaults to 'false'. */
     wrapHeadText: PropTypes.boolean,
-    /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', and 'numeric'. Defaults to 'alphanumeric'. */
-    type: PropTypes.string,
   })).isRequired,
   /** The data to be shown by the table. Keys must match the 'accessor' of their coresponding column. */
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
