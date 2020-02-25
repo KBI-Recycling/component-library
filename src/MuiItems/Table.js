@@ -10,19 +10,37 @@ import moment from 'moment';
 const Table = (props) => {
   const styles = useStyles();
   const [tableEl, setTableEl] = useState(null);
-  const baseConfig = useMemo(() => ({
-    autoResetSortBy: false,
-    autoResetFilters: false,
-    autoResetPage: false,
-    autoResetSelectedRows: false,
-    disableFilters: props.disableFilters,
-    initialState: {
-      pageSize: props.paginationInitialSize,
-      pageIndex: props.paginationInitialIndex,
-    },
-  }), [props.disableFilters, props.paginationInitialIndex, props.paginationInitialSize]);
+
+  const onLoadProps = useMemo(() => {
+    // This memo holds MuiTable props that will never, ever, EVER change after initial component mount.
+    // Extreme caution should be used when placing props inside this memo.
+    return {
+      actionsPerRow: props.actionsPerRow,
+      columns: props.columns,
+      disableFilters: props.disableFilters,
+      paginationActive: props.paginationActive,
+      paginationInitialIndex: props.paginationInitialIndex,
+      paginationInitialSize: props.paginationInitialSize,
+      paginationSizes: props.paginationSizes,
+      selectRows: props.selectRows,
+    };
+    // eslint-disable-next-line
+  }, [])
+  const baseConfig = useMemo(() => {
+    return {
+      autoResetSortBy: false,
+      autoResetFilters: false,
+      autoResetPage: false,
+      autoResetSelectedRows: false,
+      disableFilters: onLoadProps.disableFilters,
+      initialState: {
+        pageIndex: onLoadProps.paginationInitialIndex,
+        pageSize: onLoadProps.paginationInitialSize,
+      },
+    };
+  }, [onLoadProps]);
   const columns = useMemo(() => {
-    const tableColumns = props.columns.map(column => {
+    const tableColumns = onLoadProps.columns.map(column => {
       return {
         ...column,
         Filter: (() => {
@@ -91,16 +109,16 @@ const Table = (props) => {
         sortType: column.type || 'alphanumeric',
       };
     });
-    if (props.actionsPerRow.length > 0) {
+    if (onLoadProps.actionsPerRow.length > 0) {
       tableColumns.unshift({
         id: 'muiTableActions',
         disableFilters: true,
         disableSortBy: true,
         Header: 'Actions',
-        actions: props.actionsPerRow,
+        actions: onLoadProps.actionsPerRow,
       });
     }
-    if (props.selectRows) {
+    if (onLoadProps.selectRows) {
       tableColumns.unshift({
         id: 'muiRowSelection',
         Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
@@ -108,37 +126,40 @@ const Table = (props) => {
       });
     }
     return tableColumns;
-  }, [props.actionsPerRow, props.columns, props.selectRows]);
+  }, [onLoadProps]);
   const data = useMemo(() => {
+    console.log('Memo data');
     return props.data;
   }, [props.data]);
-  const sortTypes = useMemo(() => ({
-    boolean: (rowA, rowB, columnID) => {
-      if (rowA.values[columnID] === rowB.values[columnID]) return 0;
-      if (!rowA.values[columnID]) return 1;
-      if (rowA.values[columnID]) return -1;
-    },
-    currency: (rowA, rowB, columnID) => {
-      if (rowA.values[columnID] === rowB.values[columnID]) return 0;
-      if (rowA.values[columnID] > rowB.values[columnID]) return 1;
-      if (rowA.values[columnID] < rowB.values[columnID]) return -1;
-    },
-    datetime: (rowA, rowB, columnID) => {
-      const momentA = moment(rowA.values[columnID]);
-      const momentB = moment(rowB.values[columnID]);
-      if (momentA.isSame(momentB)) return 0;
-      if (momentA.isAfter(momentB)) return 1;
-      if (momentA.isBefore(momentB)) return -1;
-    },
-    numeric: (rowA, rowB, columnID) => {
-      if (rowA.values[columnID] === rowB.values[columnID]) return 0;
-      if (rowA.values[columnID] > rowB.values[columnID]) return 1;
-      if (rowA.values[columnID] < rowB.values[columnID]) return -1;
-    },
-    alphanumeric: (rowA, rowB, columnID) => {
-      return rowA.values[columnID].localeCompare(rowB.values[columnID]);
-    },
-  }), []);
+  const sortTypes = useMemo(() => {
+    return {
+      boolean: (rowA, rowB, columnID) => {
+        if (rowA.values[columnID] === rowB.values[columnID]) return 0;
+        if (!rowA.values[columnID]) return 1;
+        if (rowA.values[columnID]) return -1;
+      },
+      currency: (rowA, rowB, columnID) => {
+        if (rowA.values[columnID] === rowB.values[columnID]) return 0;
+        if (rowA.values[columnID] > rowB.values[columnID]) return 1;
+        if (rowA.values[columnID] < rowB.values[columnID]) return -1;
+      },
+      datetime: (rowA, rowB, columnID) => {
+        const momentA = moment(rowA.values[columnID]);
+        const momentB = moment(rowB.values[columnID]);
+        if (momentA.isSame(momentB)) return 0;
+        if (momentA.isAfter(momentB)) return 1;
+        if (momentA.isBefore(momentB)) return -1;
+      },
+      numeric: (rowA, rowB, columnID) => {
+        if (rowA.values[columnID] === rowB.values[columnID]) return 0;
+        if (rowA.values[columnID] > rowB.values[columnID]) return 1;
+        if (rowA.values[columnID] < rowB.values[columnID]) return -1;
+      },
+      alphanumeric: (rowA, rowB, columnID) => {
+        return rowA.values[columnID].localeCompare(rowB.values[columnID]);
+      },
+    };
+  }, []);
 
   const getMuiTableRef = () => {
     const MuiTable = document.getElementById('MuiTable');
@@ -163,6 +184,25 @@ const Table = (props) => {
     } else return rtProps.rows;
   }, [props.paginationActive, props.paginationShowEmptyRows, rtProps.page, rtProps.rows, rtProps.state.pageSize]);
 
+  const tableFooterProps = useMemo(() => {
+    return {
+      canPreviousPage: rtProps.canPreviousPage,
+      canNextPage: rtProps.canNextPage,
+      colSpan: columns.length,
+      gotoPage: rtProps.gotoPage,
+      nextPage: rtProps.nextPage,
+      pageCount: rtProps.pageCount,
+      pageOptionsLength: rtProps.pageOptions.length,
+      paginationActive: onLoadProps.paginationActive,
+      paginationSizes: onLoadProps.paginationSizes,
+      previousPage: rtProps.previousPage,
+      setPageSize: rtProps.setPageSize,
+      statePageIndex: rtProps.state.pageIndex,
+      statePageSize: rtProps.state.pageSize,
+    };
+    // eslint-disable-next-line
+  }, [columns.length, onLoadProps, rtProps.canNextPage, rtProps.canPreviousPage, rtProps.gotoPage, rtProps.nextPage, rtProps.pageCount, rtProps.pageOptions.length, rtProps.previousPage, rtProps.state.pageIndex]);
+
   return (
     <div id='MuiTable' className={styles.tableWrap}>
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
@@ -174,7 +214,7 @@ const Table = (props) => {
           {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
         </TableBody>
         <TableFooter>
-          <TableFooterRow columns={columns} rtProps={rtProps} paginationActive={props.paginationActive} paginationSizes={props.paginationSizes} />
+          <TableFooterRow {...tableFooterProps} />
         </TableFooter>
       </MuiTable>
     </div>
