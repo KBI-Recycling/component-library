@@ -148,9 +148,20 @@ const Table = (props) => {
 
   const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination);
   const bodyRows = useMemo(() => {
-    if (props.paginationActive === true) return rtProps.page;
-    else return rtProps.rows;
-  }, [props.paginationActive, rtProps.page, rtProps.rows]);
+    if (props.paginationActive && props.paginationShowEmptyRows) {
+      const sizeRowDifference = rtProps.state.pageSize - rtProps.page.length;
+      if (sizeRowDifference === 0) return rtProps.page;
+      else {
+        const pageWithBlanks = [...rtProps.page];
+        for (let blanks = sizeRowDifference; blanks > 0; blanks--) {
+          pageWithBlanks.push(null);
+        }
+        return pageWithBlanks;
+      }
+    } else if (props.paginationActive && !props.paginationShowEmptyRows) {
+      return rtProps.page;
+    } else return rtProps.rows;
+  }, [props.paginationActive, props.paginationShowEmptyRows, rtProps.page, rtProps.rows, rtProps.state.pageSize]);
 
   return (
     <div id='MuiTable' className={styles.tableWrap}>
@@ -186,6 +197,7 @@ Table.defaultProps = {
   paginationActive: true,
   paginationInitialIndex: 0,
   paginationInitialSize: 5,
+  paginationShowEmptyRows: true,
   paginationSizes: [5, 10, 15],
   selectRows: false,
 };
@@ -237,6 +249,8 @@ Table.propTypes = {
   paginationInitialIndex: PropTypes.number,
   /** The amount of rows on any given page when pagination is active. Defaults to `5`. */
   paginationInitialSize: PropTypes.number,
+  /**  If `true`, pagination will show extra empty rows to fill current page size. Defaults to `true`. */
+  paginationShowEmptyRows: PropTypes.bool,
   /**  An array of numbers representing the amount of rows on any given page. Default to [5, 10, 25]. */
   paginationSizes: PropTypes.arrayOf(PropTypes.number),
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
