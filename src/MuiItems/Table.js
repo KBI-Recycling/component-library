@@ -15,13 +15,12 @@ const Table = (props) => {
     autoResetFilters: false,
     autoResetPage: false,
     autoResetSelectedRows: false,
-    data: props.data,
     disableFilters: props.disableFilters,
     initialState: {
       pageSize: props.paginationInitialSize,
       pageIndex: props.paginationInitialIndex,
     },
-  }), [props.data, props.disableFilters, props.paginationInitialIndex, props.paginationInitialSize]);
+  }), [props.disableFilters, props.paginationInitialIndex, props.paginationInitialSize]);
   const columns = useMemo(() => {
     const tableColumns = props.columns.map(column => {
       return {
@@ -101,13 +100,18 @@ const Table = (props) => {
         actions: props.actionsPerRow,
       });
     }
-    tableColumns.unshift({
-      id: 'muiRowSelection',
-      Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
-      Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
-    });
+    if (props.selectRows) {
+      tableColumns.unshift({
+        id: 'muiRowSelection',
+        Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
+        Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
+      });
+    }
     return tableColumns;
-  }, [props.actionsPerRow, props.columns]);
+  }, [props.actionsPerRow, props.columns, props.selectRows]);
+  const data = useMemo(() => {
+    return props.data;
+  }, [props.data]);
   const sortTypes = useMemo(() => ({
     boolean: (rowA, rowB, columnID) => {
       if (rowA.values[columnID] === rowB.values[columnID]) return 0;
@@ -142,7 +146,7 @@ const Table = (props) => {
   };
   useEffect(getMuiTableRef, []);
 
-  const rtProps = useTable({...baseConfig, columns, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination);
+  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;
@@ -183,6 +187,7 @@ Table.defaultProps = {
   paginationInitialIndex: 0,
   paginationInitialSize: 5,
   paginationSizes: [5, 10, 15],
+  selectRows: false,
 };
 Table.propTypes = {
   /**  Property defines the actions that will be clickable on every row in the table. */
@@ -234,5 +239,7 @@ Table.propTypes = {
   paginationInitialSize: PropTypes.number,
   /**  An array of numbers representing the amount of rows on any given page. Default to [5, 10, 25]. */
   paginationSizes: PropTypes.arrayOf(PropTypes.number),
+  /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
+  selectRows: PropTypes.bool,
 };
 export default Table;

@@ -61,6 +61,7 @@ const handleAddRows = useCallback(() => {
   paginationSizes={[5, 10, 25, 50]}
   paginationInitialSize={10}
   paginationInitialIndex={0}
+  selectRows={true}
 />
 <Button onClick={handleAddRows} style={{marginBottom: '1000px'}}>Add 5 Rows</Button>
 </Fragment>
