@@ -21,7 +21,13 @@ const TableHeadCell = (props) => {
     active: column.isSorted,
     direction: column.isSortedDesc ? 'desc' : 'asc',
   }), [column.isSorted, column.isSortedDesc]);
-
+  if (column.id === 'muiRowSelection') {
+    return (
+      <TableCell {...column.getHeaderProps()} {...tableCellProps}>
+        {column.render('Header')}
+      </TableCell>
+    );
+  }
   return (
     <TableCell {...column.getHeaderProps(column.getSortByToggleProps())} {...tableCellProps}>
       <Typography {...typographyProps}>{column.render('Header')}</Typography>

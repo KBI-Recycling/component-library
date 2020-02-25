@@ -1,9 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
-import {useTable, useFilters, usePagination, useSortBy} from 'react-table';
+import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
+import {RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 
@@ -14,6 +14,7 @@ const Table = (props) => {
     autoResetSortBy: false,
     autoResetFilters: false,
     autoResetPage: false,
+    autoResetSelectedRows: false,
     data: props.data,
     disableFilters: props.disableFilters,
     initialState: {
@@ -93,13 +94,18 @@ const Table = (props) => {
     });
     if (props.actionsPerRow.length > 0) {
       tableColumns.unshift({
-        id: 'actions',
+        id: 'muiTableActions',
         disableFilters: true,
         disableSortBy: true,
         Header: 'Actions',
         actions: props.actionsPerRow,
       });
     }
+    tableColumns.unshift({
+      id: 'muiRowSelection',
+      Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
+      Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
+    });
     return tableColumns;
   }, [props.actionsPerRow, props.columns]);
   const sortTypes = useMemo(() => ({
@@ -136,7 +142,7 @@ const Table = (props) => {
   };
   useEffect(getMuiTableRef, []);
 
-  const rtProps = useTable({...baseConfig, columns, sortTypes}, useFilters, useSortBy, usePagination);
+  const rtProps = useTable({...baseConfig, columns, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination);
   const bodyRows = useMemo(() => {
     if (props.paginationActive === true) return rtProps.page;
     else return rtProps.rows;

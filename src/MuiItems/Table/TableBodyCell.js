@@ -21,7 +21,8 @@ const TableBodyCell = (props) => {
   return (
     <TableCell {...cell.getCellProps()} {...tableCellProps}>
       {cell.render((({cell}) => {
-        if (cell.column.actions) return <ActionsButtonGroup cell={cell} />;
+        if (cell.column.id === 'muiRowSelection') return <div>{cell.render('Cell')}</div>;
+        if (cell.column.id === 'muiTableActions') return <ActionsButtonGroup cell={cell} />;
         if (cell.column.type === 'boolean') return <Typography {...typoProps}>{cell.value ? 'True' : 'False'}</Typography>;
         if (cell.column.type === 'currency') return <Typography {...typoProps}>{cell.value.toLocaleString('en-US', {style: 'currency', currency: 'USD'})}</Typography>;
         if (cell.column.type === 'datetime') return <Typography {...typoProps}>{moment(cell.value).format(cell.column?.datetimeFormat ? cell.column.datetimeFormat : 'MM/DD/YYYY')}</Typography>;
