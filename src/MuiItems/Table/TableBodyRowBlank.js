@@ -5,7 +5,7 @@ import {TableCell, TableRow} from '@material-ui/core';
 const TableBodyRowBlank = (props) => {
   return (
     <TableRow>
-      <TableCell colSpan={props.colSpan}>{''}</TableCell>;
+      <TableCell colSpan={props.colSpan}>{''}</TableCell>
     </TableRow>
   );
 };
