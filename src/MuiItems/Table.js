@@ -85,7 +85,7 @@ const Table = (props) => {
             return rows.filter(row => {
               if (!moment(filterValue.content).isValid()) return true;
               if (moment(row.values[id]).isBefore(filterValue.content)) return true;
-              if (moment(row.values[id]).isSame(filterValue.content)) return true;
+              if (moment(filterValue.content).isSame(moment(row.values[id]).format('MM/DD/YYYY'))) return true; // Disregard time when evaluating.
               else return false;
             });
           }
@@ -93,14 +93,14 @@ const Table = (props) => {
             return rows.filter(row => {
               if (!moment(filterValue.content).isValid()) return true;
               if (moment(row.values[id]).isAfter(filterValue.content)) return true;
-              if (moment(row.values[id]).isSame(filterValue.content)) return true;
+              if (moment(filterValue.content).isSame(moment(row.values[id]).format('MM/DD/YYYY'))) return true; // Disregard time when evaluating.
               else return false;
             });
           }
           if (filterValue.type === 'Same') {
             return rows.filter(row => {
-              if (!moment(filterValue.content).isValid()) return true;
-              if (moment(row.values[id]).isSame(filterValue.content)) return true;
+              if (!moment(filterValue.content).isValid()) return true; // Return all rows when filterValue.content is invalid
+              if (moment(filterValue.content).isSame(moment(row.values[id]).format('MM/DD/YYYY'))) return true; // Disregard time when evaluating.
               else return false;
             });
           }
