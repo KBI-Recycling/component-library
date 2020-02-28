@@ -266,7 +266,7 @@ Table.propTypes = {
     icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
     /** The tooltip that will be displayed when the user hover over the action icon. */
     tooltip: PropTypes.string,
-    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatColumns, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
+    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
     onClick: PropTypes.func.isRequired,
   })),
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */

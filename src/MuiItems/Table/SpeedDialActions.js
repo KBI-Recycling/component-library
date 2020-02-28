@@ -64,7 +64,6 @@ const SpeedDialActions = (props) => {
         filteredRows: props.rtProps.filteredRows,
         filteredFlatRows: props.rtProps.filteredFlatRows,
         flatHeaders: props.rtProps.flatHeaders,
-        flatColumns: props.rtProps.flatColumns,
         flatRows: props.rtProps.flatRows,
         headers: props.rtProps.headers,
         preFilteredRows: props.rtProps.preFilteredRows,
