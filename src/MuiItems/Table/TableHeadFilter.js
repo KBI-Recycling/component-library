@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {TableCell} from '@material-ui/core';
 
 
-const TableHeadFilter = ({column, headers, rowEdgePadding}) => {
+const TableHeadFilter = ({column, columnIndex, headers, rowEdgePadding}) => {
   const tableCellProps = useMemo(() => ({
     style: {padding: '5px'},
   }), []);
@@ -11,9 +11,9 @@ const TableHeadFilter = ({column, headers, rowEdgePadding}) => {
   return (
     <TableCell {...column.getHeaderProps()} {...tableCellProps}>
       <div style={{display: 'flex'}}>
-        <span style={{paddingLeft: column.index === 0 ? rowEdgePadding : '0px'}} />
+        <span style={{paddingLeft: columnIndex === 0 ? rowEdgePadding : '0px'}} />
         {column.canFilter ? column.render('Filter') : null}
-        <span style={{paddingRight: column.index + 1 === headers.length ? rowEdgePadding : '0px'}} />
+        <span style={{paddingRight: columnIndex + 1 === headers.length ? rowEdgePadding : '0px'}} />
       </div>
     </TableCell>
   );
@@ -21,6 +21,7 @@ const TableHeadFilter = ({column, headers, rowEdgePadding}) => {
 
 TableHeadFilter.propTypes = {
   column: PropTypes.object.isRequired,
+  columnIndex: PropTypes.number.isRequired,
   headers: PropTypes.array.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
 };

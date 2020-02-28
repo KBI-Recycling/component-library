@@ -215,7 +215,7 @@ const Table = (props) => {
         </TableHead>
         <TableBody>
           {bodyRows.map((row, rowIndex) => {
-            if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.flatColumns.length} />;
+            if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
             rtProps.prepareRow(row);
             const {key} = row.getRowProps();
             return <TableBodyRow key={key} row={row} rowEdgePadding={onLoadProps.rowEdgePadding} />;

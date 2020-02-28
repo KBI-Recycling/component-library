@@ -10,12 +10,12 @@ const TableHeadRow = (props) => {
     <Fragment>
       <TableRow {...headerGroup.getHeaderGroupProps()}>
         {headerGroup.headers.map((column, columnIndex) => {
-          return <TableHeadCell key={columnIndex} column={column} headers={headerGroup.headers} rowEdgePadding={rowEdgePadding} />;
+          return <TableHeadCell key={columnIndex} column={column} columnIndex={columnIndex} headers={headerGroup.headers} rowEdgePadding={rowEdgePadding} />;
         })}
       </TableRow>
       {!disableFilters && <TableRow>
         {headerGroup.headers.map((column, columnIndex) => {
-          return <TableHeadFilter key={columnIndex} column={column} headers={headerGroup.headers} rowEdgePadding={rowEdgePadding} />;
+          return <TableHeadFilter key={columnIndex} column={column} columnIndex={columnIndex} headers={headerGroup.headers} rowEdgePadding={rowEdgePadding} />;
         })}
       </TableRow>}
     </Fragment>
