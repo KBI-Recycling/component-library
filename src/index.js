@@ -24,6 +24,9 @@ export * from './MuiItems/Alert';
 export {default as Collapse} from './MuiItems/Collapse';
 export * from './MuiItems/Collapse';
 
+export {default as Table} from './MuiItems/Table';
+export * from './MuiItems/Table';
+
 export const Formik = {
   FormikForm,
   SubmitButton,
