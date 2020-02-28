@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {TableCell, Typography} from '@material-ui/core';
 import moment from 'moment';
 
-const DateTimeCell = ({datetimeFormat, value, wrapBodyText}) => {
+const DateTimeCell = ({datetimeFormat, padLeft, padRight, value, wrapBodyText}) => {
   const tableCellProps = useMemo(() => ({
     style: {padding: '5px'},
   }), []);
@@ -14,14 +14,18 @@ const DateTimeCell = ({datetimeFormat, value, wrapBodyText}) => {
 
   return (
     <TableCell {...tableCellProps}>
-      <Typography {...typoProps}>
-        {moment(value).format(datetimeFormat || 'MM/DD/YYYY')}
-      </Typography>
+      <div style={{display: 'flex'}}>
+        <span style={{paddingLeft: padLeft}} />
+        <Typography {...typoProps}>{moment(value).format(datetimeFormat || 'MM/DD/YYYY')}</Typography>
+        <span style={{paddingRight: padRight}} />
+      </div>
     </TableCell>
   );
 };
 
 DateTimeCell.propTypes = {
+  padLeft: PropTypes.string.isRequired,
+  padRight: PropTypes.string.isRequired,
   datetimeFormat: PropTypes.string,
   value: PropTypes.string.isRequired,
   wrapBodyText: PropTypes.bool,

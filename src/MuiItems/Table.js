@@ -23,6 +23,7 @@ const Table = (props) => {
       paginationInitialIndex: props.paginationInitialIndex,
       paginationInitialSize: props.paginationInitialSize,
       paginationSizes: props.paginationSizes,
+      rowEdgePadding: props.rowEdgePadding,
       selectRows: props.selectRows,
     };
     // eslint-disable-next-line
@@ -208,14 +209,16 @@ const Table = (props) => {
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
       <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
-          {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={onLoadProps.disableFilters} />)}
+          {rtProps.headerGroups.map((headerGroup, headIndex) => {
+            return <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={onLoadProps.disableFilters} rowEdgePadding={onLoadProps.rowEdgePadding} />;
+          })}
         </TableHead>
         <TableBody>
           {bodyRows.map((row, rowIndex) => {
             if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.flatColumns.length} />;
             rtProps.prepareRow(row);
             const {key} = row.getRowProps();
-            return <TableBodyRow key={key} row={row} />;
+            return <TableBodyRow key={key} row={row} rowEdgePadding={onLoadProps.rowEdgePadding} />;
           })}
         </TableBody>
         <TableFooter>
@@ -233,6 +236,7 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'auto',
     overflowY: 'hidden',
     position: 'relative',
+    border: '1px solid black',
   },
 }));
 Table.defaultProps = {
@@ -244,6 +248,7 @@ Table.defaultProps = {
   paginationInitialSize: 5,
   paginationShowEmptyRows: true,
   paginationSizes: [5, 10, 15],
+  rowEdgePadding: '8px',
   selectRows: false,
 };
 Table.propTypes = {
@@ -298,6 +303,8 @@ Table.propTypes = {
   paginationShowEmptyRows: PropTypes.bool,
   /**  An array of numbers representing the amount of rows on any given page. Default to [5, 10, 25]. */
   paginationSizes: PropTypes.arrayOf(PropTypes.number),
+  /** Extra padding added to the left side of first column and the right side of last column. Defaults to '8px'. */
+  rowEdgePadding: PropTypes.string,
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
   selectRows: PropTypes.bool,
 };

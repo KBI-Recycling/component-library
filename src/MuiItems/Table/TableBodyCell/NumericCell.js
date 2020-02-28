@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {TableCell, Typography} from '@material-ui/core';
 
-const NumericCell = ({value, wrapBodyText}) => {
+const NumericCell = ({padLeft, padRight, value, wrapBodyText}) => {
   const tableCellProps = useMemo(() => ({
     style: {padding: '5px'},
   }), []);
@@ -13,12 +13,18 @@ const NumericCell = ({value, wrapBodyText}) => {
 
   return (
     <TableCell {...tableCellProps}>
-      <Typography {...typoProps}>{Number(value).toLocaleString()}</Typography>
+      <div style={{display: 'flex'}}>
+        <span style={{paddingLeft: padLeft}} />
+        <Typography {...typoProps}>{Number(value).toLocaleString()}</Typography>
+        <span style={{paddingRight: padRight}} />
+      </div>
     </TableCell>
   );
 };
 
 NumericCell.propTypes = {
+  padLeft: PropTypes.string.isRequired,
+  padRight: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
   wrapBodyText: PropTypes.bool,
 };

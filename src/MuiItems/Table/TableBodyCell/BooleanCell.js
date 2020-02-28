@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {TableCell, Typography} from '@material-ui/core';
 
-const BooleanCell = ({value, wrapBodyText}) => {
+const BooleanCell = ({padLeft, padRight, value, wrapBodyText}) => {
   const tableCellProps = useMemo(() => ({
     style: {padding: '5px'},
   }), []);
@@ -13,12 +13,18 @@ const BooleanCell = ({value, wrapBodyText}) => {
 
   return (
     <TableCell {...tableCellProps}>
-      <Typography {...typoProps}>{value ? 'True' : 'False'}</Typography>
+      <div style={{display: 'flex'}}>
+        <span style={{paddingLeft: padLeft}} />
+        <Typography {...typoProps}>{value ? 'True' : 'False'}</Typography>
+        <span style={{paddingRight: padRight}} />
+      </div>
     </TableCell>
   );
 };
 
 BooleanCell.propTypes = {
+  padLeft: PropTypes.string.isRequired,
+  padRight: PropTypes.string.isRequired,
   value: PropTypes.bool.isRequired,
   wrapBodyText: PropTypes.bool,
 };

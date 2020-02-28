@@ -5,14 +5,18 @@ import TableHeadCell from './TableHeadCell';
 import TableHeadFilter from './TableHeadFilter';
 
 const TableHeadRow = (props) => {
-  const {disableFilters, headerGroup} = props;
+  const {disableFilters, headerGroup, rowEdgePadding} = props;
   return (
     <Fragment>
       <TableRow {...headerGroup.getHeaderGroupProps()}>
-        {headerGroup.headers.map((column, columnIndex) => <TableHeadCell key={columnIndex} column={column} />)}
+        {headerGroup.headers.map((column, columnIndex) => {
+          return <TableHeadCell key={columnIndex} column={column} headers={headerGroup.headers} rowEdgePadding={rowEdgePadding} />;
+        })}
       </TableRow>
       {!disableFilters && <TableRow>
-        {headerGroup.headers.map((column, columnIndex) => <TableHeadFilter key={columnIndex} column={column} />)}
+        {headerGroup.headers.map((column, columnIndex) => {
+          return <TableHeadFilter key={columnIndex} column={column} headers={headerGroup.headers} rowEdgePadding={rowEdgePadding} />;
+        })}
       </TableRow>}
     </Fragment>
   );
@@ -21,5 +25,6 @@ const TableHeadRow = (props) => {
 TableHeadRow.propTypes = {
   disableFilters: PropTypes.bool,
   headerGroup: PropTypes.object.isRequired,
+  rowEdgePadding: PropTypes.string.isRequired,
 };
 export default TableHeadRow;
