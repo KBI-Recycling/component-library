@@ -46,7 +46,7 @@ const TableHeadCell = ({column, headers, rowEdgePadding}) => {
 
 TableHeadCell.propTypes = {
   column: PropTypes.object.isRequired,
-  headers: PropTypes.object.isRequired,
+  headers: PropTypes.array.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
 };
 export default TableHeadCell;

@@ -21,7 +21,7 @@ const TableHeadFilter = ({column, headers, rowEdgePadding}) => {
 
 TableHeadFilter.propTypes = {
   column: PropTypes.object.isRequired,
-  headers: PropTypes.object.isRequired,
+  headers: PropTypes.array.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
 };
 export default TableHeadFilter;
