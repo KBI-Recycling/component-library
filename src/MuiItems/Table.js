@@ -6,6 +6,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
+import TableBodyRowBlank from './Table/TableBodyRowBlank';
 
 const Table = (props) => {
   const styles = useStyles();
@@ -128,7 +129,6 @@ const Table = (props) => {
     return tableColumns;
   }, [onLoadProps]);
   const data = useMemo(() => {
-    console.log('Memo data');
     return props.data;
   }, [props.data]);
   const sortTypes = useMemo(() => {
@@ -211,7 +211,12 @@ const Table = (props) => {
           {rtProps.headerGroups.map((headerGroup, headIndex) => <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={onLoadProps.disableFilters} />)}
         </TableHead>
         <TableBody>
-          {bodyRows.map((row, bodyIndex) => <TableBodyRow key={bodyIndex} rtProps={rtProps} row={row} />)}
+          {bodyRows.map((row, rowIndex) => {
+            if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.flatColumns.length} />;
+            rtProps.prepareRow(row);
+            const {key} = row.getRowProps();
+            return <TableBodyRow key={key} row={row} />;
+          })}
         </TableBody>
         <TableFooter>
           <TableFooterRow {...tableFooterProps} />
