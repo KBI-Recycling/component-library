@@ -4,7 +4,7 @@ import {TableCell} from '@material-ui/core';
 
 const SelectRowCell = ({render}) => {
   const tableCellProps = useMemo(() => ({
-    style: {padding: '0px'},
+    style: {padding: '5px'},
   }), []);
 
   return (
