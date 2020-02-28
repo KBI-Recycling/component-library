@@ -19,7 +19,7 @@ const DefaultCell = ({value, wrapBodyText}) => {
 };
 
 DefaultCell.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   wrapBodyText: PropTypes.bool,
 };
 export default React.memo(DefaultCell);

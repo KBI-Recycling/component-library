@@ -27,7 +27,6 @@ const TableBodyRow = ({row}) => {
 };
 
 TableBodyRow.propTypes = {
-  rtProps: PropTypes.object.isRequired,
   row: PropTypes.object,
 };
 export default TableBodyRow;

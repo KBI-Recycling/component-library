@@ -19,7 +19,7 @@ const BooleanCell = ({value, wrapBodyText}) => {
 };
 
 BooleanCell.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.bool.isRequired,
   wrapBodyText: PropTypes.bool,
 };
 export default React.memo(BooleanCell);

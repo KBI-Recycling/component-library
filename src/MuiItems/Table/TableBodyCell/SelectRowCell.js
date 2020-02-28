@@ -15,6 +15,6 @@ const SelectRowCell = ({render}) => {
 };
 
 SelectRowCell.propTypes = {
-  render: PropTypes.func.isRequired,
+  render: PropTypes.object.isRequired,
 };
 export default React.memo(SelectRowCell);
