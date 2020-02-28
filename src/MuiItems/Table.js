@@ -236,7 +236,6 @@ const useStyles = makeStyles(theme => ({
     overflowX: 'auto',
     overflowY: 'hidden',
     position: 'relative',
-    border: '1px solid black',
   },
 }));
 Table.defaultProps = {
