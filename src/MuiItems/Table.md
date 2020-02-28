@@ -33,12 +33,16 @@ const handleAddRows = useCallback(() => {
         console.log('Save Row', action);
       },
     },
-    {
-      icon: Edit,
-      tooltip: 'Edit User',
-      onClick: (action) => {
-        console.log('Edit Row', action);
-      },
+    rowData => {
+      return {
+        disabled: rowData.active ? true : false,
+        hide: rowData.active ? false : true,
+        icon: Edit,
+        tooltip: `Edit ${rowData.full_name}`,
+        onClick: (action) => {
+          console.log('Edit Row', action);
+        },
+      }
     },
   ]}
   actionsPerTable={[

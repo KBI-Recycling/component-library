@@ -16,8 +16,11 @@ const ActionsCell = ({cell, padLeft, padRight}) => {
       <span style={{paddingLeft: padLeft}} />
       <ButtonGroup size='small'>
         {cell.column.actions.map((action, i) => {
+          if (typeof action === 'function') action = action(cell.row.original);
           const Icon = action.icon;
-          if (!action?.tooltip) return <Button style={actionsButtonStyle} onClick={event => action.onClick({event})}><Icon /></Button>;
+          if (action?.hide) return null;
+          if (action?.disabled) return <Button key={action.tooltip} style={actionsButtonStyle} disabled onClick={event => action.onClick({event})}><Icon /></Button>;
+          if (!action?.tooltip) return <Button key={action.tooltip} style={actionsButtonStyle} onClick={event => action.onClick({event})}><Icon /></Button>;
           return (
             <Tooltip key={action.tooltip} title={action.tooltip}>
               <Button style={actionsButtonStyle} onClick={event => action.onClick({event, rowData: cell.row.original, rowIndex: cell.row.index})}>

@@ -251,15 +251,18 @@ Table.defaultProps = {
   selectRows: false,
 };
 Table.propTypes = {
-  /**  Property defines the actions that will be clickable on every row in the table. */
-  actionsPerRow: PropTypes.arrayOf(PropTypes.shape({
-    /**  The icon that will be displayed for the action. */
-    icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
-    /** The tooltip that will be displayed when the user hover over the action icon. */
-    tooltip: PropTypes.string,
-    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, rowData, rowIndex}) => {}` */
-    onClick: PropTypes.func.isRequired,
-  })),
+  /** <p>Property defines the actions that will be clickable on every row in the table. Property can either by an object or a callback function.</p><p>***Object Shape:*** {icon, tooltip, onClick} - <b>icon: </b> (required) The icon that will be displayed for the action. Must be a React node; <b>tooltip:</b> The tooltip that will be displayed when the user hover over the action icon. Must be a string; <b>disabled:</b> Boolean that disables action button; <b>hide:</b> boolean that hides an action button; <b>onClick:</b> (required) The function that will be triggered when the button is clicked. Signature: `({event, rowData, rowIndex}) => {}</p><p>***Function Shape: *** (rowData) => return {icon, disabled, hide, tooltip, onClick};  A function must return an object that matches the shape described above. A function should be used (instead of a plain object) when rowData is needed to modify properties of Action object.</p>*/ //eslint-disable-line
+  actionsPerRow: PropTypes.arrayOf(
+    PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.shape({
+        disabled: PropTypes.bool,
+        icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
+        tooltip: PropTypes.string,
+        onClick: PropTypes.func.isRequired,
+      }),
+    ]),
+  ),
   /**  Property defines the actions that will be displayed in Material UI SpeedDial component. */
   actionsPerTable: PropTypes.arrayOf(PropTypes.shape({
     /**  The icon that will be displayed for the action. */
