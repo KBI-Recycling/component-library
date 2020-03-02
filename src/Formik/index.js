@@ -13,8 +13,11 @@ export * from './TextField';
 export {default as AutoComplete} from './AutoComplete';
 export * from './AutoComplete';
 
-// export {default as AutoCompleteObject} from './AutoCompleteObject';
+export {default as AutoCompleteObject} from './AutoCompleteObject';
 export * from './AutoCompleteObject';
+
+export {default as validateAutoObject} from './ValidateAutoObject';
+export * from './ValidateAutoObject';
 
 export {default as CurrencyField} from './CurrencyField';
 export * from './CurrencyField';

@@ -14,6 +14,7 @@ import {default as AutoComplete} from './Formik/AutoComplete';
 import {default as AutoCompleteObject} from './Formik/AutoCompleteObject';
 import {default as CheckboxGroup} from './Formik/CheckboxGroup';
 import {default as RadioGroup} from './Formik/RadioGroup';
+import {default as validateAutoObject} from './Formik/ValidateAutoObject';
 
 export {default as ValidationExample} from './TestComponent/ValidationExample';
 export * from './TestComponent/ValidationExample';
@@ -44,4 +45,5 @@ export const Formik = {
   AutoCompleteObject,
   CheckboxGroup,
   RadioGroup,
+  validateAutoObject,
 };
