@@ -38,10 +38,10 @@ const Table = (props) => {
       initialState: {
         pageIndex: onLoadProps.paginationInitialIndex,
         pageSize: onLoadProps.paginationInitialSize,
-        sortBy: props.sortBy ? props.sortBy : [],
+        sortBy: props.sortInitial ? props.sortInitial : [],
       },
     };
-  }, [onLoadProps, props.sortBy]);
+  }, [onLoadProps, props.sortInitial]);
   const columns = useMemo(() => {
     const tableColumns = onLoadProps.columns.map(column => {
       return {
@@ -253,17 +253,15 @@ Table.defaultProps = {
 };
 Table.propTypes = {
   /** <p>Property defines the actions that will be clickable on every row in the table. Property can either by an object or a callback function.</p><p>***Object Shape:*** {icon, tooltip, onClick} - <b>icon: </b> (required) The icon that will be displayed for the action. Must be a React node; <b>tooltip:</b> The tooltip that will be displayed when the user hover over the action icon. Must be a string; <b>disabled:</b> Boolean that disables action button; <b>hide:</b> boolean that hides an action button; <b>onClick:</b> (required) The function that will be triggered when the button is clicked. Signature: `({event, rowData, rowIndex}) => {}</p><p>***Function Shape: *** (rowData) => return {icon, disabled, hide, tooltip, onClick};  A function must return an object that matches the shape described above. A function should be used (instead of a plain object) when rowData is needed to modify properties of Action object.</p>*/ //eslint-disable-line
-  actionsPerRow: PropTypes.arrayOf(
-    PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.shape({
-        disabled: PropTypes.bool,
-        icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
-        tooltip: PropTypes.string,
-        onClick: PropTypes.func.isRequired,
-      }),
-    ]),
-  ),
+  actionsPerRow: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({
+      disabled: PropTypes.bool,
+      icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
+      tooltip: PropTypes.string,
+      onClick: PropTypes.func.isRequired,
+    }),
+  ])),
   /**  Property defines the actions that will be displayed in Material UI SpeedDial component. */
   actionsPerTable: PropTypes.arrayOf(PropTypes.shape({
     /**  The icon that will be displayed for the action. */
@@ -310,8 +308,8 @@ Table.propTypes = {
   rowEdgePadding: PropTypes.string,
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
   selectRows: PropTypes.bool,
-  /** Default column sorting where 'id' is the column accessor. If array length > 1, multi-sorting is enabled. */
-  sortBy: PropTypes.arrayOf(PropTypes.shape({
+  /** An array of objects used to perform initial sort of columns. ***Array Shape:*** [{id<string>, desc<boolean>}, ...]. Object 'id' property is used to select column to be sorted and must match column accessor. Object 'desc' if true will sort column descending. If array length > 1, multi-sorting is enabled. */ //eslint-disable-line
+  sortInitial: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
     desc: PropTypes.bool,
   })),
