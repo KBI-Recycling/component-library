@@ -67,6 +67,7 @@ const handleAddRows = useCallback(() => {
   paginationInitialIndex={0}
   rowEdgePadding={'16px'}
   selectRows={true}
+  sortBy={[{id: 'full_name', desc: true}]}
 />
 <Button onClick={handleAddRows}>Add 5 Rows</Button>
 </Fragment>
