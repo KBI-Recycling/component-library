@@ -37,7 +37,7 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
     return {
       ...field,
       disabled: form.isSubmitting,
-      error: meta.touched && meta.error,
+      error: Boolean(meta.touched && meta.error),
       fullWidth: true,
       helperText: (() => {
         if (meta.touched && meta.error) return meta.error;
