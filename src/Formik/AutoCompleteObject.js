@@ -1,5 +1,4 @@
 /* eslint-disable react/display-name */
-/* eslint-disable no-invalid-this */
 import React, {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {Autocomplete} from '@material-ui/lab';
@@ -7,7 +6,6 @@ import {createFilterOptions} from '@material-ui/lab/Autocomplete';
 import {Field, FastField} from 'formik';
 import get from 'lodash.get';
 import {TextField} from '@material-ui/core';
-import * as Yup from 'yup';
 
 /**
  * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop;
@@ -27,7 +25,7 @@ import * as Yup from 'yup';
  *
  */
 // eslint-disable-next-line max-len
-export const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
+const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
   const [shrunkLabel, setShrunkLabel] = useState(false);
   const filterOptions = createFilterOptions({
     matchFrom: 'any',
@@ -169,16 +167,4 @@ AutoCompleteObject.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-// eslint-disable-next-line require-jsdoc
-export function validateAutoObject() {
-  Yup.addMethod(Yup.object, 'exists', function(message) {
-    return this.test('not empty string', message, function(value) {
-      if (!value && value !== null) {
-        throw this.createError({
-          path: `${this.path}`,
-        });
-      }
-      return true;
-    });
-  });
-}
+export default AutoCompleteObject;

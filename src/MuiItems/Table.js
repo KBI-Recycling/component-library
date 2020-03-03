@@ -38,9 +38,10 @@ const Table = (props) => {
       initialState: {
         pageIndex: onLoadProps.paginationInitialIndex,
         pageSize: onLoadProps.paginationInitialSize,
+        sortBy: props.sortBy ? props.sortBy : [],
       },
     };
-  }, [onLoadProps]);
+  }, [onLoadProps, props.sortBy]);
   const columns = useMemo(() => {
     const tableColumns = onLoadProps.columns.map(column => {
       return {
@@ -309,5 +310,10 @@ Table.propTypes = {
   rowEdgePadding: PropTypes.string,
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
   selectRows: PropTypes.bool,
+  /** Default column sorting where 'id' is the column accessor. If array length > 1, multi-sorting is enabled. */
+  sortBy: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    desc: PropTypes.bool,
+  })),
 };
 export default Table;
