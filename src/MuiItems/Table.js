@@ -7,6 +7,7 @@ import {RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFo
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 import TableBodyRowBlank from './Table/TableBodyRowBlank';
+import {TableLoading, createBlankRows} from './Table/Loading';
 
 const Table = (props) => {
   const styles = useStyles();
@@ -215,17 +216,20 @@ const Table = (props) => {
           })}
         </TableHead>
         <TableBody>
-          {bodyRows.map((row, rowIndex) => {
-            if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
-            rtProps.prepareRow(row);
-            const {key} = row.getRowProps();
-            return <TableBodyRow key={key} row={row} rowEdgePadding={onLoadProps.rowEdgePadding} />;
-          })}
+          {props.isLoading ?
+            createBlankRows(rtProps.state.pageSize, rtProps.columns.length) :
+            bodyRows.map((row, rowIndex) => {
+              if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
+              rtProps.prepareRow(row);
+              const {key} = row.getRowProps();
+              return <TableBodyRow key={key} row={row} rowEdgePadding={onLoadProps.rowEdgePadding} />;
+            })}
         </TableBody>
         <TableFooter>
           <TableFooterRow {...tableFooterProps} />
         </TableFooter>
       </MuiTable>
+      <TableLoading isLoading={props.isLoading} />
     </div>
   );
 };
@@ -294,6 +298,8 @@ Table.propTypes = {
   data: PropTypes.arrayOf(PropTypes.object).isRequired,
   /** If `true`, disables filtering for every column in the entire table. Defaults to `false` */
   disableFilters: PropTypes.bool,
+  /** If `true`, displays a MUI CircularProgress element over the table body. */
+  isLoading: PropTypes.bool,
   /**  If `false`, pagination will be turned off. Defaults to `true`. */
   paginationActive: PropTypes.bool,
   /** Index of the page that should be displayed first when pagination is active. Defaults to `0`. */

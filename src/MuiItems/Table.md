@@ -68,6 +68,7 @@ const handleAddRows = useCallback(() => {
   rowEdgePadding={'16px'}
   selectRows={true}
   sortInitial={[{id: 'full_name', desc: false}]}
+  isLoading={false}
 />
 <Button onClick={handleAddRows}>Add 5 Rows</Button>
 </Fragment>
