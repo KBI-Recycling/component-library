@@ -151,8 +151,12 @@ const Table = (props) => {
         if (rowA.values[columnID] < rowB.values[columnID]) return -1;
       },
       datetime: (rowA, rowB, columnID) => {
+        // console.log({rowA, rowB, columnID});
         const momentA = moment(rowA.values[columnID]);
         const momentB = moment(rowB.values[columnID]);
+        if (momentA.isValid() && !momentB.isValid()) return 1;
+        if (!momentA.isValid() && momentB.isValid()) return -1;
+        if (!momentA.isValid() && !momentB.isValid()) return 0;
         if (momentA.isSame(momentB)) return 0;
         if (momentA.isAfter(momentB)) return 1;
         if (momentA.isBefore(momentB)) return -1;
