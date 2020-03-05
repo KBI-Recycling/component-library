@@ -113,6 +113,7 @@ const Table = (props) => {
             });
           }
         },
+        Header: () => column.Header || column.accessor || '',
         disableFilters: column.filterDisable || false,
         sortType: column.type || 'alphanumeric',
       };
