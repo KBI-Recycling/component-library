@@ -8,6 +8,7 @@ import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectCo
 import moment from 'moment';
 import TableBodyRowBlank from './Table/TableBodyRowBlank';
 import {TableLoading, createBlankRows} from './Table/Loading';
+import matchSorter from 'match-sorter';
 
 const Table = (props) => {
   const styles = useStyles();
@@ -54,6 +55,9 @@ const Table = (props) => {
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
+          if (filterValue.type === 'Similar') {
+            return matchSorter(rows, filterValue.content, {keys: [row => row.values[id]]});
+          }
           if (filterValue.type === 'Includes') {
             return rows.filter(row => {
               const cleanRowValue = String(row.values[id]).toLowerCase();
