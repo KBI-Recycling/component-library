@@ -16,7 +16,8 @@ const DateTimeCell = ({datetimeFormat, padLeft, padRight, value, wrapBodyText}) 
     <TableCell {...tableCellProps}>
       <div style={{display: 'flex'}}>
         <span style={{paddingLeft: padLeft}} />
-        <Typography {...typoProps}>{moment(value).format(datetimeFormat || 'MM/DD/YYYY')}</Typography>
+        {moment(value).isValid() && <Typography {...typoProps}>{moment(value).format(datetimeFormat || 'MM/DD/YYYY')}</Typography>}
+        {!moment(value).isValid() && <Typography {...typoProps}>{''}</Typography>}
         <span style={{paddingRight: padRight}} />
       </div>
     </TableCell>
