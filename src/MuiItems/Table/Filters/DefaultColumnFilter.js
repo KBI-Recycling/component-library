@@ -8,10 +8,11 @@ const DefaultColumnFilter = ({column}) => {
   const classes = useStyles();
   const {filterValue, setFilter} = column;
   const handleFilterChange = useCallback(() => {
-    if (!filterValue) setFilter({content: '', type: 'Starts'});
+    if (!filterValue) setFilter({content: '', type: 'Includes'});
+    else if (filterValue.type === 'Similar') setFilter({...filterValue, type: 'Includes'});
     else if (filterValue.type === 'Includes') setFilter({...filterValue, type: 'Starts'});
     else if (filterValue.type === 'Starts') setFilter({...filterValue, type: 'Equals'});
-    else if (filterValue.type === 'Equals') setFilter({...filterValue, type: 'Includes'});
+    else if (filterValue.type === 'Equals') setFilter({...filterValue, type: 'Similar'});
   }, [filterValue, setFilter]);
   const filterListProps = useMemo(() => ({
     style: {cursor: 'pointer', fontSize: '1rem'},
@@ -25,7 +26,7 @@ const DefaultColumnFilter = ({column}) => {
       classes: {root: classes.inputRoot},
       endAdornment: (
         <InputAdornment position='end'>
-          <Tooltip title={filterValue?.type || 'Includes'}>
+          <Tooltip title={filterValue?.type || 'Similar'}>
             <FilterList {...filterListProps} />
           </Tooltip>
         </InputAdornment>
@@ -42,7 +43,7 @@ const DefaultColumnFilter = ({column}) => {
     value: filterValue?.content || '',
     onChange: e => {
       const content = e.target.value;
-      const type = filterValue?.type || 'Includes';
+      const type = filterValue?.type || 'Similar';
       setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
     },
   }), [classes.formControlRoot, classes.inputRoot, column.Header, filterListProps, filterValue, setFilter]);

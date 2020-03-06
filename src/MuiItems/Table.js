@@ -8,6 +8,7 @@ import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectCo
 import moment from 'moment';
 import TableBodyRowBlank from './Table/TableBodyRowBlank';
 import {TableLoading, createBlankRows} from './Table/Loading';
+import matchSorter from 'match-sorter';
 
 const Table = (props) => {
   const styles = useStyles();
@@ -54,6 +55,9 @@ const Table = (props) => {
           else return DefaultColumnFilter;
         })(),
         filter: (rows, id, filterValue) => {
+          if (filterValue.type === 'Similar') {
+            return matchSorter(rows, filterValue.content, {keys: [row => row.values[id]]});
+          }
           if (filterValue.type === 'Includes') {
             return rows.filter(row => {
               const cleanRowValue = String(row.values[id]).toLowerCase();
@@ -109,6 +113,7 @@ const Table = (props) => {
             });
           }
         },
+        Header: () => column.Header || column.accessor || '',
         disableFilters: column.filterDisable || false,
         sortType: column.type || 'alphanumeric',
       };
@@ -147,8 +152,12 @@ const Table = (props) => {
         if (rowA.values[columnID] < rowB.values[columnID]) return -1;
       },
       datetime: (rowA, rowB, columnID) => {
+        // console.log({rowA, rowB, columnID});
         const momentA = moment(rowA.values[columnID]);
         const momentB = moment(rowB.values[columnID]);
+        if (momentA.isValid() && !momentB.isValid()) return 1;
+        if (!momentA.isValid() && momentB.isValid()) return -1;
+        if (!momentA.isValid() && !momentB.isValid()) return 0;
         if (momentA.isSame(momentB)) return 0;
         if (momentA.isAfter(momentB)) return 1;
         if (momentA.isBefore(momentB)) return -1;
