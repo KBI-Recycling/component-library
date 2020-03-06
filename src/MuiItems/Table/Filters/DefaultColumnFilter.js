@@ -18,35 +18,38 @@ const DefaultColumnFilter = ({column}) => {
     style: {cursor: 'pointer', fontSize: '1rem'},
     onClick: handleFilterChange,
   }), [handleFilterChange]);
-  const inputProps = useMemo(() => ({
-    classes: {root: classes.formControlRoot},
-    FormHelperTextProps: {style: {display: 'none'}},
-    InputLabelProps: {style: {display: 'none'}},
-    InputProps: {
-      classes: {root: classes.inputRoot},
-      endAdornment: (
-        <InputAdornment position='end'>
-          <Tooltip title={filterValue?.type || 'Similar'}>
-            <FilterList {...filterListProps} />
-          </Tooltip>
-        </InputAdornment>
-      ),
-    },
-    inputProps: {
-      autoComplete: 'off',
-      style: {
-        padding: '0px 0px 2px 0px',
-        width: filterValue?.content?.length >= column.Header.length ? `${filterValue.content.length + 1}ch` : `${column.Header.length}ch`,
+  const inputProps = useMemo(() => {
+    const header = column.Header(); //eslint-disable-line
+    return {
+      classes: {root: classes.formControlRoot},
+      FormHelperTextProps: {style: {display: 'none'}},
+      InputLabelProps: {style: {display: 'none'}},
+      InputProps: {
+        classes: {root: classes.inputRoot},
+        endAdornment: (
+          <InputAdornment position='end'>
+            <Tooltip title={filterValue?.type || 'Similar'}>
+              <FilterList {...filterListProps} />
+            </Tooltip>
+          </InputAdornment>
+        ),
       },
-    },
-    placeholder: column.Header,
-    value: filterValue?.content || '',
-    onChange: e => {
-      const content = e.target.value;
-      const type = filterValue?.type || 'Similar';
-      setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
-    },
-  }), [classes.formControlRoot, classes.inputRoot, column.Header, filterListProps, filterValue, setFilter]);
+      inputProps: {
+        autoComplete: 'off',
+        style: {
+          padding: '0px 0px 2px 0px',
+          width: filterValue?.content?.length >= header.length ? `${filterValue.content.length + 1}ch` : `${header.length}ch`,
+        },
+      },
+      placeholder: header,
+      value: filterValue?.content || '',
+      onChange: e => {
+        const content = e.target.value;
+        const type = filterValue?.type || 'Similar';
+        setFilter({content, type} || undefined); // Set undefined to remove the filter entirely
+      },
+    };
+  }, [classes.formControlRoot, classes.inputRoot, column, filterListProps, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>
