@@ -19,13 +19,11 @@ const DatetimeColumnFilter = ({column}) => {
     onClick: handleFilterChange,
   }), [handleFilterChange]);
   const inputProps = useMemo(() => ({
-    endAdornment: (
-      <InputAdornment position='end'>
-        <Tooltip title={filterValue?.type || 'Same'}>
-          <FilterList {...filterListProps} />
-        </Tooltip>
-      </InputAdornment>
-    ),
+    endAdornment: (<InputAdornment position='end'>
+      <Tooltip title={filterValue?.type || 'Same'}>
+        <FilterList {...filterListProps} />
+      </Tooltip>
+    </InputAdornment>),
     inputProps: {autoComplete: 'off'},
     classes: {input: classes.input},
     type: 'date',
