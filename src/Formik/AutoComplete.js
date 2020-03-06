@@ -39,8 +39,9 @@ const AutoComplete = props => {
           });
           return showOption;
         });
+      } else {
+        return options.filter(option => option[optionKey].toLowerCase().includes(field.value.toLowerCase()));
       }
-      return options;
     },
     id: name,
     getOptionLabel: (option, state) => {
@@ -78,6 +79,7 @@ const AutoComplete = props => {
     label: label ? label : name,
     margin: 'dense',
     required,
+    onChange: e => form.setFieldValue(field.name, e.target.value),
     ...textFieldProps,
   });
 
@@ -100,7 +102,9 @@ const AutoComplete = props => {
           {...autoCompleteProps(form, field)}
           renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
         />
-      )}
+      )
+
+      }
     </Field>
   );
 };

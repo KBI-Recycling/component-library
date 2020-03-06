@@ -48,9 +48,10 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
       name: name,
       margin: 'dense',
       value: field.value,
+      onChange,
       ...otherProps,
     };
-  }, [name, otherProps]);
+  }, [name, onChange, otherProps]);
   const autocompleteProps = useCallback((formik) => {
     const {field, form} = formik;
     return ({
