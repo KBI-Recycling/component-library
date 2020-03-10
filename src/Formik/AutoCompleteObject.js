@@ -32,30 +32,24 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
     stringify: option => get(option, optionKey, ''),
   });
 
-  const textFieldProps = useCallback((formik) => {
-    const {field, form, meta} = formik;
+  const textFieldProps = ({field, form}) => {
     return {
-      ...field,
       disabled: form.isSubmitting,
-      error: Boolean(meta.touched && meta.error),
+      error: get(form.touched, name) && get(form.errors, name) ? true : false,
       fullWidth: true,
-      helperText: (() => {
-        if (meta.touched && meta.error) return meta.error;
-        else return '';
-      })(),
+      helperText: get(form.touched, name) && get(form.errors, name),
       id: name,
       label: name,
       name: name,
       margin: 'dense',
       value: field.value,
-      onChange,
       ...otherProps,
     };
-  }, [name, onChange, otherProps]);
-  const autocompleteProps = useCallback((formik) => {
-    const {field, form} = formik;
+  };
+  const autocompleteProps = ({field, form}) => {
+    console.log('form value', form.values[name]);
     return ({
-      options,
+      options: multiple ? options.filter(option => !form.values[name].map(val => val[optionKey]).includes(option[optionKey])) : options,
       autoSelect,
       autoHighlight,
       multiple,
@@ -73,10 +67,11 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
       renderInput: params => {
       // eslint-disable-next-line max-len
         return (<TextField {...{...params, InputLabelProps: {...params.InputLabelProps, shrink: !!field.value || shrunkLabel}, inputProps: {...params.inputProps, autoComplete: 'off'}}}
-          {...textFieldProps(formik)}
+          {...textFieldProps({form, field})}
         />);
       },
       onChange: (e, value) => {
+        console.log('value', value);
         form.setFieldValue(field.name, value );
         if (value) setShrunkLabel(true);
         if (onChange) {
@@ -98,23 +93,27 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
         if (!field.value) setShrunkLabel(false);
       },
       onFocus: e => setShrunkLabel(true),
-    });
-  }, [autoHighlight, autoSelect, disableClearable, filterOptions, filterSelectedOptions, freeSolo, loading, loadingText, multiple, name, noOptionsText, onBlur, onChange, optionKey, options, otherProps.disabled, shrunkLabel, textFieldProps]); //eslint-disable-line
+    })
+    ;
+  };
 
   if (fast) {
     return (
       <FastField name={name}>
-        {(formik) => (
-          <Autocomplete {...autocompleteProps(formik)} />
+        {({field, form}) => (
+          <Autocomplete {...field} {...autocompleteProps({field, form})} />
         )}
       </FastField>
     );
   }
   return (
     <Field name={name}>
-      {(formik) => (
-        <Autocomplete {...autocompleteProps(formik)} />
-      )}
+      {({field, form}) => {
+        return (
+          <Autocomplete {...field} {...autocompleteProps({field, form})} />
+        )
+        ;
+      }}
     </Field>
   );
 };
