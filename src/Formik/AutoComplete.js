@@ -37,10 +37,11 @@ const AutoComplete = props => {
           field.value.forEach(item => {
             if (item[optionKey] === option[optionKey]) showOption = false;
           });
+          if (!option[optionKey].toLowerCase().includes(state.inputValue.toLowerCase())) showOption = false;
           return showOption;
         });
       } else {
-        return options.filter(option => option[optionKey].toLowerCase().includes(field.value.toLowerCase()));
+        return options.filter(option => option[optionKey].toLowerCase().includes(state.inputValue.toLowerCase()));
       }
     },
     id: name,
@@ -79,7 +80,6 @@ const AutoComplete = props => {
     label: label ? label : name,
     margin: 'dense',
     required,
-    onChange: e => form.setFieldValue(field.name, e.target.value),
     ...textFieldProps,
   });
 
