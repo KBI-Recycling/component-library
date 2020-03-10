@@ -98,17 +98,13 @@ const AutoComplete = props => {
   return (
     <Field name={name}>
       {({form, field}) => {
-        console.log(form.values);
         return (
           <Autocomplete
             {...autoCompleteProps(form, field)}
             renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
           />
-        )
-        ;
-      }
-
-      }
+        );
+      }}
     </Field>
   );
 };
