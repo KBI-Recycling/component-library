@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, {useState, useCallback} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Autocomplete} from '@material-ui/lab';
 import {createFilterOptions} from '@material-ui/lab/Autocomplete';
@@ -47,7 +47,6 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
     };
   };
   const autocompleteProps = ({field, form}) => {
-    console.log('form value', form.values[name]);
     return ({
       options: multiple ? options.filter(option => !form.values[name].map(val => val[optionKey]).includes(option[optionKey])) : options,
       autoSelect,
@@ -71,7 +70,6 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
         />);
       },
       onChange: (e, value) => {
-        console.log('value', value);
         form.setFieldValue(field.name, value );
         if (value) setShrunkLabel(true);
         if (onChange) {
@@ -120,7 +118,7 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
 
 AutoCompleteObject.defaultProps = {
   autoHighlight: true,
-  autoSelect: true,
+  autoSelect: false,
   clearOnEscape: true,
   disableClearable: false,
   fast: false,
