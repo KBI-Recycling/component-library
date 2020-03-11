@@ -173,6 +173,9 @@ const Table = (props) => {
         if (rowA.values[columnID] < rowB.values[columnID]) return -1;
       },
       alphanumeric: (rowA, rowB, columnID) => {
+        if (rowA.values[columnID] && !rowB.values[columnID]) return 1;
+        if (!rowA.values[columnID] && rowB.values[columnID]) return -1;
+        if (!rowA.values[columnID] && !rowB.values[columnID]) return 0;
         return rowA.values[columnID].localeCompare(rowB.values[columnID]);
       },
     };
