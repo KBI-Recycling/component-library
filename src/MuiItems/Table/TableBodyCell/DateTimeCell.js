@@ -31,7 +31,7 @@ DateTimeCell.propTypes = {
   value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.instanceOf(Date),
-  ]).isRequired,
+  ]),
   wrapBodyText: PropTypes.bool,
 };
 export default React.memo(DateTimeCell);
