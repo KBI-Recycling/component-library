@@ -15,7 +15,8 @@ const DefaultCell = ({padLeft, padRight, value, wrapBodyText}) => {
     <TableCell {...tableCellProps}>
       <div style={{display: 'flex'}}>
         <span style={{paddingLeft: padLeft}} />
-        <Typography {...typoProps}>{String(value)}</Typography>
+        {!value && <Typography>{''}</Typography>}
+        {value && <Typography {...typoProps}>{String(value)}</Typography>}
         <span style={{paddingRight: padRight}} />
       </div>
     </TableCell>
@@ -25,7 +26,7 @@ const DefaultCell = ({padLeft, padRight, value, wrapBodyText}) => {
 DefaultCell.propTypes = {
   padLeft: PropTypes.string.isRequired,
   padRight: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   wrapBodyText: PropTypes.bool,
 };
 export default React.memo(DefaultCell);
