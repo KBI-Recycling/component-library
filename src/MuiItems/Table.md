@@ -4,19 +4,20 @@ Table Example:
 import React, {Fragment, useCallback, useState} from 'react';
 import sampleData from './Table/sampleData';
 import {Button} from '@material-ui/core';
-import {Edit, Save} from '@material-ui/icons';
+import {Delete, Save, Edit} from '@material-ui/icons';
 
 const [rows, setRows] = useState(25);
+const [data, setData] = useState(sampleData.filter((row, index) => {
+    if (index < rows) return true;
+    return false;
+  }))
 const handleAddRows = useCallback(() => {
   setRows(rows + 5);
 }, [rows]);
 
 <Fragment>
 <Table
-  data={sampleData.filter((row, index) => {
-    if (index < rows) return true;
-    return false;
-  })}
+  data={data}
   columns={[
     {accessor: 'id', Header: 'Id', type: 'numeric'},
     {accessor: 'active', Header: 'Active', type: 'boolean'},
@@ -27,10 +28,10 @@ const handleAddRows = useCallback(() => {
   ]}
   actionsPerRow={[
     {
-      icon: Save,
+      icon: Delete,
       tooltip: 'Save User',
-      onClick: (action) => {
-        console.log('Save Row', action);
+      onClick: ({event, rowData, rowIndex}) => {
+        setData([...data.slice(0, rowIndex),...data.slice(rowIndex + 1)])
       },
     },
     rowData => {
@@ -70,6 +71,6 @@ const handleAddRows = useCallback(() => {
   sortInitial={[{id: 'full_name', desc: false}]}
   isLoading={false}
 />
-<Button onClick={handleAddRows}>Add 5 Rows</Button>
+<Button onClick={handleAddRows} disabled>Add 5 Rows</Button>
 </Fragment>
 ```
