@@ -4,7 +4,7 @@ Table Example:
 import React, {Fragment, useCallback, useState} from 'react';
 import sampleData from './Table/sampleData';
 import {Button} from '@material-ui/core';
-import {Edit, Save} from '@material-ui/icons';
+import {Save, Edit} from '@material-ui/icons';
 
 const [rows, setRows] = useState(25);
 const handleAddRows = useCallback(() => {
@@ -29,8 +29,8 @@ const handleAddRows = useCallback(() => {
     {
       icon: Save,
       tooltip: 'Save User',
-      onClick: (action) => {
-        console.log('Save Row', action);
+      onClick: ({event, rowData, rowIndex}) => {
+        console.log('Save User', event, rowData, rowIndex)
       },
     },
     rowData => {

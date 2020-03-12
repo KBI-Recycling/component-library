@@ -18,7 +18,6 @@ const Table = (props) => {
     // This memo holds MuiTable props that will never, ever, EVER change after initial component mount.
     // Extreme caution should be used when placing props inside this memo.
     return {
-      actionsPerRow: props.actionsPerRow,
       columns: props.columns,
       disableFilters: props.disableFilters,
       paginationActive: props.paginationActive,
@@ -124,13 +123,13 @@ const Table = (props) => {
         sortType: column.type || 'alphanumeric',
       };
     });
-    if (onLoadProps.actionsPerRow.length > 0) {
+    if (props.actionsPerRow.length > 0) {
       tableColumns.unshift({
         id: 'muiTableActions',
         disableFilters: true,
         disableSortBy: true,
         Header: 'Actions',
-        actions: onLoadProps.actionsPerRow,
+        actions: props.actionsPerRow,
       });
     }
     if (onLoadProps.selectRows) {
@@ -141,7 +140,7 @@ const Table = (props) => {
       });
     }
     return tableColumns;
-  }, [onLoadProps]);
+  }, [onLoadProps.columns, onLoadProps.selectRows, props.actionsPerRow]);
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -203,7 +202,6 @@ const Table = (props) => {
       return rtProps.page;
     } else return rtProps.rows;
   }, [props.paginationActive, props.paginationShowEmptyRows, rtProps.page, rtProps.rows, rtProps.state.pageSize]);
-
   const tableFooterProps = useMemo(() => {
     return {
       canPreviousPage: rtProps.canPreviousPage,
