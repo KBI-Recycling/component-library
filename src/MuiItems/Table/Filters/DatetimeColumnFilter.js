@@ -24,7 +24,7 @@ const DatetimeColumnFilter = ({column}) => {
         <FilterList {...filterListProps} />
       </Tooltip>
     </InputAdornment>),
-    inputProps: {autoComplete: 'off'},
+    inputProps: {autoComplete: 'off', tablefilter: 'true'},
     classes: {input: classes.input},
     type: 'date',
     onChange: e => {
