@@ -1,11 +1,11 @@
-input::-webkit-calendar-picker-indicator {
+input[tablefilter='true']::-webkit-calendar-picker-indicator {
   display: none;
 }
 
-input::-webkit-inner-spin-button {
+input[tablefilter='true']::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
-input::-webkit-clear-button {
+input[tablefilter='true']::-webkit-clear-button {
   display: none;
 }
