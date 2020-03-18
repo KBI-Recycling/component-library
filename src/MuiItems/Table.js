@@ -218,9 +218,8 @@ const Table = (props) => {
       statePageIndex: rtProps.state.pageIndex,
       statePageSize: rtProps.state.pageSize,
     };
-    // eslint-disable-next-line
-  }, [columns.length, onLoadProps, rtProps.canNextPage, rtProps.canPreviousPage, rtProps.gotoPage, rtProps.nextPage, rtProps.pageCount, rtProps.pageOptions.length, rtProps.previousPage, rtProps.state.pageIndex]);
-
+    // eslint-disable-next-line max-len
+  }, [columns.length, onLoadProps.paginationActive, onLoadProps.paginationSizes, rtProps.canNextPage, rtProps.canPreviousPage, rtProps.gotoPage, rtProps.nextPage, rtProps.pageCount, rtProps.pageOptions.length, rtProps.previousPage, rtProps.setPageSize, rtProps.state.pageIndex, rtProps.state.pageSize]);
   return (
     <div id='MuiTable' className={styles.tableWrap}>
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
