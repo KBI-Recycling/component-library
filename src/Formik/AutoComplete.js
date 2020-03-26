@@ -35,7 +35,8 @@ const AutoComplete = props => {
         return options.filter(option => {
           let showOption = true;
           field.value.forEach(item => {
-            if (item[optionKey] === option[optionKey]) showOption = false;
+            if (typeof item === 'string' && item === option[optionKey]) showOption = false;
+            if (typeof item === 'object' && item[optionKey] === option[optionKey]) showOption = false;
           });
           if (!option[optionKey].toLowerCase().includes(state.inputValue.toLowerCase())) showOption = false;
           return showOption;
@@ -59,8 +60,12 @@ const AutoComplete = props => {
     },
     onChange: (e, value) => {
       if (value && !Array.isArray(value)) form.setFieldValue(field.name, value[optionKey]);
-      else if (value && Array.isArray(value)) form.setFieldValue(field.name, value);
-      else form.setFieldValue(field.name, '');
+      else if (value && Array.isArray(value)) {
+        form.setFieldValue(field.name, value.map(item => {
+          if (typeof item === 'object') return item[optionKey];
+          return item;
+        }));
+      } else form.setFieldValue(field.name, '');
       if (onChange) {
         onChange({
           field: {...field, value: value},
