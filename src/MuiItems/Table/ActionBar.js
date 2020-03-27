@@ -14,11 +14,11 @@ const ActionBar = (props) => {
     },
   }), []);
 
+  if (!props.actions) return null;
   return (
     <div {...actionProps}>
       {props.actions.map(action => {
         if (typeof action === 'function') action = action(props.rtProps);
-        console.log({action});
         const Icon = action.icon || null;
         const actionProps ={
           color: 'primary',

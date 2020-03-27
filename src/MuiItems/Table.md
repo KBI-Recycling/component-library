@@ -34,7 +34,6 @@ const handleAddRows = useCallback(() => {
         },
       },
     (tableData) => {
-      console.log({tableData})
       return {
         icon: GetApp,
         text: 'Export Employee List',
@@ -77,6 +76,7 @@ const handleAddRows = useCallback(() => {
     primary: 'Current Employees',
     secondary: 'View all information related to current employees',
     secondaryProps: {style: {color: 'red'}},
+    wrapperStyle: {padding: '8px'}
   }}
   /*
   actionsPerTable={[

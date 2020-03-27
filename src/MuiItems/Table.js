@@ -352,7 +352,16 @@ Table.propTypes = {
     id: PropTypes.string.isRequired,
     desc: PropTypes.bool,
   })),
-  /** <p>Property defines title(s) to be displayed above main table. Pass a single string to show primary title only. Pass an object to define both primary and secondary titles.<br />***Shape:*** { primary: '...', secondary: '...', primaryProps: {...}, secondaryProps: {...} }.</p><p><b>Updating Props/Style</b> <ul><li>Primary and secondary titles use Typography components.</li><li>You may change the default props passed to Typography component by using primaryProps and secondaryProps objects.</li><li>Example: { primary: 'Primary Title', primaryProps: {variant: 'h1', style: {color: 'red'}} }</li></ul></p><br /> */ //eslint-disable-line
-  title: PropTypes.oneOfType([PropTypes.string, PropTypes.shape({primary: PropTypes.string, secondary: PropTypes.string})]),
+  /** <p>Property defines title(s) to be displayed above main table.<ul><li>Pass a single string to show primary title only. <b>example: </b> title='Current Employees'</li><li>Pass an object to define both primary and secondary titles, as well as to control title styling. <b>example: </b>title={{ primary: '...', secondary: '...', primaryProps: {...}, secondaryProps: {...}, wrapperStyle: {...} }}.</li></ul></p><p>Updating Props & Styles.<ul><li><b>primaryProps/secondaryProps: </b> Primary and secondary titles use Typography components. You may change the default props passed to Typography component by using primaryProps and secondaryProps objects. <b>example: </b>title={{ primary: 'Primary Title', primaryProps: {variant: 'h1', style: {color: 'red'}} }}</li><li><b>wrapperStyle: </b> Titles are wrapped in a `<div>` tag. You may change the default style passed to `<div>` by using wrapperStyle object. <b>example: </b> title={{ primary: 'Primary Title', wrapperStyle: {padding: '8px'} }}</li></ul></p><br /> */ //eslint-disable-line
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      primary: PropTypes.string,
+      secondary: PropTypes.string,
+      primaryProps: PropTypes.object,
+      secondaryProps: PropTypes.object,
+      wrapperStyle: PropTypes.object,
+    }),
+  ]),
 };
 export default Table;
