@@ -4,7 +4,7 @@ Table Example:
 import React, {Fragment, useCallback, useState} from 'react';
 import sampleData from './Table/sampleData';
 import {Button} from '@material-ui/core';
-import {Save, Edit} from '@material-ui/icons';
+import {Add, GetApp, Save, Edit} from '@material-ui/icons';
 
 const [rows, setRows] = useState(25);
 const handleAddRows = useCallback(() => {
@@ -24,6 +24,26 @@ const handleAddRows = useCallback(() => {
     {accessor: 'gender', Header: 'Gender', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
     {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'MM/DD/YYYY', filterField: 'datetime'},
+  ]}
+  actionsBar={[
+    {
+        icon: Add,
+        text: 'Add New Employee',
+        onClick: event => {
+          console.log('New User', event);
+        },
+      },
+    (tableData) => {
+      console.log({tableData})
+      return {
+        icon: GetApp,
+        text: 'Export Employee List',
+        buttonProps: {disabled:  tableData.selectedFlatRows.length !== 0 ? false : true},
+        onClick: event => {
+          console.log('tableData', {tableData, event});
+        },
+      }
+    },
   ]}
   actionsPerRow={[
     {
@@ -45,6 +65,20 @@ const handleAddRows = useCallback(() => {
       }
     },
   ]}
+  paginationActive={true}
+  paginationSizes={[5, 10, 25, 50]}
+  paginationInitialSize={10}
+  paginationInitialIndex={0}
+  rowEdgePadding={'16px'}
+  selectRows={true}
+  sortInitial={[{id: 'full_name', desc: false}]}
+  isLoading={false}
+  title={{
+    primary: 'Current Employees',
+    secondary: 'View all information related to current employees',
+    secondaryProps: {style: {color: 'red'}},
+  }}
+  /*
   actionsPerTable={[
     {
       icon: Save,
@@ -61,14 +95,7 @@ const handleAddRows = useCallback(() => {
       },
     },
   ]}
-  paginationActive={true}
-  paginationSizes={[5, 10, 25, 50]}
-  paginationInitialSize={10}
-  paginationInitialIndex={0}
-  rowEdgePadding={'16px'}
-  selectRows={true}
-  sortInitial={[{id: 'full_name', desc: false}]}
-  isLoading={false}
+  */
 />
 <Button onClick={handleAddRows}>Add 5 Rows</Button>
 </Fragment>
