@@ -31,9 +31,10 @@ const Table = (props) => {
       paginationSizes: props.paginationSizes,
       rowEdgePadding: props.rowEdgePadding,
       selectRows: props.selectRows,
+      title: props.title,
     };
-    // eslint-disable-next-line
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const baseConfig = useMemo(() => {
     return {
       autoResetSortBy: false,
@@ -222,7 +223,7 @@ const Table = (props) => {
 
   return (
     <div id='MuiTable'>
-      <TableTitles title={props.title} />
+      <TableTitles title={onLoadProps.title} />
       <ActionBar actions={props.actionsBar} rtProps={rtProps} />
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
       <div className={styles.tableWrap}>

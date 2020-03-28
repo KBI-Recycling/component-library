@@ -45,15 +45,6 @@ const TableTitles = (props) => {
 };
 
 TableTitles.propTypes = {
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape({
-      primary: PropTypes.string,
-      secondary: PropTypes.string,
-      primaryProps: PropTypes.object,
-      secondaryProps: PropTypes.object,
-      wrapperStyle: PropTypes.object,
-    }),
-  ]),
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 };
-export default TableTitles;
+export default React.memo(TableTitles);
