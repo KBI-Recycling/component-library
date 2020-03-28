@@ -17,7 +17,7 @@ const ActionBar = (props) => {
   if (!props.actions) return null;
   return (
     <div {...actionProps}>
-      {props.actions.map(action => {
+      {props.actions.map((action, actionIndex) => {
         if (typeof action === 'function') action = action(props.rtProps);
         const Icon = action.icon || null;
         const actionProps ={
@@ -25,10 +25,10 @@ const ActionBar = (props) => {
           size: 'small',
           startIcon: Icon ? <Icon /> : null,
           style: {borderRadius: '0px', padding: '8px 16px'},
-          onClick: event => action.onClick(event),
+          onClick: event => action.onClick ? action.onClick(event) : alert('No onClick() property set.'),
           ...action?.buttonProps,
         };
-        return <Button key={action.text} {...actionProps}>{action.text}</Button>;
+        return <Button key={action.text || actionIndex} {...actionProps}>{action.text || `Action ${actionIndex + 1}`}</Button>;
       })}
     </div>
   );
@@ -37,14 +37,7 @@ const ActionBar = (props) => {
 ActionBar.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.shape({
-      /**  The icon that will be displayed for the action. */
-      icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
-      /** The tooltip that will be displayed when the user hover over the action icon. */
-      text: PropTypes.string,
-      /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
-      onClick: PropTypes.func.isRequired,
-    }),
+    PropTypes.object,
   ])),
   rtProps: PropTypes.object,
 };
