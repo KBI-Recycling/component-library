@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
-import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
+import {Table as MuiTable, TableHead, TableBody} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
