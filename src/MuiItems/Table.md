@@ -29,17 +29,17 @@ const handleAddRows = useCallback(() => {
     {
         icon: Add,
         text: 'Add New Employee',
-        onClick: event => {
-          console.log('New User', event);
+        onClick: ({event, tableData}) => {
+          console.log('New Employee', {event, tableData});
         },
       },
-    (tableData) => {
+    (rtProps) => {
       return {
         icon: GetApp,
         text: 'Export Employee List',
-        buttonProps: {disabled:  tableData.selectedFlatRows.length !== 0 ? false : true},
-        onClick: event => {
-          console.log('tableData', {tableData, event});
+        buttonProps: {disabled:  rtProps.selectedFlatRows.length !== 0 ? false : true},
+        onClick: ({event, tableData}) => {
+          console.log('Export Employee', {event, tableData});
         },
       }
     },

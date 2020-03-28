@@ -1,8 +1,43 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Button} from '@material-ui/core';
 
-const ActionBar = (props) => {
+const ActionButton = React.memo((props) => {
+  const [forceUpdate, setForceUpdate] = useState(0);
+  const {buttonProps, icon, onClick, rtProps, text} = props;
+  const Icon = icon || null;
+  const tableData = {
+    columns: rtProps.columns,
+    data: rtProps.data,
+    initialState: rtProps.initialState,
+    state: rtProps.state,
+    allColumns: rtProps.allColumns,
+    rows: rtProps.rows,
+    rowsById: rtProps.rowsById,
+    headers: rtProps.headers,
+    filteredRows: rtProps.filteredRows,
+    selectedRows: rtProps.selectedFlatRows,
+  };
+  const actionProps = {
+    color: 'primary',
+    size: 'small',
+    startIcon: Icon ? <Icon /> : null,
+    style: {borderRadius: '0px', padding: '6px 16px'},
+    onClick: event => onClick ? onClick({event, tableData}) : {},
+    onFocus: event => setForceUpdate(forceUpdate + 1),
+    ...buttonProps,
+  };
+  return <Button {...actionProps}>{text}</Button>;
+});
+ActionButton.propTypes = {
+  buttonProps: PropTypes.object,
+  icon: PropTypes.oneOfType([PropTypes.object]),
+  onClick: PropTypes.func,
+  rtProps: PropTypes.object,
+  text: PropTypes.string,
+};
+
+const ActionBar = ({actions, rtProps}) => {
   const actionProps = useMemo(() => ({
     style: {
       backgroundColor: 'whitesmoke',
@@ -14,21 +49,13 @@ const ActionBar = (props) => {
     },
   }), []);
 
-  if (!props.actions) return null;
+  if (!actions) return null;
   return (
     <div {...actionProps}>
-      {props.actions.map((action, actionIndex) => {
-        if (typeof action === 'function') action = action(props.rtProps);
-        const Icon = action.icon || null;
-        const actionProps ={
-          color: 'primary',
-          size: 'small',
-          startIcon: Icon ? <Icon /> : null,
-          style: {borderRadius: '0px', padding: '8px 16px'},
-          onClick: event => action.onClick ? action.onClick(event) : alert('No onClick() property set.'),
-          ...action?.buttonProps,
-        };
-        return <Button key={action.text || actionIndex} {...actionProps}>{action.text || `Action ${actionIndex + 1}`}</Button>;
+      {actions.map((action, actionIndex) => {
+        if (typeof action === 'function') action = action(rtProps);
+        const {buttonProps, icon, onClick, text} = action;
+        return <ActionButton key={text || actionIndex} buttonProps={buttonProps} icon={icon} onClick={onClick} text={text} rtProps={rtProps} />;
       })}
     </div>
   );
