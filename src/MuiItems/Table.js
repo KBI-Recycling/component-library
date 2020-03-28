@@ -245,11 +245,7 @@ const Table = (props) => {
           </TableBody>
         </MuiTable>
       </div>
-      <MuiTable>
-        <TableFooter>
-          <TableFooterRow {...tableFooterProps} />
-        </TableFooter>
-      </MuiTable>
+      <TableFooterRow {...tableFooterProps} />
       <TableLoading isLoading={props.isLoading} />
     </div>
   );

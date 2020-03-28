@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {Button, ButtonGroup, FormControl, Hidden, MenuItem, Select, TableRow, TableCell, Typography} from '@material-ui/core';
+import {Button, ButtonGroup, FormControl, Hidden, MenuItem, Select, Table as MuiTable, TableFooter, TableRow, TableCell, Typography} from '@material-ui/core';
 import {SkipPrevious, NavigateBefore, NavigateNext, SkipNext} from '@material-ui/icons';
 
 
@@ -30,40 +30,44 @@ const TableFooterRow = (props) => {
 
   if (!props.paginationActive) return null;
   return (
-    <TableRow>
-      <TableCell colSpan={props.colSpan} style={{padding: '2px 0px'}}>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <ButtonGroup color='primary' style={{marginRight: '8px'}}>
-            <Button style={pagiButtonStyle} disabled={!props.canPreviousPage} onClick={() => props.gotoPage(0)} >
-              <SkipPrevious />
-            </Button>
-            <Button style={pagiButtonStyle} disabled={!props.canPreviousPage} onClick={() => props.previousPage()}>
-              <NavigateBefore />
-            </Button>
-            <Button style={pagiButtonStyle} disabled={!props.canNextPage} onClick={() => props.nextPage()}>
-              <NavigateNext />
-            </Button>
-            <Button style={pagiButtonStyle} disabled={!props.canNextPage} onClick={() => props.gotoPage(props.pageCount - 1)}>
-              <SkipNext />
-            </Button>
-          </ButtonGroup>
-          <FormControl style={{marginRight: '16px'}}>
-            <Select value={props.statePageSize} onChange={e => props.setPageSize(e.target.value)} SelectDisplayProps={selectDisplayStyle}>
-              {props.paginationSizes.map(pageSize => (
-                <MenuItem key={pageSize} value={pageSize} style={menuItemStyle}>
-                  {pageSize} Rows
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Hidden xsDown>
-            <Typography variant='caption' style={{marginRight: '24px'}}>
-              Page {props.statePageIndex + 1} of {props.pageOptionsLength}
-            </Typography>
-          </Hidden>
-        </div>
-      </TableCell>
-    </TableRow>
+    <MuiTable>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={props.colSpan} style={{padding: '2px 0px'}}>
+            <div style={{display: 'flex', alignItems: 'center'}}>
+              <ButtonGroup color='primary' style={{marginRight: '8px'}}>
+                <Button style={pagiButtonStyle} disabled={!props.canPreviousPage} onClick={() => props.gotoPage(0)} >
+                  <SkipPrevious />
+                </Button>
+                <Button style={pagiButtonStyle} disabled={!props.canPreviousPage} onClick={() => props.previousPage()}>
+                  <NavigateBefore />
+                </Button>
+                <Button style={pagiButtonStyle} disabled={!props.canNextPage} onClick={() => props.nextPage()}>
+                  <NavigateNext />
+                </Button>
+                <Button style={pagiButtonStyle} disabled={!props.canNextPage} onClick={() => props.gotoPage(props.pageCount - 1)}>
+                  <SkipNext />
+                </Button>
+              </ButtonGroup>
+              <FormControl style={{marginRight: '16px'}}>
+                <Select value={props.statePageSize} onChange={e => props.setPageSize(e.target.value)} SelectDisplayProps={selectDisplayStyle}>
+                  {props.paginationSizes.map(pageSize => (
+                    <MenuItem key={pageSize} value={pageSize} style={menuItemStyle}>
+                      {pageSize} Rows
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Hidden xsDown>
+                <Typography variant='caption' style={{marginRight: '24px'}}>
+                  Page {props.statePageIndex + 1} of {props.pageOptionsLength}
+                </Typography>
+              </Hidden>
+            </div>
+          </TableCell>
+        </TableRow>
+      </TableFooter>
+    </MuiTable>
   );
 };
 
