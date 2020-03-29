@@ -197,6 +197,11 @@ const Table = (props) => {
       return rtProps.page;
     } else return rtProps.rows;
   }, [props.paginationActive, props.paginationShowEmptyRows, rtProps.page, rtProps.rows, rtProps.state.pageSize]);
+  const tableHeadBodyProps = useMemo(() => ({
+    disableFilters: onLoadProps.disableFilters,
+    isLoading: props.isLoading,
+    rowEdgePadding: onLoadProps.rowEdgePadding,
+  }), [onLoadProps.disableFilters, onLoadProps.rowEdgePadding, props.isLoading]);
   const tableFooterProps = useMemo(() => {
     return {
       canPreviousPage: rtProps.canPreviousPage,
@@ -221,7 +226,7 @@ const Table = (props) => {
       <TableTitles title={onLoadProps.title} />
       <ActionBar actions={props.actionsBar} rtProps={rtProps} />
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
-      <TableHeadBodyRows rtProps={rtProps} bodyRows={bodyRows} isLoading={props.isLoading} disableFilters={onLoadProps.disableFilters} rowEdgePadding={onLoadProps.rowEdgePadding} />
+      <TableHeadBodyRows rtProps={rtProps} bodyRows={bodyRows} {...tableHeadBodyProps} />
       <TableFooterRow {...tableFooterProps} />
       <TableLoading isLoading={props.isLoading} />
     </div>
