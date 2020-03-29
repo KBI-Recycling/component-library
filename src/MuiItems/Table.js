@@ -1,50 +1,11 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
-import {Table as MuiTable, TableHead, TableBody} from '@material-ui/core';
-import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow, TableTitles} from './Table/';
+import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadBodyRows, TableFooterRow, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
-import TableBodyRowBlank from './Table/TableBodyRowBlank';
 import {TableLoading} from './Table/Loading';
 import matchSorter from 'match-sorter';
-
-const TableHeadBodyRows = ({bodyRows, disableFilters, isLoading, rowEdgePadding, rtProps}) => {
-  const tableWrap = useMemo(() => ({
-    display: 'block',
-    maxWidth: '100%',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    position: 'relative',
-  }), []);
-
-  return (
-    <div style={tableWrap}>
-      <MuiTable {...rtProps.getTableProps()}>
-        <TableHead>
-          {rtProps.headerGroups.map((headerGroup, headIndex) => {
-            return <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={disableFilters} rowEdgePadding={rowEdgePadding} />;
-          })}
-        </TableHead>
-        <TableBody>
-          {bodyRows.map((row, rowIndex) => {
-            if (!row || isLoading) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
-            rtProps.prepareRow(row);
-            const {key} = row.getRowProps();
-            return <TableBodyRow key={key} row={row} rowEdgePadding={rowEdgePadding} />;
-          })}
-        </TableBody>
-      </MuiTable>
-    </div>
-  );
-};
-TableHeadBodyRows.propTypes = {
-  bodyRows: PropTypes.object,
-  disableFilters: PropTypes.bool,
-  isLoading: PropTypes.bool,
-  rowEdgePadding: PropTypes.string,
-  rtProps: PropTypes.object,
-};
 
 const Table = (props) => {
   const [tableEl, setTableEl] = useState(null);
