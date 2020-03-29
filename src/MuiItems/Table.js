@@ -222,7 +222,7 @@ const Table = (props) => {
   }, [columns.length, onLoadProps.paginationActive, onLoadProps.paginationSizes, rtProps.canNextPage, rtProps.canPreviousPage, rtProps.gotoPage, rtProps.nextPage, rtProps.pageCount, rtProps.pageOptions.length, rtProps.previousPage, rtProps.setPageSize, rtProps.state.pageIndex, rtProps.state.pageSize]);
 
   return (
-    <div id='MuiTable'>
+    <div id='MuiTable' style={{position: 'relative'}}>
       <TableTitles title={onLoadProps.title} />
       <ActionBar actions={props.actionsBar} rtProps={rtProps} />
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}

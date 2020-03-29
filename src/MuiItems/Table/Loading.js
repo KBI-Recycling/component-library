@@ -21,7 +21,6 @@ export const TableLoading = ({isLoading}) => {
 TableLoading.propTypes = {
   isLoading: PropTypes.bool,
 };
-
 export const createBlankRows = (pageSize, colLength) => {
   const rows = [];
   for (let i = 0; i < pageSize; i++) {
