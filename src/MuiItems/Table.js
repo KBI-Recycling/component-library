@@ -2,16 +2,51 @@ import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
 import {Table as MuiTable, TableHead, TableBody} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
 import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 import TableBodyRowBlank from './Table/TableBodyRowBlank';
-import {TableLoading, createBlankRows} from './Table/Loading';
+import {TableLoading} from './Table/Loading';
 import matchSorter from 'match-sorter';
 
+const TableHeadBodyRows = ({bodyRows, disableFilters, isLoading, rowEdgePadding, rtProps}) => {
+  const tableWrap = useMemo(() => ({
+    display: 'block',
+    maxWidth: '100%',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    position: 'relative',
+  }), []);
+
+  return (
+    <div style={tableWrap}>
+      <MuiTable {...rtProps.getTableProps()}>
+        <TableHead>
+          {rtProps.headerGroups.map((headerGroup, headIndex) => {
+            return <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={disableFilters} rowEdgePadding={rowEdgePadding} />;
+          })}
+        </TableHead>
+        <TableBody>
+          {bodyRows.map((row, rowIndex) => {
+            if (!row || isLoading) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
+            rtProps.prepareRow(row);
+            const {key} = row.getRowProps();
+            return <TableBodyRow key={key} row={row} rowEdgePadding={rowEdgePadding} />;
+          })}
+        </TableBody>
+      </MuiTable>
+    </div>
+  );
+};
+TableHeadBodyRows.propTypes = {
+  bodyRows: PropTypes.object,
+  disableFilters: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  rowEdgePadding: PropTypes.string,
+  rtProps: PropTypes.object,
+};
+
 const Table = (props) => {
-  const styles = useStyles();
   const [tableEl, setTableEl] = useState(null);
   const getMuiTableRef = () => {
     const MuiTable = document.getElementById('MuiTable');
@@ -226,40 +261,13 @@ const Table = (props) => {
       <TableTitles title={onLoadProps.title} />
       <ActionBar actions={props.actionsBar} rtProps={rtProps} />
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
-      <div className={styles.tableWrap}>
-        <MuiTable {...rtProps.getTableProps()}>
-          <TableHead>
-            {rtProps.headerGroups.map((headerGroup, headIndex) => {
-              return <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={onLoadProps.disableFilters} rowEdgePadding={onLoadProps.rowEdgePadding} />;
-            })}
-          </TableHead>
-          <TableBody>
-            {props.isLoading ?
-              createBlankRows(rtProps.state.pageSize, rtProps.columns.length) :
-              bodyRows.map((row, rowIndex) => {
-                if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
-                rtProps.prepareRow(row);
-                const {key} = row.getRowProps();
-                return <TableBodyRow key={key} row={row} rowEdgePadding={onLoadProps.rowEdgePadding} />;
-              })}
-          </TableBody>
-        </MuiTable>
-      </div>
+      <TableHeadBodyRows rtProps={rtProps} bodyRows={bodyRows} isLoading={props.isLoading} disableFilters={onLoadProps.disableFilters} rowEdgePadding={onLoadProps.rowEdgePadding} />
       <TableFooterRow {...tableFooterProps} />
       <TableLoading isLoading={props.isLoading} />
     </div>
   );
 };
 
-const useStyles = makeStyles(theme => ({
-  tableWrap: {
-    display: 'block',
-    maxWidth: '100%',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    position: 'relative',
-  },
-}));
 Table.defaultProps = {
   actionsPerRow: [],
   actionsPerTable: [],

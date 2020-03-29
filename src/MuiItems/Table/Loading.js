@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import TableBodyRowBlank from './TableBodyRowBlank';
 
 export const TableLoading = ({isLoading}) => {
   if (!isLoading) return null;
@@ -20,11 +19,4 @@ export const TableLoading = ({isLoading}) => {
 
 TableLoading.propTypes = {
   isLoading: PropTypes.bool,
-};
-export const createBlankRows = (pageSize, colLength) => {
-  const rows = [];
-  for (let i = 0; i < pageSize; i++) {
-    rows.push(<TableBodyRowBlank key={i} colSpan={colLength} />);
-  }
-  return rows;
 };
