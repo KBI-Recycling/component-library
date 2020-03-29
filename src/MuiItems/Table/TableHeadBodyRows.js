@@ -1,10 +1,11 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Table as MuiTable, TableHead, TableBody} from '@material-ui/core';
 import {TableHeadRow, TableBodyRow} from './index';
 import TableBodyRowBlank from './TableBodyRowBlank';
 
 const TableHeadBodyRows = ({bodyRows, disableFilters, isLoading, rowEdgePadding, rtProps}) => {
+  const [forceUpdateHeadCell, setForceUpdateHeadCell] = useState(0);
   const tableWrap = useMemo(() => ({
     display: 'block',
     maxWidth: '100%',
@@ -12,13 +13,19 @@ const TableHeadBodyRows = ({bodyRows, disableFilters, isLoading, rowEdgePadding,
     overflowY: 'hidden',
     position: 'relative',
   }), []);
+  const headRowProps = useMemo(() => ({
+    disableFilters,
+    forceUpdateHeadCell,
+    rowEdgePadding,
+    setForceUpdateHeadCell,
+  }), [disableFilters, forceUpdateHeadCell, rowEdgePadding]);
 
   return (
     <div style={tableWrap}>
       <MuiTable {...rtProps.getTableProps()}>
         <TableHead>
           {rtProps.headerGroups.map((headerGroup, headIndex) => {
-            return <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={disableFilters} rowEdgePadding={rowEdgePadding} />;
+            return <TableHeadRow key={headIndex} headerGroup={headerGroup} {...headRowProps} />;
           })}
         </TableHead>
         <TableBody>
