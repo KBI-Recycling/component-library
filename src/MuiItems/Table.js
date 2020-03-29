@@ -1,10 +1,9 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
-import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadBodyRows, TableFooterRow, TableTitles} from './Table/';
+import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadBodyRows, TableFooterRow, TableLoading, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
-import {TableLoading} from './Table/Loading';
 import matchSorter from 'match-sorter';
 
 const Table = (props) => {

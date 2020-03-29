@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-export const TableLoading = ({isLoading}) => {
+const TableLoading = ({isLoading}) => {
   if (!isLoading) return null;
   else {
     return (
@@ -20,3 +20,4 @@ export const TableLoading = ({isLoading}) => {
 TableLoading.propTypes = {
   isLoading: PropTypes.bool,
 };
+export default TableLoading;
