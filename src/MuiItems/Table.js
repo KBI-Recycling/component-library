@@ -133,13 +133,6 @@ const Table = (props) => {
         actions: props.actionsPerRow,
       });
     }
-    /* if (onLoadProps.selectRows) {
-      tableColumns.unshift({
-        id: 'muiRowSelection',
-        Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
-        Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
-      });
-    }*/
     return tableColumns;
   }, [onLoadProps.columns, props.actionsPerRow]);
   const data = useMemo(() => {
