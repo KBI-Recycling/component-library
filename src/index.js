@@ -28,9 +28,6 @@ export * from './MuiItems/Collapse';
 export {default as Table} from './MuiItems/Table';
 export * from './MuiItems/Table';
 
-export {default as exportToCSV} from './ExportToCSV';
-export * from 'ExportToCSV';
-
 export const Formik = {
   FormikForm,
   SubmitButton,
