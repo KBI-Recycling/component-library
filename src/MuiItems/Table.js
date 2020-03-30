@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
 import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadBodyRows, TableFooterRow, TableLoading, TableTitles} from './Table/';
@@ -133,15 +133,15 @@ const Table = (props) => {
         actions: props.actionsPerRow,
       });
     }
-    if (onLoadProps.selectRows) {
+    /* if (onLoadProps.selectRows) {
       tableColumns.unshift({
         id: 'muiRowSelection',
         Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
         Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
       });
-    }
+    }*/
     return tableColumns;
-  }, [onLoadProps.columns, onLoadProps.selectRows, props.actionsPerRow]);
+  }, [onLoadProps.columns, props.actionsPerRow]);
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -180,8 +180,21 @@ const Table = (props) => {
       },
     };
   }, []);
+  const useHooks = useCallback(hooks => {
+    hooks.visibleColumns.push(columns => {
+      const tableColumns = [...columns];
+      if (onLoadProps.selectRows) {
+        tableColumns.unshift({
+          id: 'muiRowSelection',
+          Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
+          Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
+        });
+      }
+      return tableColumns;
+    });
+  }, [onLoadProps.selectRows]);
 
-  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination);
+  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination, useHooks);
   const bodyRows = useMemo(() => {
     if (props.paginationActive && props.paginationShowEmptyRows) {
       const sizeRowDifference = rtProps.state.pageSize - rtProps.page.length;
