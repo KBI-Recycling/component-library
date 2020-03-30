@@ -124,8 +124,17 @@ const Table = (props) => {
         sortType: column.type || 'alphanumeric',
       };
     });
+    if (props.actionsPerRow.length > 0) {
+      tableColumns.unshift({
+        id: 'muiTableActions',
+        disableFilters: true,
+        disableSortBy: true,
+        Header: 'Actions',
+        actions: props.actionsPerRow,
+      });
+    }
     return tableColumns;
-  }, [onLoadProps.columns]);
+  }, [onLoadProps.columns, props.actionsPerRow]);
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -167,15 +176,6 @@ const Table = (props) => {
   const useHooks = useCallback(hooks => {
     hooks.visibleColumns.push(columns => {
       const tableColumns = [...columns];
-      if (props.actionsPerRow.length > 0) {
-        tableColumns.unshift({
-          id: 'muiTableActions',
-          disableFilters: true,
-          disableSortBy: true,
-          Header: 'Actions',
-          actions: props.actionsPerRow,
-        });
-      }
       if (onLoadProps.selectRows) {
         tableColumns.unshift({
           id: 'muiRowSelection',
@@ -185,7 +185,7 @@ const Table = (props) => {
       }
       return tableColumns;
     });
-  }, [onLoadProps.selectRows, props.actionsPerRow]);
+  }, [onLoadProps.selectRows]);
 
   const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination, useHooks);
   const bodyRows = useMemo(() => {
