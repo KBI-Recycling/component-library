@@ -1,18 +1,18 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
-import {Table as MuiTable, TableHead, TableBody, TableFooter} from '@material-ui/core';
-import {makeStyles} from '@material-ui/core/styles';
-import {RowSelectCheckbox, SpeedDialActions, TableHeadRow, TableBodyRow, TableFooterRow} from './Table/';
+import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadBodyRows, TableFooterRow, TableLoading, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
-import TableBodyRowBlank from './Table/TableBodyRowBlank';
-import {TableLoading, createBlankRows} from './Table/Loading';
 import matchSorter from 'match-sorter';
 
 const Table = (props) => {
-  const styles = useStyles();
   const [tableEl, setTableEl] = useState(null);
+  const getMuiTableRef = () => {
+    const MuiTable = document.getElementById('MuiTable');
+    if (MuiTable) setTableEl(MuiTable);
+  };
+  useEffect(getMuiTableRef, []);
 
   const onLoadProps = useMemo(() => {
     // This memo holds MuiTable props that will never, ever, EVER change after initial component mount.
@@ -26,9 +26,10 @@ const Table = (props) => {
       paginationSizes: props.paginationSizes,
       rowEdgePadding: props.rowEdgePadding,
       selectRows: props.selectRows,
+      title: props.title,
     };
-    // eslint-disable-next-line
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const baseConfig = useMemo(() => {
     return {
       autoResetSortBy: false,
@@ -123,24 +124,8 @@ const Table = (props) => {
         sortType: column.type || 'alphanumeric',
       };
     });
-    if (props.actionsPerRow.length > 0) {
-      tableColumns.unshift({
-        id: 'muiTableActions',
-        disableFilters: true,
-        disableSortBy: true,
-        Header: 'Actions',
-        actions: props.actionsPerRow,
-      });
-    }
-    if (onLoadProps.selectRows) {
-      tableColumns.unshift({
-        id: 'muiRowSelection',
-        Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
-        Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
-      });
-    }
     return tableColumns;
-  }, [onLoadProps.columns, onLoadProps.selectRows, props.actionsPerRow]);
+  }, [onLoadProps.columns]);
   const data = useMemo(() => {
     return props.data;
   }, [props.data]);
@@ -179,14 +164,30 @@ const Table = (props) => {
       },
     };
   }, []);
+  const useHooks = useCallback(hooks => {
+    hooks.visibleColumns.push(columns => {
+      const tableColumns = [...columns];
+      if (props.actionsPerRow.length > 0) {
+        tableColumns.unshift({
+          id: 'muiTableActions',
+          disableFilters: true,
+          disableSortBy: true,
+          Header: 'Actions',
+          actions: props.actionsPerRow,
+        });
+      }
+      if (onLoadProps.selectRows) {
+        tableColumns.unshift({
+          id: 'muiRowSelection',
+          Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
+          Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
+        });
+      }
+      return tableColumns;
+    });
+  }, [onLoadProps.selectRows, props.actionsPerRow]);
 
-  const getMuiTableRef = () => {
-    const MuiTable = document.getElementById('MuiTable');
-    if (MuiTable) setTableEl(MuiTable);
-  };
-  useEffect(getMuiTableRef, []);
-
-  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination);
+  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination, useHooks);
   const bodyRows = useMemo(() => {
     if (props.paginationActive && props.paginationShowEmptyRows) {
       const sizeRowDifference = rtProps.state.pageSize - rtProps.page.length;
@@ -202,6 +203,11 @@ const Table = (props) => {
       return rtProps.page;
     } else return rtProps.rows;
   }, [props.paginationActive, props.paginationShowEmptyRows, rtProps.page, rtProps.rows, rtProps.state.pageSize]);
+  const tableHeadBodyProps = useMemo(() => ({
+    disableFilters: onLoadProps.disableFilters,
+    isLoading: props.isLoading,
+    rowEdgePadding: onLoadProps.rowEdgePadding,
+  }), [onLoadProps.disableFilters, onLoadProps.rowEdgePadding, props.isLoading]);
   const tableFooterProps = useMemo(() => {
     return {
       canPreviousPage: rtProps.canPreviousPage,
@@ -220,43 +226,19 @@ const Table = (props) => {
     };
     // eslint-disable-next-line max-len
   }, [columns.length, onLoadProps.paginationActive, onLoadProps.paginationSizes, rtProps.canNextPage, rtProps.canPreviousPage, rtProps.gotoPage, rtProps.nextPage, rtProps.pageCount, rtProps.pageOptions.length, rtProps.previousPage, rtProps.setPageSize, rtProps.state.pageIndex, rtProps.state.pageSize]);
+
   return (
-    <div id='MuiTable' className={styles.tableWrap}>
+    <div id='MuiTable' style={{position: 'relative'}}>
+      <TableTitles title={onLoadProps.title} />
+      <ActionBar actions={props.actionsBar} rtProps={rtProps} />
       {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
-      <MuiTable {...rtProps.getTableProps()}>
-        <TableHead>
-          {rtProps.headerGroups.map((headerGroup, headIndex) => {
-            return <TableHeadRow key={headIndex} headerGroup={headerGroup} disableFilters={onLoadProps.disableFilters} rowEdgePadding={onLoadProps.rowEdgePadding} />;
-          })}
-        </TableHead>
-        <TableBody>
-          {props.isLoading ?
-            createBlankRows(rtProps.state.pageSize, rtProps.columns.length) :
-            bodyRows.map((row, rowIndex) => {
-              if (!row) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.columns.length} />;
-              rtProps.prepareRow(row);
-              const {key} = row.getRowProps();
-              return <TableBodyRow key={key} row={row} rowEdgePadding={onLoadProps.rowEdgePadding} />;
-            })}
-        </TableBody>
-        <TableFooter>
-          <TableFooterRow {...tableFooterProps} />
-        </TableFooter>
-      </MuiTable>
+      <TableHeadBodyRows rtProps={rtProps} bodyRows={bodyRows} {...tableHeadBodyProps} />
+      <TableFooterRow {...tableFooterProps} />
       <TableLoading isLoading={props.isLoading} />
     </div>
   );
 };
 
-const useStyles = makeStyles(theme => ({
-  tableWrap: {
-    display: 'block',
-    maxWidth: '100%',
-    overflowX: 'auto',
-    overflowY: 'hidden',
-    position: 'relative',
-  },
-}));
 Table.defaultProps = {
   actionsPerRow: [],
   actionsPerTable: [],
@@ -270,6 +252,16 @@ Table.defaultProps = {
   selectRows: false,
 };
 Table.propTypes = {
+  /** <p>Property defines action buttons to be displayed in Action Bar component above table. [If property not provided, Action Bar will not render]. Property must be an array that contains items that are either objects or callback functions.</p><p>***Object Shape:*** {icon, tooltip, onClick, buttonProps} - <ul><li><b>icon: </b> If provided, the icon that will be displayed within action button.</li><li><b>text: </b> (required) The text that will be displayed within the action button. </li><li><b>onClick:</b> (required) The function that will be triggered when the button is clicked. Signature: `({event, tableData}) => {}.</li><li><b>buttonProps: </b> If provided, object passed to property will modify default props passed to action Button component. ***Example:*** buttonProps: { size: 'small', style: {padding: '16px'} } <a href='https://material-ui.com/api/button/#props' target='_blank'>See Material UI Button Props</a></li></ul></p><p>***Function Shape: *** (tableData) => return {icon, text, onClick, buttonProps} - <ul><li>A function must return an object that matches the shape described above.</li><li>A function should be used (instead of a plain object) when tableData is needed to modify properties of Action object.</li></ul></p> */ //eslint-disable-line
+  actionsBar: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({
+      icon: PropTypes.oneOfType([PropTypes.object]),
+      text: PropTypes.string.isRequired,
+      onClick: PropTypes.func.isRequired,
+      buttonProps: PropTypes.object,
+    }),
+  ])),
   /** <p>Property defines the actions that will be clickable on every row in the table. Property can either by an object or a callback function.</p><p>***Object Shape:*** {icon, tooltip, onClick} - <b>icon: </b> (required) The icon that will be displayed for the action. Must be a React node; <b>tooltip:</b> The tooltip that will be displayed when the user hover over the action icon. Must be a string; <b>disabled:</b> Boolean that disables action button; <b>hide:</b> boolean that hides an action button; <b>onClick:</b> (required) The function that will be triggered when the button is clicked. Signature: `({event, rowData, rowIndex}) => {}</p><p>***Function Shape: *** (rowData) => return {icon, disabled, hide, tooltip, onClick};  A function must return an object that matches the shape described above. A function should be used (instead of a plain object) when rowData is needed to modify properties of Action object.</p>*/ //eslint-disable-line
   actionsPerRow: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.func,
@@ -281,14 +273,17 @@ Table.propTypes = {
     }),
   ])),
   /**  Property defines the actions that will be displayed in Material UI SpeedDial component. */
-  actionsPerTable: PropTypes.arrayOf(PropTypes.shape({
-    /**  The icon that will be displayed for the action. */
-    icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
-    /** The tooltip that will be displayed when the user hover over the action icon. */
-    tooltip: PropTypes.string,
-    /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
-    onClick: PropTypes.func.isRequired,
-  })),
+  actionsPerTable: PropTypes.arrayOf(PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({
+      /**  The icon that will be displayed for the action. */
+      icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
+      /** The tooltip that will be displayed when the user hover over the action icon. */
+      text: PropTypes.string.isRequired,
+      /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
+      onClick: PropTypes.func.isRequired,
+    }),
+  ])),
   /** Property defines the columns that will be displayed in the table and the settings that should apply to each column. */
   columns: PropTypes.arrayOf(PropTypes.shape({
     /** Property that controls the header and data to be displayed in each column. Will be used as the table header by default; but can be overwritten by more descriptive `Header` property. */
@@ -333,5 +328,16 @@ Table.propTypes = {
     id: PropTypes.string.isRequired,
     desc: PropTypes.bool,
   })),
+  /** <p>Property defines title(s) to be displayed above main table.<ul><li>Pass a single string to show primary title only. <b>example: </b> title='Current Employees'</li><li>Pass an object to define both primary and secondary titles, as well as to control title styling. <b>example: </b>title={{ primary: '...', secondary: '...', primaryProps: {...}, secondaryProps: {...}, wrapperStyle: {...} }}.</li></ul></p><p>Updating Props & Styles.<ul><li><b>primaryProps/secondaryProps: </b> Primary and secondary titles use Typography components. You may change the default props passed to Typography component by using primaryProps and secondaryProps objects. <b>example: </b>title={{ primary: 'Primary Title', primaryProps: {variant: 'h1', style: {color: 'red'}} }}</li><li><b>wrapperStyle: </b> Titles are wrapped in a `<div>` tag. You may change the default style passed to `<div>` by using wrapperStyle object. <b>example: </b> title={{ primary: 'Primary Title', wrapperStyle: {padding: '8px'} }}</li></ul></p><br /> */ //eslint-disable-line
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      primary: PropTypes.string,
+      secondary: PropTypes.string,
+      primaryProps: PropTypes.object,
+      secondaryProps: PropTypes.object,
+      wrapperStyle: PropTypes.object,
+    }),
+  ]),
 };
 export default Table;

@@ -3,15 +3,21 @@ import PropTypes from 'prop-types';
 import {TableCell, TableSortLabel, Typography} from '@material-ui/core';
 
 
-const TableHeadCell = ({column, columnIndex, headers, rowEdgePadding}) => {
+const TableHeadCell = ({column, columnIndex, forceUpdateHeadCell, headers, rowEdgePadding, setForceUpdateHeadCell}) => {
+  const rtPropsHeadCell = column.getHeaderProps(column.getSortByToggleProps());
   const tableCellProps = useMemo(() => ({
+    ...rtPropsHeadCell,
     style: {
       cursor: column.canSort ? 'pointer' : 'inherit',
       lineHeight: 1,
       padding: '5px',
       whiteSpace: column.wrapHeadText || 'nowrap',
     },
-  }), [column.canSort, column.wrapHeadText]);
+    onClick: event => {
+      if (rtPropsHeadCell.onClick) rtPropsHeadCell.onClick(event);
+      setForceUpdateHeadCell(forceUpdateHeadCell + 1);
+    },
+  }), [column.canSort, column.wrapHeadText, forceUpdateHeadCell, rtPropsHeadCell, setForceUpdateHeadCell]);
   const typographyProps = useMemo(() => ({
     style: {display: 'inline', fontWeight: 600},
     variant: 'subtitle2',
@@ -33,7 +39,7 @@ const TableHeadCell = ({column, columnIndex, headers, rowEdgePadding}) => {
     );
   }
   return (
-    <TableCell {...column.getHeaderProps(column.getSortByToggleProps())} {...tableCellProps}>
+    <TableCell {...tableCellProps}>
       <div style={{display: 'flex'}}>
         <span style={{paddingLeft: columnIndex === 0 ? rowEdgePadding : '0px'}} />
         <Typography {...typographyProps}>{column.render('Header')}</Typography>
@@ -47,7 +53,9 @@ const TableHeadCell = ({column, columnIndex, headers, rowEdgePadding}) => {
 TableHeadCell.propTypes = {
   column: PropTypes.object.isRequired,
   columnIndex: PropTypes.number.isRequired,
+  forceUpdateHeadCell: PropTypes.number.isRequired,
   headers: PropTypes.array.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
+  setForceUpdateHeadCell: PropTypes.func.isRequired,
 };
-export default TableHeadCell;
+export default React.memo(TableHeadCell);

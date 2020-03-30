@@ -1,5 +1,12 @@
+export {default as ActionBar} from './ActionBar';
 export {default as RowSelectCheckbox} from './RowSelectCheckbox';
 export {default as SpeedDialActions} from './SpeedDialActions';
-export {default as TableHeadRow} from './TableHeadRow';
 export {default as TableBodyRow} from './TableBodyRow';
+export {default as TableBodyRowBlank} from './TableBodyRowBlank';
 export {default as TableFooterRow} from './TableFooterRow';
+export {default as TableHeadBodyRows} from './TableHeadBodyRows';
+export {default as TableHeadCell} from './TableHeadCell';
+export {default as TableHeadFilter} from './TableHeadFilter';
+export {default as TableHeadRow} from './TableHeadRow';
+export {default as TableLoading} from './TableLoading';
+export {default as TableTitles} from './TableTitles';
