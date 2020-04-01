@@ -112,7 +112,7 @@ PhoneNumberField.defaultProps = {
   margin: 'dense',
   required: false,
   variant: 'standard',
-  formatType: 'E164',
+  formatType: 'INTERNATIONAL',
   formatOnBlur: true,
 };
 PhoneNumberField.propTypes = {
