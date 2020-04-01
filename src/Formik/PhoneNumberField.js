@@ -46,6 +46,7 @@ const PhoneNumberField = (props) => {
   } = props;
 
   const textFieldProps = formik => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [lastKeyPress, setLastKeyPress] = useState(null);
     const {field, form, meta} = formik;
     return {
