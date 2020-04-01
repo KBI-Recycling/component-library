@@ -5,7 +5,7 @@ import {FastField, Field} from 'formik';
 import libphonenumber from 'google-libphonenumber';
 const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 const PNF = libphonenumber.PhoneNumberFormat;
-const numbers = /^[0-9]+$/;
+const alphaChars = /[a-zA-Z]+/;
 
 /**
  * A component that wraps Material UI TextField with Formik form context and only accepts number and phone number special character inputs.
@@ -68,7 +68,7 @@ const PhoneNumberField = (props) => {
       size,
       variant,
       onBlur: event => {
-        if (!event.target.value.match(numbers)) return;
+        if (event.target.value.match(alphaChars)) return;
         if (!event.target.value) return;
         const number = phoneUtil.parseAndKeepRawInput(event.target.value, 'US');
         const numberFormat = phoneUtil.format(number, PNF[formatType]);
