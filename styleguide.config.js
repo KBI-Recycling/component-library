@@ -31,6 +31,7 @@ module.exports = {
         'src/Formik/CurrencyField.js',
         'src/Formik/DateField.js',
         'src/Formik/NumberField.js',
+        'src/Formik/PhoneNumberField.js',
         'src/Formik/PasswordField.js',
         'src/Formik/SelectField.js',
         'src/Formik/SwitchField.js',
