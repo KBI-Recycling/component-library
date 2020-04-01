@@ -65,6 +65,7 @@ const PhoneNumberField = (props) => {
       size,
       variant,
       onBlur: event => {
+        if (event.target.value.toUpperCase.includes('V')) return;
         const number = phoneUtil.parseAndKeepRawInput(event.target.value, 'US');
         const numberFormat = phoneUtil.format(number, PNF[formatType]);
         if (phoneUtil.isValidNumber(number) && formatOnBlur) {
