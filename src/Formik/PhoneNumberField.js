@@ -5,6 +5,7 @@ import {FastField, Field} from 'formik';
 import libphonenumber from 'google-libphonenumber';
 const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 const PNF = libphonenumber.PhoneNumberFormat;
+// eslint-disable-next-line no-useless-escape
 const phoneNumChars = /^[0-9 ()+-.\[\]]*$/;
 
 /**
