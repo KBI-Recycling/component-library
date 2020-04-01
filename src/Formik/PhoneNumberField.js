@@ -118,7 +118,7 @@ PhoneNumberField.defaultProps = {
 PhoneNumberField.propTypes = {
   /** The color of the component. It supports those theme colors that make sense for this component. */
   color: PropTypes.oneOf(['primary', 'secondary']),
-  /** If true, text field will be disabled. */
+  /** If true, the input element will be disabled.*/
   disabled: PropTypes.bool,
   /** If `true`, the label will be displayed in an error state. */
   error: PropTypes.bool,
