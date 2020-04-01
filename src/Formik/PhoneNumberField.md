@@ -10,8 +10,11 @@ PhoneNumberField Examples:
 import React from 'react'
 import {Formik, Form} from 'formik';
 import {Grid, Typography} from '@material-ui/core';
+import * as yup from 'yup';
+import validatePhoneField from './ValidatePhoneField.js';
+validatePhoneField();
 
-<Formik initialValues={{PhoneNumber: ''}} validateOnChange={false}>
+<Formik initialValues={{PhoneNumber: ''}} validateOnChange={false} validationSchema={yup.object().shape({PhoneNumber: yup.string().validPhoneNumber('This phone number is invalid.')})}>
   {formik => (
     <Form style={{width: '100%'}} noValidate method="post">
       <Grid container spacing={2}>
