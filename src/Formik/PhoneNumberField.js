@@ -1,10 +1,11 @@
-import React, {useCallback} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import MuiTextField from '@material-ui/core/TextField';
 import {FastField, Field} from 'formik';
 import libphonenumber from 'google-libphonenumber';
 const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 const PNF = libphonenumber.PhoneNumberFormat;
+const numbers = /^[0-9]+$/;
 
 /**
  * A component that wraps Material UI TextField with Formik form context and only accepts number and phone number special character inputs.
@@ -45,6 +46,7 @@ const PhoneNumberField = (props) => {
   } = props;
 
   const textFieldProps = formik => {
+    const [lastKeyPress, setLastKeyPress] = useState(null);
     const {field, form, meta} = formik;
     return {
       ...field,
@@ -65,8 +67,8 @@ const PhoneNumberField = (props) => {
       size,
       variant,
       onBlur: event => {
+        if (!event.target.value.match(numbers)) return;
         if (!event.target.value) return;
-        if (event.target.value.toUpperCase().includes('V')) return;
         const number = phoneUtil.parseAndKeepRawInput(event.target.value, 'US');
         const numberFormat = phoneUtil.format(number, PNF[formatType]);
         if (phoneUtil.isValidNumber(number) && formatOnBlur) {
@@ -81,8 +83,10 @@ const PhoneNumberField = (props) => {
       },
       onKeyDown: event => {
         // eslint-disable-next-line max-len
-        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 189, 109, 16, 187, 32, 86];
-        if (persistKeyCodes.includes(event.keyCode)) event.persist();
+        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 189, 109, 16, 187, 32];
+        setLastKeyPress(event.keyCode);
+        if (event.keyCode === 86 && lastKeyPress === 17) event.persist();
+        else if (persistKeyCodes.includes(event.keyCode)) event.persist();
         else event.preventDefault();
       },
     };
