@@ -86,7 +86,7 @@ const PhoneNumberField = (props) => {
         // eslint-disable-next-line max-len
         const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 189, 109, 16, 187, 32];
         setLastKeyPress(event.keyCode);
-        if (event.keyCode === 86 && lastKeyPress === 17) event.persist();
+        if (event.keyCode === 86 && (lastKeyPress === 17 || lastKeyPress === 91)) event.persist();
         else if (persistKeyCodes.includes(event.keyCode)) event.persist();
         else event.preventDefault();
       },
