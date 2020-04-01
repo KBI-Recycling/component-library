@@ -5,7 +5,7 @@ import {FastField, Field} from 'formik';
 import libphonenumber from 'google-libphonenumber';
 const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 const PNF = libphonenumber.PhoneNumberFormat;
-const alphaChars = /[a-zA-Z]+/;
+const phoneNumChars = /^[0-9 ()+-.\[\]]*$/;
 
 /**
  * A component that wraps Material UI TextField with Formik form context and only accepts number and phone number special character inputs.
@@ -47,7 +47,6 @@ const PhoneNumberField = (props) => {
 
   const textFieldProps = formik => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [lastKeyPress, setLastKeyPress] = useState(null);
     const {field, form, meta} = formik;
     return {
       ...field,
@@ -78,19 +77,10 @@ const PhoneNumberField = (props) => {
         if (onBlur) onBlur({event, field, form, meta});
       },
       onChange: event => {
-        if (event.target.value.match(alphaChars)) return form.setFieldValue(name, '');
-        field.onChange(event);
-        if (onChange) onChange({event, field, form, meta});
-      },
-      onKeyDown: event => {
-        // eslint-disable-next-line max-len
-        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 189, 109, 16, 187, 32];
-        setLastKeyPress(event.keyCode);
-        if (event.keyCode === 86 && (lastKeyPress === 17 || lastKeyPress === 91)) {
-          console.log('here?');
-          event.persist();
-        } else if (persistKeyCodes.includes(event.keyCode)) event.persist();
-        else event.preventDefault();
+        if (event.target.value.match(phoneNumChars)) {
+          field.onChange(event);
+          if (onChange) onChange({event, field, form, meta});
+        }
       },
     };
   };
