@@ -19,6 +19,9 @@ export * from './AutoCompleteObject';
 export {default as validateAutoObject} from './ValidateAutoObject';
 export * from './ValidateAutoObject';
 
+export {default as validatePhoneField} from './ValidatePhoneField';
+export * from './ValidatePhoneField';
+
 export {default as CurrencyField} from './CurrencyField';
 export * from './CurrencyField';
 
@@ -27,6 +30,9 @@ export * from './DateField';
 
 export {default as NumberField} from './NumberField';
 export * from './NumberField';
+
+export {default as PhoneNumberField} from './PhoneNumberField';
+export * from './PhoneNumberField';
 
 export {default as PasswordField} from './PasswordField';
 export * from './PasswordField';
