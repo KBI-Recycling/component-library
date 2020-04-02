@@ -50,7 +50,7 @@ const AutoComplete = props => {
       if (typeof option === 'string') return option;
       else if (typeof option === 'number') return option.toString(10);
       else if (typeof option === 'object') return option[optionKey];
-      else return null;
+      else return '';
     },
     ListboxProps: {style: {maxHeight: '200px'}},
     options,
@@ -65,7 +65,7 @@ const AutoComplete = props => {
           if (typeof item === 'object') return item[optionKey];
           return item;
         }));
-      } else form.setFieldValue(field.name, null);
+      } else form.setFieldValue(field.name, '');
       if (onChange) {
         onChange({
           field: {...field, value: value},
@@ -74,11 +74,7 @@ const AutoComplete = props => {
       }
     },
     size: 'small',
-    value: (() => {
-      if (field.value === 0) return field.value;
-      else if (!field.value) return null;
-      else return field.value;
-    })(),
+    value: field.value,
     ...otherProps,
   });
   const renderInputProps = (form, field, params) => ({
