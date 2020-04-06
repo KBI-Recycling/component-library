@@ -6,6 +6,7 @@ import {default as CurrencyField} from './Formik/CurrencyField';
 import {default as DateField} from './Formik/DateField';
 import {default as NumberField} from './Formik/NumberField';
 import {default as PasswordField} from './Formik/PasswordField';
+import {default as PhoneNumberField} from './Formik/PhoneNumberField';
 import {default as SelectField} from './Formik/SelectField';
 import {default as SwitchField} from './Formik/SwitchField';
 import {default as VinField} from './Formik/VinField';
@@ -15,6 +16,7 @@ import {default as AutoCompleteObject} from './Formik/AutoCompleteObject';
 import {default as CheckboxGroup} from './Formik/CheckboxGroup';
 import {default as RadioGroup} from './Formik/RadioGroup';
 import {default as validateAutoObject} from './Formik/ValidateAutoObject';
+import {default as validatePhoneField} from './Formik/ValidatePhoneField';
 
 export {default as ValidationExample} from './TestComponent/ValidationExample';
 export * from './TestComponent/ValidationExample';
@@ -37,6 +39,7 @@ export const Formik = {
   DateField,
   NumberField,
   PasswordField,
+  PhoneNumberField,
   SelectField,
   SwitchField,
   VinField,
@@ -46,4 +49,5 @@ export const Formik = {
   CheckboxGroup,
   RadioGroup,
   validateAutoObject,
+  validatePhoneField,
 };

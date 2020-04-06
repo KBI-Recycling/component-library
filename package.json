@@ -1,6 +1,6 @@
 {
   "name": "@kbi/component-library",
-  "version": "0.3.1",
+  "version": "0.3.4",
   "description": "A library of all reusable KBI components and utilities.",
   "repository": "https://github.com/KBI-Recycling/component-library",
   "main": "dist/index.js",
@@ -22,7 +22,7 @@
   "peerDependencies": {
     "@material-ui/core": "4.x.x",
     "@material-ui/icons": "4.x.x",
-    "@material-ui/lab": "4.0.0-alpha.47",
+    "@material-ui/lab": "4.0.0-alpha.48",
     "formik": "2.x.x",
     "moment": "2.x.x",
     "react": "16.x.x",
