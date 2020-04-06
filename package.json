@@ -22,7 +22,7 @@
   "peerDependencies": {
     "@material-ui/core": "4.x.x",
     "@material-ui/icons": "4.x.x",
-    "@material-ui/lab": "4.0.0-alpha.47",
+    "@material-ui/lab": "4.0.0-alpha.48",
     "formik": "2.x.x",
     "moment": "2.x.x",
     "react": "16.x.x",
