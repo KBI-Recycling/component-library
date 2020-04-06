@@ -6,7 +6,7 @@ import {default as CurrencyField} from './Formik/CurrencyField';
 import {default as DateField} from './Formik/DateField';
 import {default as NumberField} from './Formik/NumberField';
 import {default as PasswordField} from './Formik/PasswordField';
-import {default as PhoneNumberField} from './FormikPhoneNumberField';
+import {default as PhoneNumberField} from './Formik/PhoneNumberField';
 import {default as SelectField} from './Formik/SelectField';
 import {default as SwitchField} from './Formik/SwitchField';
 import {default as VinField} from './Formik/VinField';
