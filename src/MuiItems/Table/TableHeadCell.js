@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {TableCell, TableSortLabel, Typography} from '@material-ui/core';
 
 
-const TableHeadCell = ({column, columnIndex, forceUpdateHeadCell, headers, rowEdgePadding, setForceUpdateHeadCell}) => {
+const TableHeadCell = ({column, columnIndex, headers, rowEdgePadding}) => {
   const rtPropsHeadCell = column.getHeaderProps(column.getSortByToggleProps());
   const tableCellProps = useMemo(() => ({
     ...rtPropsHeadCell,
@@ -15,9 +15,8 @@ const TableHeadCell = ({column, columnIndex, forceUpdateHeadCell, headers, rowEd
     },
     onClick: event => {
       if (rtPropsHeadCell.onClick) rtPropsHeadCell.onClick(event);
-      setForceUpdateHeadCell(forceUpdateHeadCell + 1);
     },
-  }), [column.canSort, column.wrapHeadText, forceUpdateHeadCell, rtPropsHeadCell, setForceUpdateHeadCell]);
+  }), [column.canSort, column.wrapHeadText, rtPropsHeadCell]);
   const typographyProps = useMemo(() => ({
     style: {display: 'inline', fontWeight: 600},
     variant: 'subtitle2',
@@ -53,9 +52,7 @@ const TableHeadCell = ({column, columnIndex, forceUpdateHeadCell, headers, rowEd
 TableHeadCell.propTypes = {
   column: PropTypes.object.isRequired,
   columnIndex: PropTypes.number.isRequired,
-  forceUpdateHeadCell: PropTypes.number.isRequired,
   headers: PropTypes.array.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
-  setForceUpdateHeadCell: PropTypes.func.isRequired,
 };
-export default React.memo(TableHeadCell);
+export default TableHeadCell;
