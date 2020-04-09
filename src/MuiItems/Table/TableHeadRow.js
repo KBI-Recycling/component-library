@@ -5,12 +5,10 @@ import TableHeadCell from './TableHeadCell';
 import TableHeadFilter from './TableHeadFilter';
 
 const TableHeadRow = (props) => {
-  const {disableFilters, forceUpdateHeadCell, headerGroup, rowEdgePadding, setForceUpdateHeadCell} = props;
+  const {disableFilters, headerGroup, rowEdgePadding} = props;
   const tableHeadCellProps = useMemo(() => ({
-    forceUpdateHeadCell,
     rowEdgePadding,
-    setForceUpdateHeadCell,
-  }), [forceUpdateHeadCell, rowEdgePadding, setForceUpdateHeadCell]);
+  }), [rowEdgePadding]);
 
   return (
     <Fragment>
@@ -30,9 +28,7 @@ const TableHeadRow = (props) => {
 
 TableHeadRow.propTypes = {
   disableFilters: PropTypes.bool,
-  forceUpdateHeadCell: PropTypes.number.isRequired,
   headerGroup: PropTypes.object.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
-  setForceUpdateHeadCell: PropTypes.func.isRequired,
 };
 export default TableHeadRow;

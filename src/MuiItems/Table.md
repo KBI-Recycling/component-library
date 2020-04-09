@@ -4,7 +4,7 @@ Table Example:
 import React, {Fragment, useCallback, useMemo, useState} from 'react';
 import sampleData from './Table/sampleData';
 import {Button} from '@material-ui/core';
-import {Add, DeleteForever, GetApp, Save, Edit} from '@material-ui/icons';
+import {Add, DeleteForever, Save, Edit} from '@material-ui/icons';
 
 const [rows, setRows] = useState(25);
 const [data, setData] = useState(sampleData.filter((row, index) => {
@@ -40,11 +40,15 @@ const handleAddRows = useCallback(() => {
       },
     (rtProps) => {
       return {
-        icon: GetApp,
-        text: 'Export Employee List',
+        icon: DeleteForever,
+        text: 'Delete Selected Employees',
         buttonProps: {disabled:  rtProps.selectedFlatRows.length !== 0 ? false : true},
         onClick: ({event, tableData}) => {
-          console.log('Export Employee', {event, tableData});
+          const selectedIndexes = tableData.selectedRows.sort((a, b) => b.index - a.index).map(row => row.index);
+          const newData = [...data];
+          selectedIndexes.forEach(selectedIndex => newData.splice(selectedIndex, 1));
+          setData([...newData]);
+          tableData.toggleAllRowsSelected(false);
         },
       }
     },
