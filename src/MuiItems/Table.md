@@ -44,11 +44,11 @@ const handleAddRows = useCallback(() => {
         text: 'Delete Selected Employees',
         buttonProps: {disabled:  rtProps.selectedFlatRows.length !== 0 ? false : true},
         onClick: ({event, tableData}) => {
-          const selectedIndexes = tableData.selectedRows.map(row => Number(row.index));
-          selectedIndexes.sort((a, b) => a - b).reverse();
+          const selectedIndexes = tableData.selectedRows.sort((a, b) => b.index - a.index).map(row => row.index);
           const newData = [...data];
           selectedIndexes.forEach(selectedIndex => {
             newData.splice(selectedIndex, 1);
+            rtProps.toggleRowSelected(selectedIndex, false);
           });
           setData([...newData]);
         },
