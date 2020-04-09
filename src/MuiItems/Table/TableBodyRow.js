@@ -9,7 +9,7 @@ import BooleanCell from './TableBodyCell/BooleanCell';
 import ActionsCell from './TableBodyCell/ActionsCell';
 import SelectRowCell from './TableBodyCell/SelectRowCell';
 
-const TableBodyRow = ({row, rowEdgePadding}) => {
+const TableBodyRow = ({row, rowEdgePadding, rtProps}) => {
   return (
     <TableRow {...row.getRowProps()}>
       {row.cells.map((cell, index) => {
@@ -17,7 +17,7 @@ const TableBodyRow = ({row, rowEdgePadding}) => {
         const padLeft = index === 0 ? rowEdgePadding : '0px';
         const padRight = index + 1 === row.cells.length ? rowEdgePadding : '0px';
         if (cell.column.id === 'muiRowSelection') return <SelectRowCell key={key} render={cell.render('Cell')} padLeft={padLeft} padRight={padRight} />;
-        if (cell.column.id === 'muiTableActions') return <ActionsCell key={key} cell={cell} padLeft={padLeft} padRight={padRight} />;
+        if (cell.column.id === 'muiTableActions') return <ActionsCell key={key} cell={cell} padLeft={padLeft} padRight={padRight} rtProps={rtProps} />;
         if (cell.column.type === 'boolean') return <BooleanCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         if (cell.column.type === 'currency') return <CurrencyCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         if (cell.column.type === 'datetime') return <DateTimeCell key={key} datetimeFormat={cell.column?.datetimeFormat} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />; //eslint-disable-line
@@ -31,5 +31,6 @@ const TableBodyRow = ({row, rowEdgePadding}) => {
 TableBodyRow.propTypes = {
   row: PropTypes.object.isRequired,
   rowEdgePadding: PropTypes.string.isRequired,
+  rtProps: PropTypes.object,
 };
 export default TableBodyRow;

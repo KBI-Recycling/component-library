@@ -30,7 +30,7 @@ const TableHeadBodyRows = ({bodyRows, disableFilters, isLoading, rowEdgePadding,
             if (!row || isLoading) return <TableBodyRowBlank key={rowIndex} colSpan={rtProps.allColumns.length} />;
             rtProps.prepareRow(row);
             const {key} = row.getRowProps();
-            return <TableBodyRow key={key} row={row} rowEdgePadding={rowEdgePadding} />;
+            return <TableBodyRow key={key} rtProps={rtProps} row={row} rowEdgePadding={rowEdgePadding} />;
           })}
         </TableBody>
       </MuiTable>

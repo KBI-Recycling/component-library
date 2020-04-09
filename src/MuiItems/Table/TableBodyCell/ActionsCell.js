@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {ButtonGroup, Button, TableCell, Tooltip} from '@material-ui/core';
 
-const ActionsCell = ({cell, padLeft, padRight}) => {
+const ActionsCell = ({cell, padLeft, padRight, rtProps}) => {
   const actionsButtonStyle = useMemo(() => ({
     border: '0px',
     padding: '4px 0px 0px 0px',
@@ -23,7 +23,7 @@ const ActionsCell = ({cell, padLeft, padRight}) => {
           if (!action?.tooltip) return <Button key={action.tooltip} style={actionsButtonStyle} onClick={event => action.onClick({event})}><Icon /></Button>;
           return (
             <Tooltip key={action.tooltip} title={action.tooltip}>
-              <Button style={actionsButtonStyle} onClick={event => action.onClick({event, rowData: cell.row.original, rowIndex: cell.row.index})}>
+              <Button style={actionsButtonStyle} onClick={event => action.onClick({event, rtProps, rowData: cell.row.original, rowIndex: cell.row.index})}>
                 <Icon />
               </Button>
             </Tooltip>
@@ -39,5 +39,6 @@ ActionsCell.propTypes = {
   cell: PropTypes.object.isRequired,
   padLeft: PropTypes.string.isRequired,
   padRight: PropTypes.string.isRequired,
+  rtProps: PropTypes.object,
 };
 export default React.memo(ActionsCell);

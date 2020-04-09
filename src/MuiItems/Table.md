@@ -57,16 +57,17 @@ const handleAddRows = useCallback(() => {
     {
       icon: Save,
       tooltip: 'Save User',
-      onClick: ({event, rowData, rowIndex}) => {
-        console.log('Save User', event, rowData, rowIndex)
+      onClick: ({event, rtProps, rowData, rowIndex}) => {
+        console.log('Save User', event, rtProps, rowData, rowIndex)
       },
     },
     {
       icon: DeleteForever,
       tooltip: 'Delete Forever',
-      onClick: ({event, rowData, rowIndex}) => {
+      onClick: ({event, rtProps, rowData, rowIndex}) => {
         const newData = [...data];
         newData.splice(rowIndex, 1);
+        rtProps.toggleAllRowsSelected(false)
         setData([...newData]);
       },
     },
