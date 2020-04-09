@@ -17,6 +17,8 @@ const ActionButton = React.memo((props) => {
     headers: rtProps.headers,
     filteredRows: rtProps.filteredRows,
     selectedRows: rtProps.selectedFlatRows,
+    toggleRowSelected: rtProps.toggleRowSelected,
+    toggleAllRowsSelected: rtProps.toggleAllRowsSelected,
   };
   const actionProps = {
     color: 'primary',

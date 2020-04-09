@@ -46,11 +46,9 @@ const handleAddRows = useCallback(() => {
         onClick: ({event, tableData}) => {
           const selectedIndexes = tableData.selectedRows.sort((a, b) => b.index - a.index).map(row => row.index);
           const newData = [...data];
-          selectedIndexes.forEach(selectedIndex => {
-            newData.splice(selectedIndex, 1);
-            rtProps.toggleRowSelected(selectedIndex, false);
-          });
+          selectedIndexes.forEach(selectedIndex => newData.splice(selectedIndex, 1));
           setData([...newData]);
+          tableData.toggleAllRowsSelected(false);
         },
       }
     },
