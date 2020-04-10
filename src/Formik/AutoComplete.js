@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
@@ -23,6 +23,13 @@ import {Field} from 'formik';
 const AutoComplete = props => {
   const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
+  const noEmptyStringOption = useMemo(() => {
+    let noEmptyString = true;
+    options.forEach(option => {
+      if (option[optionKey] === '') noEmptyString = false;
+    });
+    return noEmptyString;
+  }, [options, optionKey]);
   const autoCompleteProps = (form, field) => ({
     ...field,
     autoHighlight: true,
@@ -52,6 +59,9 @@ const AutoComplete = props => {
       else if (typeof option === 'object') return option[optionKey];
       else return '';
     },
+    getOptionSelected: (option, value) => {
+      if (option[optionKey] === value) return true;
+    },
     ListboxProps: {style: {maxHeight: '200px'}},
     options,
     onBlur: e => {
@@ -74,7 +84,7 @@ const AutoComplete = props => {
       }
     },
     size: 'small',
-    value: field.value,
+    value: (noEmptyStringOption && field.value === '') ? null : field.value,
     ...otherProps,
   });
   const renderInputProps = (form, field, params) => ({
