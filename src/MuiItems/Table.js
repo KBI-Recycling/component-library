@@ -51,6 +51,7 @@ const Table = (props) => {
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
           if (column.type === 'datetime') return DatetimeColumnFilter;
+          if (column.type === 'timestamp') return DatetimeColumnFilter;
           if (column.type === 'boolean') return BooleanColumnFilter;
           else return DefaultColumnFilter;
         })(),
@@ -89,7 +90,7 @@ const Table = (props) => {
               else return false;
             });
           }
-          if (filterValue.type === 'Before') {
+          if (filterValue.type === 'Before' && column.type === 'datetime') {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
               const rowMoment = moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
@@ -99,7 +100,7 @@ const Table = (props) => {
               else return false;
             });
           }
-          if (filterValue.type === 'After') {
+          if (filterValue.type === 'After' && column.type === 'datetime') {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
               const rowMoment = moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
@@ -109,10 +110,41 @@ const Table = (props) => {
               else return false;
             });
           }
-          if (filterValue.type === 'Same') {
+          if (filterValue.type === 'Same' && column.type === 'datetime') {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
               const rowMoment = moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
+              if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
+              if (filterMoment.isSame(rowMoment)) return true;
+              else return false;
+            });
+          }
+          if (filterValue.type === 'Before' && column.type === 'timestamp') {
+            return rows.filter(row => {
+              const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
+              const rowMoment = moment.unix(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
+              if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
+              if (typeof row.values[id] !== 'number') return false; // Don't show invalid dates
+              if (rowMoment.isBefore(filterMoment)) return true;
+              if (filterMoment.isSame(rowMoment)) return true;
+              else return false;
+            });
+          }
+          if (filterValue.type === 'After' && column.type === 'timestamp') {
+            return rows.filter(row => {
+              const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
+              const rowMoment = moment.unix(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
+              if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
+              if (typeof row.values[id] !== 'number') return false; // Don't show invalid dates
+              if (rowMoment.isAfter(filterMoment)) return true;
+              if (filterMoment.isSame(rowMoment)) return true;
+              else return false;
+            });
+          }
+          if (filterValue.type === 'Same' && column.type === 'timestamp') {
+            return rows.filter(row => {
+              const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
+              const rowMoment = moment.unix(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
               if (filterMoment.isSame(rowMoment)) return true;
               else return false;
@@ -161,6 +193,11 @@ const Table = (props) => {
         if (momentA.isBefore(momentB)) return -1;
       },
       numeric: (rowA, rowB, columnID) => {
+        if (rowA.values[columnID] === rowB.values[columnID]) return 0;
+        if (rowA.values[columnID] > rowB.values[columnID]) return 1;
+        if (rowA.values[columnID] < rowB.values[columnID]) return -1;
+      },
+      timestamp: (rowA, rowB, columnID) => {
         if (rowA.values[columnID] === rowB.values[columnID]) return 0;
         if (rowA.values[columnID] > rowB.values[columnID]) return 1;
         if (rowA.values[columnID] < rowB.values[columnID]) return -1;

@@ -4,6 +4,7 @@ import {TableRow} from '@material-ui/core';
 import DefaultCell from './TableBodyCell/DefaultCell';
 import NumericCell from './TableBodyCell/DefaultCell';
 import DateTimeCell from './TableBodyCell/DateTimeCell';
+import TimestampCell from './TableBodyCell/TimestampCell';
 import CurrencyCell from './TableBodyCell/CurrencyCell';
 import BooleanCell from './TableBodyCell/BooleanCell';
 import ActionsCell from './TableBodyCell/ActionsCell';
@@ -21,6 +22,7 @@ const TableBodyRow = ({row, rowEdgePadding, rtProps}) => {
         if (cell.column.type === 'boolean') return <BooleanCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         if (cell.column.type === 'currency') return <CurrencyCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         if (cell.column.type === 'datetime') return <DateTimeCell key={key} datetimeFormat={cell.column?.datetimeFormat} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />; //eslint-disable-line
+        if (cell.column.type === 'timestamp') return <TimestampCell key={key} datetimeFormat={cell.column?.datetimeFormat} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />; //eslint-disable-line
         if (cell.column.type === 'numeric') return <NumericCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         return <DefaultCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
       })}
