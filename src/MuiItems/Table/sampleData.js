@@ -1,5 +1,16 @@
+/* const timestamp = {
+  seconds: 1553541909,
+  nanoseconds: 338000000,
+  toDate() {
+    return new Date(this.toMillis());
+  },
+  toMillis() {
+    return this.seconds * 1000 + this.nanoseconds / 1e6;
+  },
+};*/
+
 export default [
-  {'id': 1, 'active': false, 'full_name': 'J.D. Yglesia', 'gender': 'Male', 'salary': 37941.86, 'dob': () => '2019-06-04T12:35:45Z'},
+  {'id': 1, 'active': false, 'full_name': 'J.D. Yglesia', 'gender': 'Male', 'salary': 37941.86, 'dob': '2019-05-06T09:47:43Z'},
   {'id': 2, 'active': false, 'full_name': 'K.C. Berndtsson', 'gender': 'Female', 'salary': 27568.59, 'dob': ''},
   {'id': 3, 'active': false, 'full_name': 'Sadie Painten', 'gender': 'Female', 'salary': 27217.44, 'dob': '2019-03-03T10:36:47Z'},
   {'id': 4, 'active': true, 'full_name': 'Star Rosina', 'gender': 'Female', 'salary': 61292.57, 'dob': '2020-01-14T03:05:11Z'},

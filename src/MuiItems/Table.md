@@ -28,7 +28,7 @@ const handleAddRows = useCallback(() => {
     {accessor: 'full_name', Header: 'Name', filterDisable: false},
     {accessor: 'gender', Header: 'Gender', filterField: 'select'},
     {accessor: 'salary', Header: 'Salary', type: 'currency'},
-    {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'MM/DD/YYYY', filterField: 'datetime'},
+    {accessor: 'dob', Header: 'Date of Birth', type: 'datetime', datetimeFormat: 'MM/DD/YYYY'},
   ]}
   actionsBar={[
     {

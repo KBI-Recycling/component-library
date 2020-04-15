@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {TableCell, Typography} from '@material-ui/core';
 import moment from 'moment';
 
-const DateTimeCell = ({datetimeFormat, padLeft, padRight, value, wrapBodyText}) => {
+const DateTimeCell = ({datetimeFormat, padLeft, padRight, type, value, wrapBodyText}) => {
   const tableCellProps = useMemo(() => ({
     style: {padding: '5px'},
   }), []);
@@ -12,6 +12,7 @@ const DateTimeCell = ({datetimeFormat, padLeft, padRight, value, wrapBodyText}) 
     variant: 'body2',
   }), [wrapBodyText]);
   if (typeof value === 'function') value = value();
+  if (typeof value === 'object' && type === 'timestamp') value = value.toMillis();
 
   return (
     <TableCell {...tableCellProps}>
@@ -28,9 +29,12 @@ const DateTimeCell = ({datetimeFormat, padLeft, padRight, value, wrapBodyText}) 
 DateTimeCell.propTypes = {
   padLeft: PropTypes.string.isRequired,
   padRight: PropTypes.string.isRequired,
+  type: PropTypes.string,
   datetimeFormat: PropTypes.string,
   value: PropTypes.oneOfType([
     PropTypes.string,
+    PropTypes.func,
+    PropTypes.object,
     PropTypes.instanceOf(Date),
   ]),
   wrapBodyText: PropTypes.bool,

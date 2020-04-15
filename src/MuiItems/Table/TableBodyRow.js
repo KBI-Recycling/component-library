@@ -20,7 +20,7 @@ const TableBodyRow = ({row, rowEdgePadding, rtProps}) => {
         if (cell.column.id === 'muiTableActions') return <ActionsCell key={key} cell={cell} padLeft={padLeft} padRight={padRight} rtProps={rtProps} />;
         if (cell.column.type === 'boolean') return <BooleanCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         if (cell.column.type === 'currency') return <CurrencyCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
-        if (cell.column.type === 'datetime') return <DateTimeCell key={key} datetimeFormat={cell.column?.datetimeFormat} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />; //eslint-disable-line
+        if (cell.column.type === 'datetime' || cell.column.type === 'timestamp') return <DateTimeCell key={key} datetimeFormat={cell.column?.datetimeFormat} value={cell.value} type={cell.column?.type} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />; //eslint-disable-line
         if (cell.column.type === 'numeric') return <NumericCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
         return <DefaultCell key={key} value={cell.value} wrapBodyText={cell.column.wrapBodyText} padLeft={padLeft} padRight={padRight} />;
       })}

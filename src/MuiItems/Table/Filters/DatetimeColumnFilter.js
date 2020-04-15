@@ -30,10 +30,11 @@ const DatetimeColumnFilter = ({column}) => {
     onChange: e => {
       const content = e.target.value;
       const type = filterValue?.type || 'Same';
+      const columnType = column.type;
       if (!content) setFilter(undefined);
-      else setFilter({content, type});
+      else setFilter({content, type, columnType});
     },
-  }), [classes.input, filterListProps, filterValue, setFilter]);
+  }), [column, classes.input, filterListProps, filterValue, setFilter]);
 
   return (
     <div style={{display: 'flex', alignItems: 'center'}}>

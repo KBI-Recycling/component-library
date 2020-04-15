@@ -50,7 +50,7 @@ const Table = (props) => {
         ...column,
         Filter: (() => {
           if (column.filterField === 'select') return SelectColumnFilter;
-          if (column.type === 'datetime') return DatetimeColumnFilter;
+          if (column.type === 'datetime' || column.type === 'timestamp') return DatetimeColumnFilter;
           if (column.type === 'boolean') return BooleanColumnFilter;
           else return DefaultColumnFilter;
         })(),
@@ -92,29 +92,41 @@ const Table = (props) => {
           if (filterValue.type === 'Before') {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
-              const rowMoment = moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
+              const rowMoment = () => {
+                // hour(0).minute(0).second(0).millisecond(0) set to disregard time when evaluating.
+                if (filterValue.columnType === 'datetime') return moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0);
+                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null).hour(0).minute(0).second(0).millisecond(0);
+              };
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
-              if (rowMoment.isBefore(filterMoment)) return true;
-              if (filterMoment.isSame(rowMoment)) return true;
+              if (rowMoment().isBefore(filterMoment)) return true;
+              if (filterMoment.isSame(rowMoment())) return true;
               else return false;
             });
           }
           if (filterValue.type === 'After') {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
-              const rowMoment = moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
+              const rowMoment = () => {
+                // hour(0).minute(0).second(0).millisecond(0) set to disregard time when evaluating.
+                if (filterValue.columnType === 'datetime') return moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0);
+                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null).hour(0).minute(0).second(0).millisecond(0);
+              };
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
-              if (rowMoment.isAfter(filterMoment)) return true;
-              if (filterMoment.isSame(rowMoment)) return true;
+              if (rowMoment().isAfter(filterMoment)) return true;
+              if (filterMoment.isSame(rowMoment())) return true;
               else return false;
             });
           }
           if (filterValue.type === 'Same') {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
-              const rowMoment = moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0); // Disregard time when evaluating.
+              const rowMoment = () => {
+                // hour(0).minute(0).second(0).millisecond(0) set to disregard time when evaluating.
+                if (filterValue.columnType === 'datetime') return moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0);
+                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null).hour(0).minute(0).second(0).millisecond(0);
+              };
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
-              if (filterMoment.isSame(rowMoment)) return true;
+              if (filterMoment.isSame(rowMoment())) return true;
               else return false;
             });
           }
@@ -153,6 +165,16 @@ const Table = (props) => {
       datetime: (rowA, rowB, columnID) => {
         const momentA = moment(rowA.values[columnID]);
         const momentB = moment(rowB.values[columnID]);
+        if (momentA.isValid() && !momentB.isValid()) return 1;
+        if (!momentA.isValid() && momentB.isValid()) return -1;
+        if (!momentA.isValid() && !momentB.isValid()) return 0;
+        if (momentA.isSame(momentB)) return 0;
+        if (momentA.isAfter(momentB)) return 1;
+        if (momentA.isBefore(momentB)) return -1;
+      },
+      timestamp: (rowA, rowB, columnID) => {
+        const momentA = moment(rowA.values[columnID]?.toMillis ? rowA.values[columnID]?.toMillis() : null);
+        const momentB = moment(rowB.values[columnID]?.toMillis ? rowB.values[columnID]?.toMillis() : null);
         if (momentA.isValid() && !momentB.isValid()) return 1;
         if (!momentA.isValid() && momentB.isValid()) return -1;
         if (!momentA.isValid() && !momentB.isValid()) return 0;
