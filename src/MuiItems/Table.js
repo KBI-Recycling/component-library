@@ -318,7 +318,7 @@ Table.propTypes = {
     filterField: PropTypes.oneOf(['text', 'boolean', 'datetime', 'select']),
     /** Overwrites default `accessor` title used in the table header. */
     Header: PropTypes.string,
-    /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', and 'numeric'. Defaults to 'alphanumeric'. */
+    /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', 'timestamp', and 'numeric'. Defaults to 'alphanumeric'. Note: type 'timestamp' works exactly like 'datetime' but allows for the passing of FireStore timestamp object. */
     type: PropTypes.string,
     /** Controls whether text will wrap inside Table's Body cell.  Defaults to 'false'. */
     wrapBodyText: PropTypes.boolean,
