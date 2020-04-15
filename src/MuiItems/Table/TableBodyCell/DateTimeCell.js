@@ -11,6 +11,7 @@ const DateTimeCell = ({datetimeFormat, padLeft, padRight, value, wrapBodyText}) 
     style: {whiteSpace: wrapBodyText || 'nowrap'},
     variant: 'body2',
   }), [wrapBodyText]);
+  if (typeof value === 'function') value = value();
 
   return (
     <TableCell {...tableCellProps}>
