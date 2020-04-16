@@ -39,6 +39,7 @@ module.exports = {
         'src/Formik/WeightField.js',
         'src/Formik/AutoComplete.js',
         'src/Formik/AutoCompleteObject.js',
+        'src/Formik/AutoCompleteV3.js',
         'src/Formik/CheckboxGroup.js',
         'src/Formik/RadioGroup.js',
       ],
