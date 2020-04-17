@@ -11,7 +11,7 @@ import React from 'react'
 import {Formik, Form} from 'formik';
 import {Grid, Typography} from '@material-ui/core';
 import * as yup from 'yup';
-import validateAutoObject from './validateAutoObject.js'
+import validateAutoObject from './ValidateAutoObject.js'
 validateAutoObject();
 
 <Formik validateOnChange={false} initialValues={{ Automatic: '', Multiple: [{name: 'Gerry', info: 789}] }}
@@ -43,7 +43,7 @@ validateAutoObject();
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant='caption'>Multi</Typography>
-            <AutoCompleteObject {...AutoCompleteObjectProps2} /> 
+            <AutoCompleteObject {...AutoCompleteObjectProps2} />
           </Grid>
         </Grid>
       </Form>
