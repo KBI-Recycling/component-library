@@ -36,7 +36,7 @@ import {Grid, Typography} from '@material-ui/core';
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant='caption'>Multi</Typography>
-            <AutoCompleteObject {...AutoCompleteObjectProps2} />
+            <AutoCompleteObject {...AutoCompleteObjectProps2} /> 
           </Grid>
         </Grid>
       </Form>

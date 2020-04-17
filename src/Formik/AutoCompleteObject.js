@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Autocomplete} from '@material-ui/lab';
-import {createFilterOptions} from '@material-ui/lab/Autocomplete';
+import {makeStyles} from '@material-ui/core/styles';
 import {Field, FastField} from 'formik';
 import get from 'lodash.get';
 import {TextField} from '@material-ui/core';
@@ -27,13 +27,24 @@ import {TextField} from '@material-ui/core';
 // eslint-disable-next-line max-len
 const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
   const [shrunkLabel, setShrunkLabel] = useState(false);
-  const filterOptions = createFilterOptions({
-    matchFrom: 'any',
-    stringify: option => get(option, optionKey, ''),
-  });
+  const classes = useStyles();
 
-  const textFieldProps = ({field, form}) => {
+  const filterOptions = (options, {inputValue}) => {
+    return options.filter(option => {
+      if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
+      return true;
+    });
+  };
+
+  const optionsWithEmptyString = useMemo(() => {
+    const returnOptions = [...options];
+    returnOptions.push('');
+    return returnOptions;
+  }, [options]);
+
+  const textFieldProps = ({field, form, params}) => {
     return {
+      ...params,
       disabled: form.isSubmitting,
       error: get(form.touched, name) && get(form.errors, name) ? true : false,
       fullWidth: true,
@@ -46,9 +57,10 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
       ...otherProps,
     };
   };
+
   const autocompleteProps = ({field, form}) => {
     return ({
-      options: multiple ? options.filter(option => !form.values[name].map(val => val[optionKey]).includes(option[optionKey])) : options,
+      options: optionsWithEmptyString,
       autoSelect,
       autoHighlight,
       multiple,
@@ -58,15 +70,24 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
       loadingText,
       filterOptions,
       disableClearable,
+      classes: {tagSizeSmall: classes.tagSizeSmall},
+      size: 'small',
       disableCloseOnSelect: multiple ? true : false,
       value: !multiple ? field.value : field.value || [],
       noOptionsText: noOptionsText,
       disabled: form.isSubmitting || otherProps.disabled,
+      getOptionSelected: (option, inputValue) => {
+        if (inputValue === '' && option === '') {
+          return true;
+        } else if (get(option, optionKey, '') === get(inputValue, optionKey, '')) {
+          return true;
+        }
+      },
       getOptionLabel: option => get(option, optionKey, ''),
       renderInput: params => {
       // eslint-disable-next-line max-len
         return (<TextField {...{...params, InputLabelProps: {...params.InputLabelProps, shrink: !!field.value || shrunkLabel}, inputProps: {...params.inputProps, autoComplete: 'off'}}}
-          {...textFieldProps({form, field})}
+          {...textFieldProps({form, field, params})}
         />);
       },
       onChange: (e, value) => {
@@ -115,6 +136,14 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
     </Field>
   );
 };
+
+const useStyles = makeStyles({
+  tagSizeSmall: {
+    backgroundColor: 'white',
+    border: '1px solid lightskyblue',
+    borderRadius: '5px',
+  },
+});
 
 AutoCompleteObject.defaultProps = {
   autoHighlight: true,
