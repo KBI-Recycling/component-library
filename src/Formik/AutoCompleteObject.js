@@ -32,6 +32,7 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
   const filterOptions = (options, {inputValue}) => {
     return options.filter(option => {
       if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
+      else if (get(option, optionKey, '').toLowerCase().indexOf(inputValue.toLowerCase()) === -1) return false;
       return true;
     });
   };
