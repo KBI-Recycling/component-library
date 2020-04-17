@@ -20,7 +20,7 @@ import {Field} from 'formik';
  * @public
  *
  */
-const AutoCompleteV3 = props => {
+const AutoCompleteValue = props => {
   const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
@@ -106,14 +106,14 @@ const useStyles = makeStyles({
     borderRadius: '5px',
   },
 });
-AutoCompleteV3.defaultProps = {
+AutoCompleteValue.defaultProps = {
   autoSelect: false,
   disabled: false,
   fast: false,
   multiple: false,
   required: false,
 };
-AutoCompleteV3.propTypes = {
+AutoCompleteValue.propTypes = {
   /** If `true`, the selected option becomes the value of the input when the Autocomplete loses focus unless the user chooses a different option or changes the character string in the input. */
   autoSelect: PropTypes.bool,
   /** If `true`, the `input` element will be disabled. */
@@ -139,4 +139,4 @@ AutoCompleteV3.propTypes = {
   /** Object to pass props to underlying MUI TextField component.  */
   textFieldProps: PropTypes.object,
 };
-export default AutoCompleteV3;
+export default AutoCompleteValue;

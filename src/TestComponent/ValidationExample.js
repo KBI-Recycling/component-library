@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {Formik, Form} from 'formik';
 import {FormControlLabel, Grid, MenuItem, Radio} from '@material-ui/core';
 import {AutoComplete, AutoCompleteObject, validateAutoObject, CurrencyField, DateField, NumberField, PasswordField, RadioGroup, SelectField, SwitchField, TextField, WeightField} from '../Formik';
-import {object, string, date, number, boolean} from 'yup';
+import {object, string, date, number, boolean, array} from 'yup';
 
 /**
  * A test component used to try out Formik components with validation.
@@ -21,6 +21,7 @@ const ValidationExample = () => {
     Text: '',
     Auto: '',
     AutoObject: '',
+    AutoMultiple: [],
     Currency: '',
     Date: '',
     Number: '',
@@ -33,7 +34,8 @@ const ValidationExample = () => {
   const validationSchema = object().shape({
     Text: string().required(),
     Auto: string().required(),
-    AutoObject: object().exists('AutoObject is a required field.'),
+    AutoObject: object().exists('AutoObject is a required field.').nullable(),
+    AutoMultiple: array().min(0),
     Currency: number().required().min(5).max(30),
     Date: date().required(),
     Number: number().required(),
@@ -59,6 +61,13 @@ const ValidationExample = () => {
     options: [{name: 'Chris', info: 123}, {name: 'Dan', info: 456}, {name: 'Gerry', info: 789}],
     optionKey: 'name',
   }), []);
+  const autoMultiple = {
+    name: 'AutoMultiple',
+    label: 'AutoCompleteObject Multiple',
+    options: [{name: 'Chris', info: 123}, {name: 'Dan', info: 456}, {name: 'Gerry', info: 789}],
+    optionKey: 'name',
+    multiple: true,
+  };
   return (
     <>
       <h1>Field Examples</h1>
@@ -80,6 +89,9 @@ const ValidationExample = () => {
               </Grid>
               <Grid item xs={12}>
                 <AutoCompleteObject {...autoObjectProps} />
+              </Grid>
+              <Grid item xs={12}>
+                <AutoCompleteObject {...autoMultiple} />
               </Grid>
               <Grid item xs={12}>
                 <CurrencyField name='Currency' />

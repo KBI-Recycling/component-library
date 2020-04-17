@@ -1,10 +1,10 @@
 How to Access:
 ```html
 import {Formik} from '@kbi/component-library';
-const {AutoCompleteV3} = Formik;
+const {AutoCompleteValue} = Formik;
 ```
 
-AutoCompleteV3 Examples:
+AutoCompleteValue Examples:
 
 ```js
 import React from 'react'
@@ -14,14 +14,14 @@ import {Grid, Typography} from '@material-ui/core';
 <Formik validateOnChange={false} initialValues={{ Developer: '', DeveloperMulti: [] }}>
   {formik => {
     const developerProps = {
-      id: 'AutoCompleteV3:Developer',
+      id: 'AutoCompleteValue:Developer',
       name: 'Developer',
       options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
       optionKey: 'name',
       onChange: ({field, form, value, selected}) => console.log({field, form, value, selected}),
     }
     const developerMultiProps = {
-      id: 'AutoCompleteV3:DeveloperMulti',
+      id: 'AutoCompleteValue:DeveloperMulti',
       name: 'DeveloperMulti',
       label: 'Developers',
       multiple: true,
@@ -35,11 +35,11 @@ import {Grid, Typography} from '@material-ui/core';
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <Typography variant='caption'>Basic</Typography>
-            <AutoCompleteV3 {...developerProps} />
+            <AutoCompleteValue {...developerProps} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant='caption'>Basic</Typography>
-            <AutoCompleteV3 {...developerMultiProps} />
+            <AutoCompleteValue {...developerMultiProps} />
           </Grid>
         </Grid>
       </Form>
