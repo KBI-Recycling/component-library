@@ -52,7 +52,7 @@ const hazards = [
         </Grid>
         <Grid item xs={12} sm={4}>
           <Typography variant='caption'>Required</Typography>
-          <CheckboxGroup name='Developers' id='CheckboxGroup:Colors' boxes={basicBoxes} required />
+          <CheckboxGroup name='Developers' id='CheckboxGroup:Developers' boxes={basicBoxes} required />
         </Grid>
         <Grid item xs={12} sm={8}>
           <Typography variant='caption'>Long Text</Typography>
