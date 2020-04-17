@@ -14,18 +14,20 @@ import {Grid, Typography} from '@material-ui/core';
 <Formik validateOnChange={false} initialValues={{ Developer: '', DeveloperMulti: [] }}>
   {formik => {
     const developerProps = {
-      id: 'Developer',
+      id: 'AutoCompleteV3:Developer',
       name: 'Developer',
       options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
-      optionKey: 'name',    
+      optionKey: 'name',
+      onChange: ({field, form, value, selected}) => console.log({field, form, value, selected}),
     }
     const developerMultiProps = {
-      id: 'DeveloperMulti',
+      id: 'AutoCompleteV3:DeveloperMulti',
       name: 'DeveloperMulti',
       label: 'Developers',
       multiple: true,
       options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
       optionKey: 'name',
+      onChange: ({field, form, value, selected}) => console.log({field, form, value, selected}),
     }
 
     return (

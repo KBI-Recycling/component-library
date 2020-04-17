@@ -23,13 +23,19 @@ import {Field} from 'formik';
 const AutoCompleteV3 = props => {
   const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
-  const noEmptyStringOption = useMemo(() => {
-    let noEmptyString = true;
+  const optionsMemo = useMemo(() => {
+    const valueSet = new Set();
+    const valueRefs = {};
     options.forEach(option => {
-      if (option[optionKey] === '') noEmptyString = false;
+      const currentOption = option[optionKey];
+      if (!valueSet.has(currentOption)) {
+        valueSet.add(currentOption);
+        valueRefs[currentOption] = option;
+      }
     });
-    return noEmptyString;
-  }, [options, optionKey]);
+    valueSet.add(''); // Add empty string to set to ensure no MUI getOptionSelected warning when passing '' from Formik
+    return {values: [...valueSet], refs: {...valueRefs}};
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const autoCompleteProps = (form, field) => ({
     ...field,
     autoHighlight: true,
@@ -38,53 +44,30 @@ const AutoCompleteV3 = props => {
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
     filterOptions: (options, state) => {
-      if (Array.isArray(field.value)) {
-        return options.filter(option => {
-          let showOption = true;
-          field.value.forEach(item => {
-            if (typeof item === 'string' && item === option[optionKey]) showOption = false;
-            if (typeof item === 'object' && item[optionKey] === option[optionKey]) showOption = false;
-          });
-          if (!option[optionKey].toLowerCase().includes(state.inputValue.toLowerCase())) showOption = false;
-          return showOption;
-        });
-      } else {
-        return options.filter(option => option[optionKey].toLowerCase().includes(state.inputValue.toLowerCase()));
-      }
+      return options.filter(option => {
+        if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
+        else if (option.toLowerCase().indexOf(state.inputValue.toLowerCase()) === -1) return false;
+        return true;
+      });
     },
     id: name,
-    getOptionLabel: (option, state) => {
-      if (typeof option === 'string') return option;
-      else if (typeof option === 'number') return option.toString(10);
-      else if (typeof option === 'object') return option[optionKey];
-      else return '';
-    },
-    getOptionSelected: (option, value) => {
-      if (option[optionKey] === value) return true;
-    },
     ListboxProps: {style: {maxHeight: '200px'}},
-    options,
+    options: optionsMemo.values,
     onBlur: e => {
       form.setFieldTouched(field.name, true);
       if (onBlur) onBlur({field, form});
     },
     onChange: (e, value) => {
-      if (value && !Array.isArray(value)) form.setFieldValue(field.name, value[optionKey]);
-      else if (value && Array.isArray(value)) {
-        form.setFieldValue(field.name, value.map(item => {
-          if (typeof item === 'object') return item[optionKey];
-          return item;
-        }));
-      } else form.setFieldValue(field.name, '');
+      if (!value) form.setFieldValue(field.name, '');
+      else form.setFieldValue(field.name, value);
       if (onChange) {
-        onChange({
-          field: {...field, value: value},
-          form: {...form, values: {...form.values, [name]: value}},
-        });
+        if (!value) onChange({field, form, value, selected: null});
+        if (typeof value === 'string') onChange({field, form, value, selected: optionsMemo.refs[value]});
+        if (Array.isArray(field.value)) onChange({field, form, value, selected: value.map(item => optionsMemo.refs[item])});
       }
     },
     size: 'small',
-    value: (noEmptyStringOption && field.value === '') ? null : field.value,
+    value: field.value,
     ...otherProps,
   });
   const renderInputProps = (form, field, params) => ({
@@ -102,10 +85,7 @@ const AutoCompleteV3 = props => {
     return (
       <Field name={name}>
         {({form, field}) => (
-          <Autocomplete
-            {...autoCompleteProps(form, field)}
-            renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
-          />
+          <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, params)} />} />
         )}
       </Field>
     );
@@ -113,10 +93,7 @@ const AutoCompleteV3 = props => {
   return (
     <Field name={name}>
       {({form, field}) => (
-        <Autocomplete
-          {...autoCompleteProps(form, field)}
-          renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
-        />
+        <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, params)} />} />
       )}
     </Field>
   );
@@ -137,7 +114,7 @@ AutoCompleteV3.defaultProps = {
   required: false,
 };
 AutoCompleteV3.propTypes = {
-  /** Auto Select (incomplete) */
+  /** If `true`, the selected option becomes the value of the input when the Autocomplete loses focus unless the user chooses a different option or changes the character string in the input. */
   autoSelect: PropTypes.bool,
   /** If `true`, the `input` element will be disabled. */
   disabled: PropTypes.bool,
