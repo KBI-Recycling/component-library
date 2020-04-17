@@ -33,7 +33,7 @@ const AutoCompleteV3 = props => {
         valueRefs[currentOption] = option;
       }
     });
-    valueSet.add(''); // Add empty string to set to ensure no MUI getOptionSelected warning when passing '' from Formik
+    if (!valueSet.has('')) valueSet.add(''); // Add empty string to set to ensure no MUI getOptionSelected warning when passing '' from Formik
     return {values: [...valueSet], refs: {...valueRefs}};
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const autoCompleteProps = (form, field) => ({
