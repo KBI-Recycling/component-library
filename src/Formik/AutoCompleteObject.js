@@ -92,12 +92,13 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
         />);
       },
       onChange: (e, value) => {
-        form.setFieldValue(field.name, value );
+        const valueToSet = value === null ? '' : value;
+        form.setFieldValue(field.name, valueToSet );
         if (value) setShrunkLabel(true);
         if (onChange) {
           onChange({
-            field: {...field, value: value},
-            form: {...form, values: {...form.values, [name]: value}},
+            field: {...field, value: valueToSet},
+            form: {...form, values: {...form.values, [name]: valueToSet}},
           });
         }
       },
