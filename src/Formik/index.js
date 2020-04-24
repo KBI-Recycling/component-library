@@ -16,6 +16,9 @@ export * from './AutoComplete';
 export {default as AutoCompleteObject} from './AutoCompleteObject';
 export * from './AutoCompleteObject';
 
+export {default as AutoCompleteValue} from './AutoCompleteValue';
+export * from './AutoCompleteValue';
+
 export {default as validateAutoObject} from './ValidateAutoObject';
 export * from './ValidateAutoObject';
 

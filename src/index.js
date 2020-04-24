@@ -13,6 +13,7 @@ import {default as VinField} from './Formik/VinField';
 import {default as WeightField} from './Formik/WeightField';
 import {default as AutoComplete} from './Formik/AutoComplete';
 import {default as AutoCompleteObject} from './Formik/AutoCompleteObject';
+import {default as AutoCompleteValue} from './Formik/AutoCompleteValue';
 import {default as CheckboxGroup} from './Formik/CheckboxGroup';
 import {default as RadioGroup} from './Formik/RadioGroup';
 import {default as validateAutoObject} from './Formik/ValidateAutoObject';
@@ -46,6 +47,7 @@ export const Formik = {
   WeightField,
   AutoComplete,
   AutoCompleteObject,
+  AutoCompleteValue,
   CheckboxGroup,
   RadioGroup,
   validateAutoObject,
