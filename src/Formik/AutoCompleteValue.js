@@ -35,7 +35,7 @@ const AutoCompleteValue = props => {
     });
     if (!valueSet.has('')) valueSet.add(''); // Add empty string to set to ensure no MUI getOptionSelected warning when passing '' from Formik
     return {values: [...valueSet], refs: {...valueRefs}};
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [options, optionKey]);
   const autoCompleteProps = (form, field) => ({
     ...field,
     autoHighlight: true,
@@ -132,7 +132,7 @@ AutoCompleteValue.propTypes = {
   onChange: PropTypes.func,
   /** String name of options object property. */
   optionKey: PropTypes.string.isRequired,
-  /** Array of objects. These are referenced by the 'optionKey' prop. */
+  /** Array of objects. These are referenced by the 'optionKey' prop. <b> Note: This prop should be memoized to ensure efficient optimization.</b> */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
