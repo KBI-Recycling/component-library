@@ -93,13 +93,12 @@ const Table = (props) => {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
               const rowMoment = () => {
-                // hour(0).minute(0).second(0).millisecond(0) set to disregard time when evaluating.
-                if (filterValue.columnType === 'datetime') return moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0);
-                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null).hour(0).minute(0).second(0).millisecond(0);
+                if (filterValue.columnType === 'datetime') return moment(row.values[id]);
+                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null);
               };
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
-              if (rowMoment().isBefore(filterMoment)) return true;
-              if (filterMoment.isSame(rowMoment())) return true;
+              if (rowMoment().isBefore(filterMoment, 'day')) return true;
+              if (filterMoment.isSame(rowMoment(), 'day')) return true;
               else return false;
             });
           }
@@ -107,13 +106,12 @@ const Table = (props) => {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
               const rowMoment = () => {
-                // hour(0).minute(0).second(0).millisecond(0) set to disregard time when evaluating.
-                if (filterValue.columnType === 'datetime') return moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0);
-                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null).hour(0).minute(0).second(0).millisecond(0);
+                if (filterValue.columnType === 'datetime') return moment(row.values[id]);
+                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null);
               };
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
-              if (rowMoment().isAfter(filterMoment)) return true;
-              if (filterMoment.isSame(rowMoment())) return true;
+              if (rowMoment().isAfter(filterMoment, 'day')) return true;
+              if (filterMoment.isSame(rowMoment(), 'day')) return true;
               else return false;
             });
           }
@@ -121,12 +119,11 @@ const Table = (props) => {
             return rows.filter(row => {
               const filterMoment = moment(filterValue.content, 'YYYY-MM-DD');
               const rowMoment = () => {
-                // hour(0).minute(0).second(0).millisecond(0) set to disregard time when evaluating.
-                if (filterValue.columnType === 'datetime') return moment(row.values[id]).hour(0).minute(0).second(0).millisecond(0);
-                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null).hour(0).minute(0).second(0).millisecond(0);
+                if (filterValue.columnType === 'datetime') return moment(row.values[id]);
+                else if (filterValue.columnType === 'timestamp') return moment(row.values[id].toMillis ? row.values[id].toMillis() : null);
               };
               if (!filterMoment.isValid()) return true; // Return all rows when filterValue.content is invalid
-              if (filterMoment.isSame(rowMoment())) return true;
+              if (filterMoment.isSame(rowMoment(), 'day')) return true;
               else return false;
             });
           }

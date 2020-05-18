@@ -12,7 +12,7 @@ const DateTimeCell = ({datetimeFormat, padLeft, padRight, type, value, wrapBodyT
     variant: 'body2',
   }), [wrapBodyText]);
   if (typeof value === 'function') value = value();
-  if (typeof value === 'object' && type === 'timestamp') value = value.toMillis();
+  if (typeof value === 'object' && type === 'timestamp') value = value?.toMillis ? value.toMillis() : '';
 
   return (
     <TableCell {...tableCellProps}>
