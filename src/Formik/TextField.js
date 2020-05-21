@@ -36,6 +36,7 @@ const TextField = (props) => {
     rows,
     rowsMax,
     size,
+    trim,
     variant,
     ...otherProps
   } = props;
@@ -64,6 +65,7 @@ const TextField = (props) => {
       variant,
       onBlur: event => {
         field.onBlur(event);
+        if (trim) form.setFieldValue(field.name, field.value.trim());
         if (onBlur) onBlur({event, field, form, meta});
       },
       onChange: event => {
@@ -71,7 +73,7 @@ const TextField = (props) => {
         if (onChange) onChange({event, field, form, meta});
       },
     };
-  }, [color, disabled, error, fullWidth, helperText, id, label, margin, multiline, name, onBlur, onChange, placeholder, required, rows, rowsMax, size, variant]);
+  }, [color, disabled, error, fullWidth, helperText, id, label, margin, multiline, name, onBlur, onChange, placeholder, required, rows, rowsMax, size, variant, trim]);
 
   if (fast) {
     return <FastField name={name}>
@@ -92,6 +94,7 @@ TextField.defaultProps = {
   margin: 'dense',
   multiline: false,
   required: false,
+  trim: true,
   variant: 'standard',
 };
 TextField.propTypes = {
@@ -131,6 +134,8 @@ TextField.propTypes = {
   rowsMax: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   /** The size of the text field. */
   size: PropTypes.oneOf(['small', 'medium']),
+  /** If `true`, whitespace from both sides of a string will be removed onBlur. */
+  trim: PropTypes.bool,
   /** The variant to use. */
   variant: PropTypes.oneOf(['standard', 'outlined', 'filled']),
 };
