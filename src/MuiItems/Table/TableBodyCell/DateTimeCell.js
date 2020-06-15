@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 import {TableCell, Typography} from '@material-ui/core';
 import moment from 'moment';
 
-const DateTimeCell = ({datetimeFormat, padLeft, padRight, type, value, wrapBodyText}) => {
+const DateTimeCell = ({datetimeFormat, maxWidth, padLeft, padRight, type, value, wrapBodyText}) => {
   const tableCellProps = useMemo(() => ({
-    style: {padding: '5px'},
-  }), []);
+    style: {
+      maxWidth: `${maxWidth}px`,
+      padding: '5px',
+    },
+  }), [maxWidth]);
   const typoProps = useMemo(() => ({
     style: {whiteSpace: wrapBodyText || 'nowrap'},
     variant: 'body2',
@@ -26,7 +29,11 @@ const DateTimeCell = ({datetimeFormat, padLeft, padRight, type, value, wrapBodyT
   );
 };
 
+DateTimeCell.defaultProps = {
+  maxWidth: 9007199254740991,
+};
 DateTimeCell.propTypes = {
+  maxWidth: PropTypes.string,
   padLeft: PropTypes.string.isRequired,
   padRight: PropTypes.string.isRequired,
   type: PropTypes.string,

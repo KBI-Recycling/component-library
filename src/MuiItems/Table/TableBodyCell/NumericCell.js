@@ -2,10 +2,13 @@ import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {TableCell, Typography} from '@material-ui/core';
 
-const NumericCell = ({padLeft, padRight, value, wrapBodyText}) => {
+const NumericCell = ({maxWidth, padLeft, padRight, value, wrapBodyText}) => {
   const tableCellProps = useMemo(() => ({
-    style: {padding: '5px'},
-  }), []);
+    style: {
+      maxWidth: `${maxWidth}px`,
+      padding: '5px',
+    },
+  }), [maxWidth]);
   const typoProps = useMemo(() => ({
     style: {whiteSpace: wrapBodyText || 'nowrap'},
     variant: 'body2',
@@ -22,7 +25,11 @@ const NumericCell = ({padLeft, padRight, value, wrapBodyText}) => {
   );
 };
 
+NumericCell.defaultProps = {
+  maxWidth: 9007199254740991,
+};
 NumericCell.propTypes = {
+  maxWidth: PropTypes.string,
   padLeft: PropTypes.string.isRequired,
   padRight: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
