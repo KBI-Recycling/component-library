@@ -6,8 +6,8 @@ import {useHistory} from 'react-router-dom';
 
 const DetailsFieldList = props => {
   const styles = useStyles();
-  const {fields} = props;
   const history = useHistory();
+
   const textFieldProps = useCallback((field) => ({
     className: styles.disabled,
     fullWidth: true,
@@ -33,13 +33,18 @@ const DetailsFieldList = props => {
     onClick: field.link ? () => history.push(field.link) : () => { },
     value: field.value,
     variant: 'outlined',
+    ...field.textFieldProps,
   }), [history, styles.disabled]);
+  const listStyle = {
+    width: '100%',
+    ...props.listStyle,
+  };
 
   return (
-    <List style={{minWidth: '100%', maxWidth: '100%'}}>
+    <List style={{...listStyle}}>
       <ListItem style={{flexDirection: 'column'}}>
         <Grid container spacing={2} className={styles.menu}>
-          {fields.map((field, index) => {
+          {props.fields.map((field, index) => {
             const {visible = true} = field;
             if (visible) return <Grid item key={index}><TextField {...textFieldProps(field)} /></Grid>;
             else return null;
@@ -62,6 +67,18 @@ DetailsFieldList.defaultProps = {
   fields: [{label: `Add 'fields' props`, value: `Add 'fields' props`}],
 };
 DetailsFieldList.propTypes = {
-  fields: PropTypes.array.isRequired,
+  /** An array of objects mapped over for each of the sections in the list */
+  fields: PropTypes.arrayOf(PropTypes.shape({
+  /** The label for the field */
+    label: PropTypes.string.isRequired,
+    /** The value for the field */
+    value: PropTypes.string.isRequired,
+    /** A boolean to hide or show the field */
+    visable: PropTypes.bool,
+    /** any field specific props to pass to the TextField component */
+    textFieldProps: PropTypes.object,
+  })).isRequired,
+  /** Any styling that will be applied to the list */
+  listStyle: PropTypes.object,
 };
 export default DetailsFieldList;
