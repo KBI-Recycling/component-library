@@ -19,6 +19,7 @@ module.exports = {
         'src/MuiItems/Alert.js',
         'src/MuiItems/Collapse.js',
         'src/MuiItems/Table.js',
+        'src/MuiItems/DetailsPanel.js',
       ],
     },
     {
