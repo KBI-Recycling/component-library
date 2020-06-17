@@ -42,6 +42,7 @@ DetailsPanel.defaultProps = {
   subtitleVariant: 'body2',
   subtitleLink: null,
   subtitle: null,
+  iconProps: {},
 };
 
 DetailsPanel.propTypes = {
