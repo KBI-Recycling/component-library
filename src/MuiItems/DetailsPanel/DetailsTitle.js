@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
 import {List, ListItem, Typography} from '@material-ui/core';
 
 const DetailsTitle = props => {
   const listStyle = {
     width: '100%',
-    ...props.listStyle,
   };
 
   return (
@@ -18,9 +16,9 @@ const DetailsTitle = props => {
         {!props.subtitleLink && props.subtitle ? <Typography variant={props.subtitleVariant} style={{lineHeigt: '.9', textAlign: 'center', ...props.subtitleStyle}}>
           {props.subtitle}
         </Typography> : null}
-        {props.subtitleLink && <Link to={props.subtitleLink}>
+        {props.subtitleLink && <a href={props.subtitleLink}>
           <Typography variant='body2' style={{lineHeigt: '.9', textAlign: 'center'}}>{props.subtitle}</Typography>
-        </Link>}
+        </a>}
       </ListItem>
     </List>
   );
@@ -39,8 +37,6 @@ DetailsTitle.propTypes = {
   titleVariant: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2', 'body1', 'body2']),
   /** Any styling that will be applied to the title Typography */
   titleStyle: PropTypes.object,
-  /** Any styling that will be applied to the list */
-  listStyle: PropTypes.object,
   /** The sting displayed as a subtitle */
   subtitle: PropTypes.string,
   /** Any styling that will be applied to the subtitle Typography */

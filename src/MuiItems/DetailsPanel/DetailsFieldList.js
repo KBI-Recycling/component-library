@@ -2,11 +2,9 @@ import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {Grid, List, ListItem, TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {useHistory} from 'react-router-dom';
 
 const DetailsFieldList = props => {
   const styles = useStyles();
-  const history = useHistory();
 
   const textFieldProps = useCallback((field) => ({
     className: styles.disabled,
@@ -30,14 +28,13 @@ const DetailsFieldList = props => {
     label: field.label,
     margin: 'dense',
     multiline: true,
-    onClick: field.link ? () => history.push(field.link) : () => { },
+    onClick: field.onClick ? e => field.onClick(e) : () => { },
     value: field.value,
     variant: 'outlined',
     ...field.textFieldProps,
-  }), [history, styles.disabled]);
+  }), [styles.disabled]);
   const listStyle = {
     width: '100%',
-    ...props.listStyle,
   };
 
   return (
@@ -46,7 +43,7 @@ const DetailsFieldList = props => {
         <Grid container spacing={2} className={styles.menu}>
           {props.fields.map((field, index) => {
             const {visible = true} = field;
-            if (visible) return <Grid item key={index}><TextField {...textFieldProps(field)} /></Grid>;
+            if (visible) return <Grid item key={`field${index}`}><TextField {...textFieldProps(field)} /></Grid>;
             else return null;
           })}
         </Grid>
@@ -64,7 +61,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 DetailsFieldList.defaultProps = {
-  fields: [{label: `Add 'fields' props`, value: `Add 'fields' props`}],
+  fields: [],
 };
 DetailsFieldList.propTypes = {
   /** An array of objects mapped over for each of the sections in the list */
@@ -73,12 +70,14 @@ DetailsFieldList.propTypes = {
     label: PropTypes.string.isRequired,
     /** The value for the field */
     value: PropTypes.string.isRequired,
+    /** This boolean will change the field to act like a link. */
+    link: PropTypes.bool,
+    /** The click handler for the field */
+    onClick: PropTypes.func,
     /** A boolean to hide or show the field */
     visable: PropTypes.bool,
     /** any field specific props to pass to the TextField component */
     textFieldProps: PropTypes.object,
   })).isRequired,
-  /** Any styling that will be applied to the list */
-  listStyle: PropTypes.object,
 };
 export default DetailsFieldList;
