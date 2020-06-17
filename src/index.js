@@ -31,6 +31,9 @@ export * from './MuiItems/Collapse';
 export {default as Table} from './MuiItems/Table';
 export * from './MuiItems/Table';
 
+export {default as DetailsPanel} from './MuiItems/DetailsPanel.js';
+export * from './MuiItems/DetailsPanel.js';
+
 export const Formik = {
   FormikForm,
   SubmitButton,
