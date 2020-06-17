@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
-import {List, ListItem, Button} from '@material-ui/core';
+import {List, Grid, ListItem, Button} from '@material-ui/core';
 
 const DetailsButtons = props => {
   const buttonProps = useCallback(button => {
@@ -21,11 +21,16 @@ const DetailsButtons = props => {
   return (
     <List style={{...listStyle}}>
       <ListItem style={{flexDirection: 'column'}}>
-        {props.buttons.map((button, index) => {
-          const {visible = true} = button;
-          if (visible) return <Button key={`Button${index}`} {...buttonProps(button)}>{button.text}</Button>;
-          else return null;
-        })}
+        <Grid container spacing={1}>
+          {props.buttons.map((button, index) => {
+            const {visible = true} = button;
+            if (visible) {
+              return <Grid item xs={12} key={`Button${index}`}>
+                <Button {...buttonProps(button)}>{button.text}</Button>
+              </Grid>;
+            } else return null;
+          })}
+        </Grid>
       </ListItem>
     </List>
   );

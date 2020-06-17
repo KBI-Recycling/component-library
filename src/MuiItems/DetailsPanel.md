@@ -13,7 +13,8 @@ import {Business} from '@material-ui/icons';
       {label: 'External Link', value: 'XHAJCU71h099avFA', link: true, onClick: () => alert('Direct  you to account page')},
     ]}
     buttons={[
-      {text: 'Update Information', onClick: () => alert('Edit the information here')}
+      {text: 'Update Information', onClick: () => alert('Edit the information here')},
+      {text: 'Navigate to new page', onClick: () => alert('Change location')},
     ]}
     icon={Business}
     iconProps={{style: {fill: 'red'}}}
