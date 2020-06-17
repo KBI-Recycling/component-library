@@ -47,13 +47,13 @@ DetailsPanel.defaultProps = {
 
 DetailsPanel.propTypes = {
   /** Any props you want to be passeed to the surrounding Paper component */
-  paperProps: PropTypes.string.isRequired,
+  paperProps: PropTypes.string,
   /** An array of objects mapped over for each of the sections in the list. any props not specified here that are passed will be attached to the MaterialUI Button component  */
   buttons: PropTypes.arrayOf(PropTypes.shape({
     /** The label for the button */
-    text: PropTypes.string.isRequired,
+    text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     /** The function ran on click of the button */
-    onClick: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
     /** A boolean to disabled the button. defaults to false */
     disabled: PropTypes.bool,
     /** A boolean to hide or show the button */
