@@ -1,6 +1,6 @@
 {
   "name": "@kbi/component-library",
-  "version": "0.3.22",
+  "version": "0.3.23",
   "description": "A library of all reusable KBI components and utilities.",
   "repository": "https://github.com/KBI-Recycling/component-library",
   "main": "dist/index.js",
