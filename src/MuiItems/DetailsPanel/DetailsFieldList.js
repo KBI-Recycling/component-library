@@ -29,7 +29,7 @@ const DetailsFieldList = props => {
     margin: 'dense',
     multiline: true,
     onClick: field.onClick ? e => field.onClick(e) : () => { },
-    value: field.value,
+    value: '' + field.value, // converts whatever to a string
     variant: 'outlined',
     ...field.textFieldProps,
   }), [styles.disabled]);
@@ -69,7 +69,7 @@ DetailsFieldList.propTypes = {
   /** The label for the field */
     label: PropTypes.string.isRequired,
     /** The value for the field */
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).isRequired,
     /** This boolean will change the field to act like a link. */
     link: PropTypes.bool,
     /** The click handler for the field */

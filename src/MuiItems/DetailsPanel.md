@@ -10,6 +10,7 @@ import {Business} from '@material-ui/icons';
       {label: 'Address', value: '125 E Commercial St'},
       {label: 'Line 2', value: 'Unit A'},
       {label: 'Phone', value: '(714) 738-8516'},
+      {label: 'Is this allowed?', value: true},
       {label: 'External Link', value: 141553523637323, link: true, onClick: () => alert('Direct  you to account page')},
     ]}
     buttons={[

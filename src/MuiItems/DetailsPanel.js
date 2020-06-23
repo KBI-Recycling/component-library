@@ -63,7 +63,7 @@ DetailsPanel.propTypes = {
     /** The label for the field */
     label: PropTypes.string.isRequired,
     /** The value for the field */
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]).isRequired,
     /** A boolean to hide or show the field */
     visable: PropTypes.bool,
     /** any field specific props to pass to the TextField component */
