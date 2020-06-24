@@ -21,7 +21,7 @@ import {Field} from 'formik';
  *
  */
 const AutoComplete = props => {
-  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, freeSolo, ...otherProps} = props;
   const classes = useStyles();
   const noEmptyStringOption = useMemo(() => {
     let noEmptyString = true;
@@ -36,6 +36,7 @@ const AutoComplete = props => {
     autoSelect,
     classes: {tagSizeSmall: classes.tagSizeSmall},
     clearOnEscape: true,
+    freeSolo,
     disabled: form.isSubmitting || form.isValidating || disabled,
     filterOptions: (options, state) => {
       if (Array.isArray(field.value)) {
@@ -64,11 +65,17 @@ const AutoComplete = props => {
     },
     ListboxProps: {style: {maxHeight: '200px'}},
     options,
-    onBlur: e => {
+    onBlur: event => {
+      const objectWithUpdatedState = {field, form, event};
+      if (freeSolo) {
+        form.setFieldValue(field.name, event.target.value);
+        objectWithUpdatedState.field = {...objectWithUpdatedState.field, value: event.target.value};
+        objectWithUpdatedState.form = {...objectWithUpdatedState.form, values: {...form.values, [name]: event.target.value}};
+      }
       form.setFieldTouched(field.name, true);
-      if (onBlur) onBlur({field, form});
+      if (onBlur) onBlur(objectWithUpdatedState);
     },
-    onChange: (e, value) => {
+    onChange: (event, value) => {
       if (value && !Array.isArray(value)) form.setFieldValue(field.name, value[optionKey]);
       else if (value && Array.isArray(value)) {
         form.setFieldValue(field.name, value.map(item => {
@@ -80,6 +87,7 @@ const AutoComplete = props => {
         onChange({
           field: {...field, value: value},
           form: {...form, values: {...form.values, [name]: value}},
+          event,
         });
       }
     },
@@ -135,6 +143,7 @@ AutoComplete.defaultProps = {
   fast: false,
   multiple: false,
   required: false,
+  freeSolo: false,
 };
 AutoComplete.propTypes = {
   /** Auto Select (incomplete) */
@@ -149,9 +158,9 @@ AutoComplete.propTypes = {
   multiple: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, form}) => {}`; */
   onBlur: PropTypes.func,
-  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, form}) => {}`; */
   onChange: PropTypes.func,
   /** String name of options object property. */
   optionKey: PropTypes.string.isRequired,
@@ -159,6 +168,8 @@ AutoComplete.propTypes = {
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
+  /** If `true`, field will allow the user to enter a value that is not in the list of options. It will assign the value to formik when the field is blurred */
+  freeSolo: PropTypes.bool,
   /** Object to pass props to underlying MUI TextField component.  */
   textFieldProps: PropTypes.object,
 };

@@ -21,7 +21,7 @@ import {Field} from 'formik';
  *
  */
 const AutoCompleteValue = props => {
-  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, freeSolo, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
     const valueSet = new Set();
@@ -40,6 +40,7 @@ const AutoCompleteValue = props => {
     ...field,
     autoHighlight: true,
     autoSelect,
+    freeSolo,
     classes: {tagSizeSmall: classes.tagSizeSmall},
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
@@ -53,17 +54,23 @@ const AutoCompleteValue = props => {
     id: name,
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
-    onBlur: e => {
+    onBlur: event => {
+      const objectWithUpdatedState = {field, form, event};
+      if (freeSolo) {
+        form.setFieldValue(field.name, event.target.value);
+        objectWithUpdatedState.field = {...objectWithUpdatedState.field, value: event.target.value};
+        objectWithUpdatedState.form = {...objectWithUpdatedState.form, values: {...form.values, [name]: event.target.value}};
+      }
       form.setFieldTouched(field.name, true);
-      if (onBlur) onBlur({field, form});
+      if (onBlur) onBlur(objectWithUpdatedState);
     },
-    onChange: (e, value) => {
+    onChange: (event, value) => {
       if (!value) form.setFieldValue(field.name, '');
       else form.setFieldValue(field.name, value);
       if (onChange) {
-        if (!value) onChange({field, form, value, selected: null});
-        if (typeof value === 'string') onChange({field, form, value, selected: optionsMemo.refs[value]});
-        if (Array.isArray(field.value)) onChange({field, form, value, selected: value.map(item => optionsMemo.refs[item])});
+        if (!value) onChange({field, form, value, event, selected: null});
+        if (typeof value === 'string') onChange({field, form, value, event, selected: optionsMemo.refs[value]});
+        if (Array.isArray(field.value)) onChange({field, form, value, event, selected: value.map(item => optionsMemo.refs[item])});
       }
     },
     size: 'small',
@@ -112,6 +119,7 @@ AutoCompleteValue.defaultProps = {
   fast: false,
   multiple: false,
   required: false,
+  freeSolo: false,
 };
 AutoCompleteValue.propTypes = {
   /** If `true`, the selected option becomes the value of the input when the Autocomplete loses focus unless the user chooses a different option or changes the character string in the input. */
@@ -126,14 +134,16 @@ AutoCompleteValue.propTypes = {
   multiple: PropTypes.bool,
   /** A field's name in Formik state. Also, automatically sets the input's `id` attribute if not otherwise passed. */
   name: PropTypes.string.isRequired,
-  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the `input` loses focus. ***Signature:*** `({event, field, form}) => {}`; */
   onBlur: PropTypes.func,
-  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, handlers, meta}) => {}`; */
+  /** Callback fired when the input's `value` is changed. ***Signature:*** `({event, field, form, value, selected}) => {}`; */
   onChange: PropTypes.func,
   /** String name of options object property. */
   optionKey: PropTypes.string.isRequired,
   /** Array of objects. These are referenced by the 'optionKey' prop. <b> Note: This prop should be memoized to ensure efficient optimization.</b> */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
+  /** If `true`, field will allow the user to enter a value that is not in the list of options. It will assign the value to formik when the field is blurred */
+  freeSolo: PropTypes.bool,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
   /** Object to pass props to underlying MUI TextField component.  */
