@@ -21,7 +21,7 @@ import {Field} from 'formik';
  *
  */
 const AutoCompleteValue = props => {
-  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, freeSolo, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
     const valueSet = new Set();
@@ -44,7 +44,6 @@ const AutoCompleteValue = props => {
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
     filterOptions: (options, state) => {
-      if (freeSolo) options.push(state.inputValue);
       return options.filter(option => {
         if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
         else if (option.toLowerCase().indexOf(state.inputValue.toLowerCase()) === -1) return false;
@@ -112,7 +111,6 @@ AutoCompleteValue.defaultProps = {
   fast: false,
   multiple: false,
   required: false,
-  freeSolo: false,
 };
 AutoCompleteValue.propTypes = {
   /** If `true`, the selected option becomes the value of the input when the Autocomplete loses focus unless the user chooses a different option or changes the character string in the input. */
@@ -135,8 +133,6 @@ AutoCompleteValue.propTypes = {
   optionKey: PropTypes.string.isRequired,
   /** Array of objects. These are referenced by the 'optionKey' prop. <b> Note: This prop should be memoized to ensure efficient optimization.</b> */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
-  /** If `true`, field will insert whatever the user has typed as a selectable option.  */
-  freeSolo: PropTypes.bool,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
   /** Object to pass props to underlying MUI TextField component.  */
