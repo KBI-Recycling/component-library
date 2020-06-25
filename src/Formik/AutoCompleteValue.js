@@ -21,7 +21,7 @@ import {Field} from 'formik';
  *
  */
 const AutoCompleteValue = props => {
-  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, freeSolo, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
     const valueSet = new Set();
@@ -40,7 +40,6 @@ const AutoCompleteValue = props => {
     ...field,
     autoHighlight: true,
     autoSelect,
-    freeSolo,
     classes: {tagSizeSmall: classes.tagSizeSmall},
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
@@ -55,14 +54,7 @@ const AutoCompleteValue = props => {
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
     onBlur: event => {
-      const objectWithUpdatedState = {field, form, event};
-      if (freeSolo) {
-        form.setFieldValue(field.name, event.target.value);
-        objectWithUpdatedState.field = {...objectWithUpdatedState.field, value: event.target.value};
-        objectWithUpdatedState.form = {...objectWithUpdatedState.form, values: {...form.values, [name]: event.target.value}};
-      }
-      form.setFieldTouched(field.name, true);
-      if (onBlur) onBlur(objectWithUpdatedState);
+      if (onBlur) onBlur({field, form, event});
     },
     onChange: (event, value) => {
       if (!value) form.setFieldValue(field.name, '');
@@ -119,7 +111,6 @@ AutoCompleteValue.defaultProps = {
   fast: false,
   multiple: false,
   required: false,
-  freeSolo: false,
 };
 AutoCompleteValue.propTypes = {
   /** If `true`, the selected option becomes the value of the input when the Autocomplete loses focus unless the user chooses a different option or changes the character string in the input. */
@@ -142,8 +133,6 @@ AutoCompleteValue.propTypes = {
   optionKey: PropTypes.string.isRequired,
   /** Array of objects. These are referenced by the 'optionKey' prop. <b> Note: This prop should be memoized to ensure efficient optimization.</b> */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
-  /** If `true`, field will allow the user to enter a value that is not in the list of options. It will assign the value to formik when the field is blurred */
-  freeSolo: PropTypes.bool,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
   /** Object to pass props to underlying MUI TextField component.  */
