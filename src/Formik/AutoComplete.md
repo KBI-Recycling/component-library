@@ -44,11 +44,11 @@ import {Grid, Typography} from '@material-ui/core';
             <AutoComplete {...developerProps} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography variant='caption'>multiple</Typography>
+            <Typography variant='caption'>Multiple</Typography>
             <AutoComplete {...developerMultiProps} />
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography variant='caption'>freeSolo</Typography>
+            <Typography variant='caption'>FreeSolo</Typography>
             <AutoComplete {...developerFreeSoloProps} />
           </Grid>
         </Grid>

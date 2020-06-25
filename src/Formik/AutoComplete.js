@@ -49,7 +49,7 @@ const AutoComplete = props => {
           return showOption;
         });
       } else {
-        if (freeSolo) options.push({[optionKey]: state.inputValue});
+        if (freeSolo && state.inputValue !== '') options.push({[optionKey]: state.inputValue});
         return options.filter(option => option[optionKey].toLowerCase().includes(state.inputValue.toLowerCase()));
       }
     },
