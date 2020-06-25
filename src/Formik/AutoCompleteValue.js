@@ -40,11 +40,11 @@ const AutoCompleteValue = props => {
     ...field,
     autoHighlight: true,
     autoSelect,
-    freeSolo,
     classes: {tagSizeSmall: classes.tagSizeSmall},
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
     filterOptions: (options, state) => {
+      if (freeSolo) options.push(state.inputValue);
       return options.filter(option => {
         if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
         else if (option.toLowerCase().indexOf(state.inputValue.toLowerCase()) === -1) return false;
@@ -55,14 +55,7 @@ const AutoCompleteValue = props => {
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
     onBlur: event => {
-      const objectWithUpdatedState = {field, form, event};
-      if (freeSolo) {
-        form.setFieldValue(field.name, event.target.value);
-        objectWithUpdatedState.field = {...objectWithUpdatedState.field, value: event.target.value};
-        objectWithUpdatedState.form = {...objectWithUpdatedState.form, values: {...form.values, [name]: event.target.value}};
-      }
-      form.setFieldTouched(field.name, true);
-      if (onBlur) onBlur(objectWithUpdatedState);
+      if (onBlur) onBlur({field, form, event});
     },
     onChange: (event, value) => {
       if (!value) form.setFieldValue(field.name, '');
@@ -142,7 +135,7 @@ AutoCompleteValue.propTypes = {
   optionKey: PropTypes.string.isRequired,
   /** Array of objects. These are referenced by the 'optionKey' prop. <b> Note: This prop should be memoized to ensure efficient optimization.</b> */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
-  /** If `true`, field will allow the user to enter a value that is not in the list of options. It will assign the value to formik when the field is blurred */
+  /** If `true`, field will insert whatever the user has typed as a selectable option.  */
   freeSolo: PropTypes.bool,
   /** If `true`, the label is displayed as required and the input element will be required. */
   required: PropTypes.bool,
