@@ -1,6 +1,6 @@
 {
   "name": "@kbi/component-library",
-  "version": "0.3.27",
+  "version": "0.3.28",
   "description": "A library of all reusable KBI components and utilities.",
   "repository": "https://github.com/KBI-Recycling/component-library",
   "main": "dist/index.js",
@@ -26,7 +26,8 @@
     "formik": "2.x.x",
     "moment": "2.x.x",
     "react": "16.x.x",
-    "react-dom": "16.x.x"
+    "react-dom": "16.x.x",
+    "react-router-dom": "^5.x.x"
   },
   "devDependencies": {
     "@babel/cli": "7.10.1",

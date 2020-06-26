@@ -20,6 +20,7 @@ module.exports = {
         'src/MuiItems/Collapse.js',
         'src/MuiItems/Table.js',
         'src/MuiItems/DetailsPanel.js',
+        'src/MuiItems/AppFrame.js',
       ],
     },
     {
