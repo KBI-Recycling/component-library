@@ -1,16 +1,13 @@
-import React, {useCallback, useMemo, useState} from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
+import React, {useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 import {matchPath, useLocation} from 'react-router-dom';
 import {AppBar as MuiAppBar, Toolbar, IconButton, Typography} from '@material-ui/core';
 import {Menu, MoreVert} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
-// import {acSetDrawerOpen} from 'global_state/actions.js';
 import {ModuleMenu} from './AppBar/';
 
 const AppBarTitle = ({routes}) => {
   const location = useLocation();
-  console.log('location', location );
   const currentRoute = useMemo(() => {
     return routes.find((route, index, array) => {
       return matchPath(location.pathname, {path: route.path, exact: route.exact, strict: route.strict});
@@ -24,16 +21,9 @@ const AppBarTitle = ({routes}) => {
   ), [currentRoute.pageTitle]);
 };
 
-const AppBar = ({routes}) => {
-  const drawerOpen = true; // useSelector(state => state.global.drawerOpen);
+const AppBar = ({routes, drawerOpen, setDrawerOpen}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-
-  // Component Action Creators
-  // const dispatch = useDispatch();
-  const setDrawerOpen = useCallback((drawerOpen) => {
-    // return () => dispatch(acSetDrawerOpen(drawerOpen));
-  }, []);
 
   return (
     <MuiAppBar position='fixed' className={classes.appBar}>
@@ -63,6 +53,8 @@ AppBar.propTypes = {
     path: PropTypes.string.isRequired,
     pageTitle: PropTypes.string.isRequired,
   })),
+  setDrawerOpen: PropTypes.func.isRequired,
+  drawerOpen: PropTypes.bool.isRequired,
 };
 
 export default React.memo(AppBar);

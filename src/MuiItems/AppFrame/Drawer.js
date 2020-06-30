@@ -1,32 +1,27 @@
 import React, {useMemo} from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
 import {Drawer as MuiDrawer, Divider, List, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-// import KBILogo from './KBI-logo(small).png';
+import KBILogo from './KBI-logo(small).png';
 import MenuItem from './MenuItem.js';
-// import {acSetDrawerOpen} from 'global_state/actions.js';
 
-const Drawer = ({menuItems, moduleTitle}) => {
+const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen}) => {
   const currentUserEmail = 'an email here'; // useSelector(state => state.global.currentUser.email);
-  const drawerOpen = true; // useSelector(state => state.global.drawerOpen);
-  const smallDevice = false; // useSelector(state => state.global.smallDevice);
   const classes = useStyles();
-  // const dispatch = useDispatch();
 
   // Component Props
   const muiDrawerProps = useMemo(() => ({
     classes: {paper: classes.drawerPaper},
     onClose: () => {
-      // if (smallDevice) dispatch(acSetDrawerOpen(false));
+      if (smallDevice) setDrawerOpen(false);
     },
     open: drawerOpen,
     variant: smallDevice ? 'temporary' : 'persistent',
-  }), [classes, drawerOpen, smallDevice]);
+  }), [classes.drawerPaper, drawerOpen, setDrawerOpen, smallDevice]);
 
   return (
     <MuiDrawer {...muiDrawerProps}>
-      <img src={'https://www.google.com/url?sa=i&url=https%3A%2F%2Fdlpng.com%2Fpng%2F1733783&psig=AOvVaw3Xa8MCdKlIHdg7HKnFmKDu&ust=1593286021449000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJiTl42boOoCFQAAAAAdAAAAABAZ'} alt='KBI' className={classes.logo} />
+      <img src={KBILogo} alt='KBI' className={classes.logo} />
       <Typography className={classes.title}>{moduleTitle}</Typography>
       <Typography className={classes.email}>{currentUserEmail}</Typography>
       <Divider className={classes.divider} />
@@ -96,6 +91,9 @@ Drawer.propTypes = {
     selectedLinkComparison: PropTypes.string,
   })),
   moduleTitle: PropTypes.string.isRequired,
+  setDrawerOpen: PropTypes.func.isRequired,
+  drawerOpen: PropTypes.bool.isRequired,
+  smallDevice: PropTypes.bool.isRequired,
 };
 
 export default Drawer;

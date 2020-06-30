@@ -11,7 +11,7 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo}) => {
       <div className={classes.root} >
         <div className={classes.hidePrint}>
           {/* <AppBar routes={routes} /> */}
-          {/* <Drawer menuItems={menuItems} moduleTitle={moduleTitle} /> */}
+          <Drawer menuItems={menuItems} moduleTitle={moduleTitle} />
         </div>
         <main className={classes.content}>
           {/* <MainView routes={routes} redirectTo={redirectTo} /> */}

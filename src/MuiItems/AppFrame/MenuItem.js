@@ -1,16 +1,12 @@
 import React, {forwardRef, useMemo} from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import {useHistory} from 'react-router-dom';
 import {makeStyles} from '@material-ui/core/styles';
 import {ListItem, ListItemIcon, ListItemText} from '@material-ui/core';
-// import {acSetDrawerOpen} from 'global_state/actions.js';
 
-const MenuItem = ({icon, link, text, selectedLinkComparison}) => {
-  const smallDevice = false; // useSelector(state => state.global.smallDevice);
+const MenuItem = ({icon, link, text, selectedLinkComparison, smallDevice, setDrawerOpen}) => {
   const classes = useStyles();
-  // const dispatch = useDispatch();
   const history = useHistory();
 
   const CustomLink = useMemo(() => {
@@ -19,7 +15,7 @@ const MenuItem = ({icon, link, text, selectedLinkComparison}) => {
       // Prevents same path being added to history multiple times.
       if (history.location.pathname !== link) history.push(link);
       // Close Drawer, on small devices only, when menu link is clicked.
-      // if (smallDevice) dispatch(acSetDrawerOpen(false));
+      if (smallDevice) setDrawerOpen(false);
     };
     // Makes ListItem function more like <a /> tag.
     return forwardRef((linkProps, ref) => <Link ref={ref} to={link} {...linkProps} onClick={handleClick} />);
@@ -41,6 +37,8 @@ MenuItem.propTypes = {
   link: PropTypes.string.isRequired,
   selectedLinkComparison: PropTypes.string,
   text: PropTypes.string.isRequired,
+  smallDevice: PropTypes.bool.isRequired,
+  setDrawerOpen: PropTypes.func.isRequired,
 };
 const useStyles = makeStyles(theme => ({
   listItem: {
