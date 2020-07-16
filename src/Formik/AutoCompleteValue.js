@@ -21,7 +21,7 @@ import {Field} from 'formik';
  *
  */
 const AutoCompleteValue = props => {
-  const {disabled, fast, label, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, freeSolo, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
     const valueSet = new Set();
@@ -50,6 +50,7 @@ const AutoCompleteValue = props => {
         return true;
       });
     },
+    freeSolo,
     id: name,
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
@@ -64,6 +65,10 @@ const AutoCompleteValue = props => {
         if (typeof value === 'string') onChange({field, form, value, event, selected: optionsMemo.refs[value]});
         if (Array.isArray(field.value)) onChange({field, form, value, event, selected: value.map(item => optionsMemo.refs[item])});
       }
+    },
+    onKeyDown: (event) => {
+      const value = event.target.value;
+      if (freeSolo && event.key === 'Tab' && value) form.setFieldValue(field.name, [...field.value, value]);
     },
     size: 'small',
     value: field.value,
@@ -109,6 +114,7 @@ AutoCompleteValue.defaultProps = {
   autoSelect: false,
   disabled: false,
   fast: false,
+  freeSolo: false,
   multiple: false,
   required: false,
 };
@@ -119,6 +125,8 @@ AutoCompleteValue.propTypes = {
   disabled: PropTypes.bool,
   /** If `true` component uses `<FastField />` as an optimized version of `<Field />`. Should only be used on large forms (~30+ fields) or when a field has very expensive validation requirements. `<FastField />` has the same exact API as `<Field>`, but implements `shouldComponentUpdate()` internally to block all additional re-renders unless there are direct updates to the `<FastField />'s` relevant parts/slice of Formik state. */ //eslint-disable-line
   fast: PropTypes.bool,
+  /** If true, the Autocomplete is free solo, meaning that the user input is not bound to provided options. */
+  freeSolo: PropTypes.bool,
   /** The `label` content. If not set, `label` will default to `name` prop.  */
   label: PropTypes.string,
   /** If true, formik value must be an array and the input will support multiple selections. */
