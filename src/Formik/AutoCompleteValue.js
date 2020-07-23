@@ -21,7 +21,7 @@ import {Field} from 'formik';
  *
  */
 const AutoCompleteValue = props => {
-  const {disabled, fast, label, freeSolo, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, freeSolo, multiple, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
     const valueSet = new Set();
@@ -51,10 +51,14 @@ const AutoCompleteValue = props => {
       });
     },
     freeSolo,
+    multiple,
     id: name,
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
     onBlur: event => {
+      const value = event.target.value;
+      if (value && freeSolo && multiple) form.setFieldValue(field.name, [...field.value, value]);
+      if (value && freeSolo && !multiple) form.setFieldValue(field.name, value);
       if (onBlur) onBlur({field, form, event});
     },
     onChange: (event, value) => {
@@ -65,10 +69,6 @@ const AutoCompleteValue = props => {
         if (typeof value === 'string') onChange({field, form, value, event, selected: optionsMemo.refs[value]});
         if (Array.isArray(field.value)) onChange({field, form, value, event, selected: value.map(item => optionsMemo.refs[item])});
       }
-    },
-    onKeyDown: (event) => {
-      const value = event.target.value;
-      if (freeSolo && event.key === 'Tab' && value) form.setFieldValue(field.name, [...field.value, value]);
     },
     size: 'small',
     value: field.value,

@@ -11,7 +11,7 @@ import React from 'react'
 import {Formik, Form} from 'formik';
 import {Grid, Typography} from '@material-ui/core';
 
-<Formik validateOnChange={false} initialValues={{ Developer: '', DeveloperMulti: [], DeveloperFreeSolo: [] }}>
+<Formik validateOnChange={false} initialValues={{ Developer: '', DeveloperMulti: [], DeveloperFreeSolo: '', DeveloperFreeSoloMulti: [] }}>
   {formik => {
     const developerProps = {
       id: 'AutoCompleteValue:Developer',
@@ -34,6 +34,15 @@ import {Grid, Typography} from '@material-ui/core';
       freeSolo: true,
       name: 'DeveloperFreeSolo',
       label: 'Developers',
+      options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
+      optionKey: 'name',
+      onChange: ({field, form, value, selected}) => console.log({field, form, value, selected}),
+    }
+    const developerFreeSoloMultiProps = {
+      id: 'AutoCompleteValue:DeveloperFreeSoloMulti',
+      freeSolo: true,
+      name: 'DeveloperFreeSoloMulti',
+      label: 'Developers',
       multiple: true,
       options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
       optionKey: 'name',
@@ -52,8 +61,12 @@ import {Grid, Typography} from '@material-ui/core';
             <AutoCompleteValue {...developerMultiProps} />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant='caption'>Free Solo</Typography>
+            <Typography variant='caption'>Free Solo Basic</Typography>
             <AutoCompleteValue {...developerFreeSoloProps} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant='caption'>Free Solo Multi</Typography>
+            <AutoCompleteValue {...developerFreeSoloMultiProps} />
           </Grid>
         </Grid>
       </Form>
