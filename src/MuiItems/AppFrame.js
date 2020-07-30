@@ -1,20 +1,40 @@
-import React, {Fragment} from 'react';
+/* eslint-disable max-len */
+import React, {Fragment, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core/styles';
+import {makeStyles, useMediaQuery} from '@material-ui/core';
 import {AppBar, Drawer, MainView} from './AppFrame/';
 
-const AppFrame = ({routes, menuItems, moduleTitle, redirectTo}) => {
+const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail}) => {
   const classes = useStyles();
+  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [smallDevice, setSmallDevice] = useState(false);
+  const deviceIsSmall = useMediaQuery('(max-width:1280px)');
+
+  useEffect(() => {
+    if (deviceIsSmall) {
+      setDrawerOpen(false);
+      setSmallDevice(true);
+    } else {
+      setDrawerOpen(true);
+      setSmallDevice(false);
+    }
+  }, [deviceIsSmall]);
 
   return (
     <Fragment>
-      <div className={classes.root} >
+      <div className={classes.root}>
         <div className={classes.hidePrint}>
-          {/* <AppBar routes={routes} /> */}
-          <Drawer menuItems={menuItems} moduleTitle={moduleTitle} />
+          <AppBar routes={routes} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+          <Drawer menuItems={menuItems}
+            moduleTitle={moduleTitle}
+            smallDevice={smallDevice}
+            drawerOpen={drawerOpen}
+            setDrawerOpen={bool => setDrawerOpen(bool)}
+            currentUserEmail={currentUserEmail}
+          />
         </div>
         <main className={classes.content}>
-          {/* <MainView routes={routes} redirectTo={redirectTo} /> */}
+          <MainView routes={routes} redirectTo={redirectTo} />
         </main>
       </div>
     </Fragment>
@@ -63,21 +83,37 @@ const useStyles = makeStyles(theme => ({
 }));
 
 AppFrame.propTypes = {
+  /** The routes that will be used to navigate throughout the page. Will be passed to react-router-dom Route components. */
   routes: PropTypes.arrayOf(PropTypes.shape({
+    /** A function that returns the component that is to be rendered for any given route. Signature: '() => &lt;MyViewComponent /&gt;' */
     component: PropTypes.func.isRequired,
+    /** The 'exact' prop that Route takes */
     exact: PropTypes.bool.isRequired,
+    /** The 'strict' prop that Route takes */
     strict: PropTypes.bool.isRequired,
+    /** The 'path' prop that Route takes */
     path: PropTypes.string.isRequired,
+    /** The title that is displayed on the AppBar for the page */
     pageTitle: PropTypes.string.isRequired,
   })),
+  /** Used by the Drawer component. Maps over this array to create the list items to navigate throughout the site. */
   menuItems: PropTypes.arrayOf(PropTypes.shape({
+    /** A function that returns the icon component that is to be rendered for the item. Signature: '() => &lt;MyIcon /&gt;' */
     icon: PropTypes.func.isRequired,
+    /** The title of the list item */
     text: PropTypes.string.isRequired,
+    /** A link that matches one of the route paths. Where the menu item send the user on click  */
     link: PropTypes.string.isRequired,
+    /** Used in the check for the currently selected menu item. It is required when a menu item has subroutes that would cause the url to be different than the 'link' prop. i.e. '/view/process-form/form-id/selected-item-id'
+     */
     selectedLinkComparison: PropTypes.string,
   })),
+  /** The title that will display on the Drawer */
   moduleTitle: PropTypes.string.isRequired,
+  /** The path that will be passed to react-router-dom Redirect 'to' prop */
   redirectTo: PropTypes.string.isRequired,
+  /** The email of the current user. Displayed on the app frame */
+  currentUserEmail: PropTypes.string.isRequired,
 };
 
 export default AppFrame;

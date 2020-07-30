@@ -5,8 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import KBILogo from './KBI-logo(small).png';
 import MenuItem from './MenuItem.js';
 
-const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen}) => {
-  const currentUserEmail = 'an email here'; // useSelector(state => state.global.currentUser.email);
+const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen, currentUserEmail}) => {
   const classes = useStyles();
 
   // Component Props
@@ -94,6 +93,7 @@ Drawer.propTypes = {
   setDrawerOpen: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool.isRequired,
   smallDevice: PropTypes.bool.isRequired,
+  currentUserEmail: PropTypes.string.isRequired,
 };
 
 export default Drawer;
