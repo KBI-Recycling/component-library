@@ -17,6 +17,7 @@
     "google-libphonenumber": "3.2.10",
     "lodash.get": "4.4.2",
     "match-sorter": "4.2.0",
+    "react-router-dom": "^5.2.0",
     "react-table": "7.2.2"
   },
   "peerDependencies": {
@@ -26,7 +27,8 @@
     "formik": "2.x.x",
     "moment": "2.x.x",
     "react": "16.x.x",
-    "react-dom": "16.x.x"
+    "react-dom": "16.x.x",
+    "react-router-dom": "^5.x.x"
   },
   "devDependencies": {
     "@babel/cli": "7.10.5",
@@ -50,7 +52,12 @@
     "eslint-plugin-jsx-a11y": "6.3.1",
     "eslint-plugin-react": "7.20.3",
     "eslint-plugin-react-hooks": "2.5.1",
+<<<<<<< HEAD
+    "file-loader": "^6.0.0",
+    "formik": "2.1.4",
+=======
     "formik": "2.1.5",
+>>>>>>> c00f461e5b292e681d04fbc0a67ee80ce2dcb8f8
     "gh-pages": "2.2.0",
     "moment": "2.27.0",
     "prop-types": "15.7.2",
