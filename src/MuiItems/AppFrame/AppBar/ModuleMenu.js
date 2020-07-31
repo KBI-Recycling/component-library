@@ -10,7 +10,7 @@ const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction, s
 
   const goToModule = pathToNewModule => {
     window.open(pathToNewModule, '__blank');
-    setDrawerOpen(false);
+    setAnchorEl(null);
   };
 
   const appBarMenu = {
@@ -39,6 +39,7 @@ const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction, s
       key='logout'
       onClick={() => {
         logoutFunction();
+        setAnchorEl(null);
       }}
     >
       Log Out
@@ -60,7 +61,6 @@ ModuleMenu.propTypes = {
     pathComparisonString: PropTypes.string.isRequired,
   })).isRequired,
   logoutFunction: PropTypes.func.isRequired,
-  setDrawerOpen: PropTypes.func.isRequired,
 };
 
 export default ModuleMenu;
