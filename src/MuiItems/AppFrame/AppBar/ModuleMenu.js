@@ -9,7 +9,7 @@ const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction}) 
   const history = useHistory();
 
   const goToModule = pathToNewModule => {
-    window.open(pathToNewModule, '');
+    window.open(pathToNewModule, '__blank');
   };
 
   const appBarMenu = {
