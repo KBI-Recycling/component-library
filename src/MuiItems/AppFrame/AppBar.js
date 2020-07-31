@@ -21,7 +21,7 @@ const AppBarTitle = ({routes}) => {
   ), [currentRoute.pageTitle]);
 };
 
-const AppBar = ({routes, drawerOpen, setDrawerOpen}) => {
+const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFunction}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -35,7 +35,7 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen}) => {
         <IconButton color='inherit' onClick={e => setAnchorEl(e.currentTarget)}>
           <MoreVert />
         </IconButton>
-        <ModuleMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} />
+        <ModuleMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} logoutFunction={logoutFunction} moduleMenuOptions={moduleMenuOptions} />
       </Toolbar>
     </MuiAppBar>
   );
@@ -55,6 +55,12 @@ AppBar.propTypes = {
   })),
   setDrawerOpen: PropTypes.func.isRequired,
   drawerOpen: PropTypes.bool.isRequired,
+  moduleMenuOptions: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    path: PropTypes.string.isRequired,
+    pathComparisonString: PropTypes.string.isRequired,
+  })).isRequired,
+  logoutFunction: PropTypes.func.isRequired,
 };
 
 export default React.memo(AppBar);
