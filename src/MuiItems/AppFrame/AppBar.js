@@ -40,7 +40,6 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFun
           setAnchorEl={setAnchorEl}
           logoutFunction={logoutFunction}
           moduleMenuOptions={moduleMenuOptions}
-          setDrawerOpen={setDrawerOpen}
         />
       </Toolbar>
     </MuiAppBar>
