@@ -5,11 +5,12 @@ import {Menu, MenuItem} from '@material-ui/core';
 // import {Auth} from 'config.js';
 // import {acLogoutUser} from 'global_state/actions.js';
 
-const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction}) => {
+const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction, setDrawerOpen}) => {
   const history = useHistory();
 
   const goToModule = pathToNewModule => {
     window.open(pathToNewModule, '__blank');
+    setDrawerOpen(false);
   };
 
   const appBarMenu = {
@@ -59,6 +60,7 @@ ModuleMenu.propTypes = {
     pathComparisonString: PropTypes.string.isRequired,
   })).isRequired,
   logoutFunction: PropTypes.func.isRequired,
+  setDrawerOpen: PropTypes.func.isRequired,
 };
 
 export default ModuleMenu;

@@ -35,7 +35,13 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFun
         <IconButton color='inherit' onClick={e => setAnchorEl(e.currentTarget)}>
           <MoreVert />
         </IconButton>
-        <ModuleMenu anchorEl={anchorEl} setAnchorEl={setAnchorEl} logoutFunction={logoutFunction} moduleMenuOptions={moduleMenuOptions} />
+        <ModuleMenu
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          logoutFunction={logoutFunction}
+          moduleMenuOptions={moduleMenuOptions}
+          setDrawerOpen={setDrawerOpen}
+        />
       </Toolbar>
     </MuiAppBar>
   );
