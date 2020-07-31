@@ -28,7 +28,7 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFun
   return (
     <MuiAppBar position='fixed' className={classes.appBar}>
       <Toolbar variant='dense' disableGutters>
-        <IconButton edge='start' color='inherit' aria-label='menu' style={{marginLeft: 8}} onClick={setDrawerOpen(!drawerOpen)}>
+        <IconButton edge='start' color='inherit' aria-label='menu' style={{marginLeft: 8}} onClick={() => setDrawerOpen(!drawerOpen)}>
           <Menu />
         </IconButton>
         <AppBarTitle routes={routes} />
