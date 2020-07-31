@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {makeStyles, useMediaQuery} from '@material-ui/core';
 import {AppBar, Drawer, MainView} from './AppFrame/';
 
-const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail}) => {
+const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail, moduleMenuOptions, logoutFunction}) => {
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [smallDevice, setSmallDevice] = useState(false);
@@ -24,7 +24,7 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail}
     <Fragment>
       <div className={classes.root}>
         <div className={classes.hidePrint}>
-          <AppBar routes={routes} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+          <AppBar routes={routes} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} logoutFunction={logoutFunction} moduleMenuOptions={moduleMenuOptions} />
           <Drawer menuItems={menuItems}
             moduleTitle={moduleTitle}
             smallDevice={smallDevice}
@@ -114,6 +114,17 @@ AppFrame.propTypes = {
   redirectTo: PropTypes.string.isRequired,
   /** The email of the current user. Displayed on the app frame */
   currentUserEmail: PropTypes.string.isRequired,
+  /** The list of ooptions that will be provided to the hamburger menu on the AppBar */
+  moduleMenuOptions: PropTypes.arrayOf(PropTypes.shape({
+    /** The string that will be shown to the user on the MenuItem */
+    title: PropTypes.string.isRequired,
+    /** The path that the user will open in a new tab when clicked */
+    path: PropTypes.string.isRequired,
+    /** The string that is passed to String.includes() in order to eliminate the module that the user is currently in from the list of options */
+    pathComparisonString: PropTypes.string.isRequired,
+  })).isRequired,
+  /** The function that is ran from the hamburger menu Logout option. Should be a fetch request to the logout endpoint from app-engine, but has the option of being whatever function that is ran to logout and redirect the user */
+  logoutFunction: PropTypes.func.isRequired,
 };
 
 export default AppFrame;

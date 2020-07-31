@@ -25,7 +25,16 @@ const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen,
       <Typography className={classes.email}>{currentUserEmail}</Typography>
       <Divider className={classes.divider} />
       <List className={classes.list}>
-        {menuItems.map(item => <MenuItem key={item.text} icon={item.icon()} link={item.link} text={item.text} selectedLinkComparison={item.selectedLinkComparison} />)}
+        {menuItems.map(item => (
+          <MenuItem key={item.text}
+            icon={item.icon()}
+            link={item.link}
+            text={item.text}
+            selectedLinkComparison={item.selectedLinkComparison}
+            setDrawerOpen={setDrawerOpen}
+            smallDevice={smallDevice}
+          />),
+        )}
       </List>
     </MuiDrawer>
   );
