@@ -5,7 +5,7 @@ import {Menu, MenuItem} from '@material-ui/core';
 // import {Auth} from 'config.js';
 // import {acLogoutUser} from 'global_state/actions.js';
 
-const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction, setDrawerOpen}) => {
+const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction}) => {
   const history = useHistory();
 
   const goToModule = pathToNewModule => {
@@ -26,7 +26,7 @@ const ModuleMenu = ({anchorEl, setAnchorEl, moduleMenuOptions, logoutFunction, s
       horizontal: 'right',
     },
     children: [...moduleMenuOptions.map(option => {
-      if (history.location.pathname.includes(option.pathComparisonString)) return null;
+      if (option.pathComparisonString && history.location.pathname.includes(option.pathComparisonString)) return null;
       else {
         return (
           <MenuItem key={option.path} onClick={() => goToModule(option.path)}>
@@ -58,7 +58,7 @@ ModuleMenu.propTypes = {
   moduleMenuOptions: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
-    pathComparisonString: PropTypes.string.isRequired,
+    pathComparisonString: PropTypes.string,
   })).isRequired,
   logoutFunction: PropTypes.func.isRequired,
 };
