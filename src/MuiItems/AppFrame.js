@@ -120,8 +120,8 @@ AppFrame.propTypes = {
     title: PropTypes.string.isRequired,
     /** The path that the user will open in a new tab when clicked */
     path: PropTypes.string.isRequired,
-    /** The string that is passed to String.includes() in order to eliminate the module that the user is currently in from the list of options */
-    pathComparisonString: PropTypes.string.isRequired,
+    /** The string that is passed to String.includes() in order to eliminate options from the list shown by the menu */
+    pathComparisonString: PropTypes.string,
   })).isRequired,
   /** The function that is ran from the hamburger menu Logout option. Should be a fetch request to the logout endpoint from app-engine, but has the option of being whatever function that is ran to logout and redirect the user */
   logoutFunction: PropTypes.func.isRequired,
