@@ -63,7 +63,7 @@ AppBar.propTypes = {
   moduleMenuOptions: PropTypes.arrayOf(PropTypes.shape({
     title: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
-    pathComparisonString: PropTypes.string.isRequired,
+    pathComparisonString: PropTypes.string,
   })).isRequired,
   logoutFunction: PropTypes.func.isRequired,
 };
