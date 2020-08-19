@@ -18,7 +18,8 @@ const useDrawer = ({smallDevice, drawerOpen}) => {
       ...defaultStyle,
       margin: theme.spacing(4),
       marginTop: theme.spacing(9),
-      marginLeft: theme.spacing(4) + (drawerOpen ? 300 : 0),
+      // drawer is 300px width, thats why -300
+      marginLeft: theme.spacing(4) + (drawerOpen ? 0 : -300),
     };
   }, [drawerOpen, smallDevice, theme]);
 
