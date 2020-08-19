@@ -10,6 +10,7 @@ const useDrawer = ({smallDevice, drawerOpen}) => {
     const smallStyle = {
       ...defaultStyle,
       margin: theme.spacing(2),
+      marginTop: theme.spacing(2) + 48,
     };
 
     if (smallDevice) return smallStyle;
