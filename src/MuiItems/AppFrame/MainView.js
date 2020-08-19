@@ -1,19 +1,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useDrawer} from './MainView/';
+import {makeStyles} from '@material-ui/core/styles';
 import {Switch, Redirect, Route} from 'react-router-dom';
 
 const MainView = ({routes, redirectTo}) => {
+  const {drawerMargin} = useDrawer();
+  const classes = useStyles();
+
   return (
-    <div style={{padding: '24px 0'}}>
-      <Switch>
-        {routes.map(({component, exact, path, strict}) => {
-          return <Route key={path} exact={exact} path={path} strict={strict} component={component} />;
-        })}
-        <Redirect exact to={redirectTo} />
-      </Switch>
-    </div>
+    <main className={classes.content}>
+      <div style={drawerMargin}>
+        <Switch>
+          {routes.map(({component, exact, path, strict}) => {
+            return <Route key={path} exact={exact} path={path} strict={strict} component={component} />;
+          })}
+          <Redirect exact to={redirectTo} />
+        </Switch>
+      </div>
+    </main>
+
   );
 };
+
+const useStyles = makeStyles(theme => ({
+  content: {
+    'flexGrow': 1,
+    'backgroundColor': theme.palette.background.default,
+    'minWidth': 0, // So the Typography noWrap works
+    '@media print': {
+      backgroundColor: '#FFFFFF',
+    },
+  },
+}));
 
 MainView.propTypes = {
   redirectTo: PropTypes.string.isRequired,
