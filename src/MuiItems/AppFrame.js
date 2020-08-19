@@ -34,7 +34,7 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail,
           />
         </div>
         <main className={classes.content}>
-          <MainView routes={routes} redirectTo={redirectTo} />
+          <MainView routes={routes} redirectTo={redirectTo} smallDevice={smallDevice} drawerOpen={drawerOpen} />
         </main>
       </div>
     </Fragment>

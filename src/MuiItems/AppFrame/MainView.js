@@ -4,8 +4,8 @@ import {useDrawer} from './MainView/';
 import {makeStyles} from '@material-ui/core/styles';
 import {Switch, Redirect, Route} from 'react-router-dom';
 
-const MainView = ({routes, redirectTo}) => {
-  const {drawerMargin} = useDrawer();
+const MainView = ({routes, redirectTo, smallDevice, drawerOpen}) => {
+  const {drawerMargin} = useDrawer({smallDevice, drawerOpen});
   const classes = useStyles();
 
   return (
@@ -36,6 +36,8 @@ const useStyles = makeStyles(theme => ({
 
 MainView.propTypes = {
   redirectTo: PropTypes.string.isRequired,
+  smallDevice: PropTypes.bool.isRequired,
+  drawerOpen: PropTypes.bool.isRequired,
   routes: PropTypes.arrayOf(PropTypes.shape({
     component: PropTypes.func.isRequired,
     exact: PropTypes.bool.isRequired,
