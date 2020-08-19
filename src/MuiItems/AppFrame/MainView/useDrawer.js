@@ -1,12 +1,8 @@
 import {useMemo} from 'react';
-import {useSelector} from 'react-redux';
 import {useTheme} from '@material-ui/core/styles';
-import {useSmallDeviceCheck} from 'hooks';
 
-const useDrawer = () => {
+const useDrawer = ({smallDevice, drawerOpen}) => {
   const theme = useTheme();
-  const drawerOpen = useSelector(state => state.ui.drawerOpen);
-  const {smallDevice} = useSmallDeviceCheck();
 
   const drawerMargin = useMemo(() => {
     const duration = theme.transitions.duration.enteringScreen;
