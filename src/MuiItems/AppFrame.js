@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {makeStyles, useMediaQuery, ThemeProvider, createMuiTheme} from '@material-ui/core';
 import {AppBar, Drawer, MainView} from './AppFrame/';
 
-const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail, moduleMenuOptions, logoutFunction}) => {
+const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail, moduleMenuOptions, logoutFunction, themeOptions}) => {
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [smallDevice, setSmallDevice] = useState(false);
@@ -33,8 +33,9 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail,
       shape: {
         borderRadius: 2,
       },
+      ...themeOptions,
     });
-  }, []);
+  }, [themeOptions]);
 
   useEffect(() => {
     if (deviceIsSmall) {
@@ -152,6 +153,8 @@ AppFrame.propTypes = {
   })).isRequired,
   /** The function that is ran from the hamburger menu Logout option. Should be a fetch request to the logout endpoint from app-engine, but has the option of being whatever function that is ran to logout and redirect the user */
   logoutFunction: PropTypes.func.isRequired,
+  /** This object is spread into createMuiTheme after the default theme options are set. Passing this prop to AppFrame will add additional options to the mui theme, or overwrite existing options. */
+  themeOptions: PropTypes.object,
 };
 
 export default AppFrame;
