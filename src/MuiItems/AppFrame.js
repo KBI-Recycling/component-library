@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles, useMediaQuery} from '@material-ui/core';
+import {makeStyles, useMediaQuery, ThemeProvider, createMuiTheme} from '@material-ui/core';
 import {AppBar, Drawer, MainView} from './AppFrame/';
 
 const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail, moduleMenuOptions, logoutFunction}) => {
@@ -9,6 +9,32 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail,
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [smallDevice, setSmallDevice] = useState(false);
   const deviceIsSmall = useMediaQuery('(max-width:1280px)');
+
+  const muiTheme = useMemo(() => {
+    return createMuiTheme({
+      palette: {
+        primary: {
+          main: '#6D6E71',
+          light: '#9b9c9f',
+          dark: '#424346',
+          contrastText: '#ffffff',
+        },
+        secondary: {
+          main: '#ed1c24',
+          light: '#ff5f4e',
+          dark: '#b20000',
+          contrastText: '#000000',
+        },
+        background: {
+          paper: '#fff',
+          default: '#eeeeee',
+        },
+      },
+      shape: {
+        borderRadius: 2,
+      },
+    });
+  }, []);
 
   useEffect(() => {
     if (deviceIsSmall) {
@@ -21,7 +47,7 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail,
   }, [deviceIsSmall]);
 
   return (
-    <Fragment>
+    <ThemeProvider theme={muiTheme}>
       <div className={classes.root}>
         <div className={classes.hidePrint}>
           <AppBar routes={routes} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} logoutFunction={logoutFunction} moduleMenuOptions={moduleMenuOptions} />
@@ -37,7 +63,7 @@ const AppFrame = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail,
           <MainView routes={routes} redirectTo={redirectTo} smallDevice={smallDevice} drawerOpen={drawerOpen} />
         </main>
       </div>
-    </Fragment>
+    </ThemeProvider>
   );
 };
 
@@ -57,15 +83,16 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     [theme.breakpoints.down('xs')]: {
-      'paddingLeft': theme.spacing(6),
+      'paddingLeft': 0,
+      'paddingRight': 0,
     },
     [theme.breakpoints.up('sm')]: {
-      'paddingLeft': theme.spacing(6) + 300,
+      'paddingLeft': 300,
     },
     'flexGrow': 1,
     'backgroundColor': theme.palette.background.default,
     'padding': theme.spacing(6),
-    'paddingLeft': theme.spacing(6) + 300,
+    'paddingLeft': 300,
     'minWidth': 0, // So the Typography noWrap works
     '@media print': {
       backgroundColor: '#FFFFFF',
