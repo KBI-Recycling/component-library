@@ -16,6 +16,8 @@ const useDrawer = ({smallDevice, drawerOpen}) => {
     return {
       ...defaultStyle,
       margin: theme.spacing(4),
+      // 48 is the size of the toolbar
+      marginTop: theme.spacing(4) + 48,
       // drawer is 300px width, thats why -300
       marginLeft: theme.spacing(4) + (drawerOpen ? 0 : -300),
     };
