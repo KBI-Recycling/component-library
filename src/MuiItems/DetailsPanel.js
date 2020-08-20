@@ -47,7 +47,7 @@ DetailsPanel.defaultProps = {
 
 DetailsPanel.propTypes = {
   /** Any props you want to be passeed to the surrounding Paper component */
-  paperProps: PropTypes.string,
+  paperProps: PropTypes.object,
   /** An array of objects mapped over for each of the sections in the list. any props not specified here that are passed will be attached to the MaterialUI Button component  */
   buttons: PropTypes.arrayOf(PropTypes.shape({
     /** The label for the button */

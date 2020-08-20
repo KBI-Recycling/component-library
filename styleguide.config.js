@@ -20,6 +20,7 @@ module.exports = {
         'src/MuiItems/Collapse.js',
         'src/MuiItems/Table.js',
         'src/MuiItems/DetailsPanel.js',
+        'src/MuiItems/AppFrame.js',
       ],
     },
     {
@@ -60,6 +61,14 @@ module.exports = {
         {
           test: /\.css$/,
           use: ['style-loader', 'css-loader'],
+        },
+        {
+          test: /\.(png|jpe?g|gif)$/i,
+          use: [
+            {
+              loader: 'file-loader',
+            },
+          ],
         },
       ],
     },
