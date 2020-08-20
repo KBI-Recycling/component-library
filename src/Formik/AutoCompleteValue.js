@@ -59,7 +59,7 @@ const AutoCompleteValue = props => {
       const value = event.target.value;
       if (value && freeSolo && multiple) {
         form.setFieldValue(field.name, [...field.value, value]);
-        if (onBlur) onBlur({field: [...field.value, value], form, event});
+        if (onBlur) onBlur({field: {...field, value: [...field.value, value]}, form, event});
       }
       if (value && freeSolo && !multiple) {
         form.setFieldValue(field.name, value);
