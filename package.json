@@ -14,11 +14,11 @@
   "author": "Daniel Kinsbursky",
   "license": "ISC",
   "dependencies": {
-    "google-libphonenumber": "3.2.10",
+    "google-libphonenumber": "3.2.12",
     "lodash.get": "4.4.2",
     "match-sorter": "4.2.0",
     "react-router-dom": "^5.2.0",
-    "react-table": "7.2.2"
+    "react-table": "7.5.0"
   },
   "peerDependencies": {
     "@material-ui/core": "4.x.x",
