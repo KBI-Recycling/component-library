@@ -206,7 +206,7 @@ const Table = (props) => {
     });
   }, [onLoadProps.selectRows]);
 
-  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, useRowSelect, usePagination, useHooks);
+  const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, usePagination, useRowSelect, useHooks);
   const bodyRows = useMemo(() => {
     if (props.paginationActive && props.paginationShowEmptyRows) {
       const sizeRowDifference = rtProps.state.pageSize - rtProps.page.length;
