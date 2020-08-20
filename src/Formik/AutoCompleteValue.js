@@ -57,9 +57,14 @@ const AutoCompleteValue = props => {
     options: optionsMemo.values,
     onBlur: event => {
       const value = event.target.value;
-      if (value && freeSolo && multiple) form.setFieldValue(field.name, [...field.value, value]);
-      if (value && freeSolo && !multiple) form.setFieldValue(field.name, value);
-      if (onBlur) onBlur({field, form, event});
+      if (value && freeSolo && multiple) {
+        form.setFieldValue(field.name, [...field.value, value]);
+        if (onBlur) onBlur({field: [...field.value, value], form, event});
+      }
+      if (value && freeSolo && !multiple) {
+        form.setFieldValue(field.name, value);
+        if (onBlur) onBlur({field, form, event});
+      }
     },
     onChange: (event, value) => {
       if (!value) form.setFieldValue(field.name, '');
