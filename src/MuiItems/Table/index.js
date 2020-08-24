@@ -1,6 +1,5 @@
 export {default as ActionBar} from './ActionBar';
 export {default as RowSelectCheckbox} from './RowSelectCheckbox';
-export {default as SpeedDialActions} from './SpeedDialActions';
 export {default as TableBodyRow} from './TableBodyRow';
 export {default as TableBodyRowBlank} from './TableBodyRowBlank';
 export {default as TableFooterRow} from './TableFooterRow';

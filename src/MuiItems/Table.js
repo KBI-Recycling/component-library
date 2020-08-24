@@ -1,19 +1,12 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'react-table';
-import {ActionBar, RowSelectCheckbox, SpeedDialActions, TableHeadBodyRows, TableFooterRow, TableLoading, TableTitles} from './Table/';
+import {ActionBar, RowSelectCheckbox, TableHeadBodyRows, TableFooterRow, TableLoading, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
 import matchSorter from 'match-sorter';
 
 const Table = (props) => {
-  const [tableEl, setTableEl] = useState(null);
-  const getMuiTableRef = () => {
-    const MuiTable = document.getElementById('MuiTable');
-    if (MuiTable) setTableEl(MuiTable);
-  };
-  useEffect(getMuiTableRef, []);
-
   const onLoadProps = useMemo(() => {
     // This memo holds MuiTable props that will never, ever, EVER change after initial component mount.
     // Extreme caution should be used when placing props inside this memo.
@@ -250,7 +243,6 @@ const Table = (props) => {
     <div id='MuiTable' style={{position: 'relative'}}>
       <TableTitles title={onLoadProps.title} />
       <ActionBar actions={props.actionsBar} rtProps={rtProps} />
-      {tableEl && <SpeedDialActions actions={props.actionsPerTable} rtProps={rtProps} tableEl={tableEl} />}
       <TableHeadBodyRows rtProps={rtProps} bodyRows={bodyRows} {...tableHeadBodyProps} />
       <TableFooterRow {...tableFooterProps} />
       <TableLoading isLoading={props.isLoading} />
@@ -288,18 +280,6 @@ Table.propTypes = {
       disabled: PropTypes.bool,
       icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
       tooltip: PropTypes.string,
-      onClick: PropTypes.func.isRequired,
-    }),
-  ])),
-  /**  Property defines the actions that will be displayed in Material UI SpeedDial component. */
-  actionsPerTable: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({
-      /**  The icon that will be displayed for the action. */
-      icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
-      /** The tooltip that will be displayed when the user hover over the action icon. */
-      text: PropTypes.string.isRequired,
-      /** The function that will be triggered when the button is clicked. ***Signature:*** `({event, columns, data, filteredRows, filteredFlatRows, flatHeaders, flatRows, headers, preFilteredRows, preFilteredFlatRows, preSortedRows, rows, selectedFlatRows, sortedRows}) => {}` */ //eslint-disable-line
       onClick: PropTypes.func.isRequired,
     }),
   ])),
