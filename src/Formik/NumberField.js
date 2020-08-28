@@ -73,8 +73,7 @@ const NumberField = (props) => {
         if (onChange) onChange({event, field, form, meta});
       },
       onKeyDown: event => {
-        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105];
-        console.log('event.key', event.key);
+        const persistKeyCodes = [8, 9, 13, 37, 39, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 109, 189];
         if (persistKeyCodes.includes(event.keyCode)) event.persist();
         else if (event.key === '.' && field.value.split('.').length <= 1) event.persist();
         else if (event.keyCode === 38) form.setFieldValue(name, (Number(field.value) + 1).toFixed(decimal));
