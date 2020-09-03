@@ -79,11 +79,15 @@ const AutoCompleteValue = props => {
     value: field.value,
     ...otherProps,
   });
-  const renderInputProps = (form, field, params) => ({
+  const renderInputProps = (form, field, meta, params) => ({
     ...params,
     error: form.touched[name] && form.errors[name] ? true : false,
     fullWidth: true,
-    helperText: form.touched[name] && form.errors[name],
+    helperText: (() => {
+      if (meta.touched && meta.error) return meta.error;
+      else if (textFieldProps?.helperText) return textFieldProps.helperText;
+      else return '';
+    })(),
     label: label ? label : name,
     margin: 'dense',
     required,
@@ -101,8 +105,8 @@ const AutoCompleteValue = props => {
   }
   return (
     <Field name={name}>
-      {({form, field}) => (
-        <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, params)} />} />
+      {({form, field, meta}) => (
+        <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, meta, params)} />} />
       )}
     </Field>
   );
