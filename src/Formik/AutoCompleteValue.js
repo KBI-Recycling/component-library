@@ -67,6 +67,7 @@ const AutoCompleteValue = props => {
       }
     },
     onChange: (event, value) => {
+      form.setTouched(field.name, true);
       if (!value) form.setFieldValue(field.name, '');
       else form.setFieldValue(field.name, value);
       if (onChange) {
@@ -83,15 +84,15 @@ const AutoCompleteValue = props => {
     ...params,
     error: form.touched[name] && form.errors[name] ? true : false,
     fullWidth: true,
-    helperText: (() => {
-      if (meta.touched && meta.error) return meta.error;
-      else if (textFieldProps?.helperText) return textFieldProps.helperText;
-      else return '';
-    })(),
     label: label ? label : name,
     margin: 'dense',
     required,
     ...textFieldProps,
+    helperText: (() => {
+      if (form.touched[name] && form.errors[name]) return form.errors[name];
+      else if (textFieldProps?.helperText) return textFieldProps.helperText;
+      else return '';
+    })(),
   });
 
   if (fast) {
