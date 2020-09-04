@@ -67,7 +67,6 @@ const AutoCompleteValue = props => {
       }
     },
     onChange: (event, value) => {
-      form.setTouched(field.name, true);
       if (!value) form.setFieldValue(field.name, '');
       else form.setFieldValue(field.name, value);
       if (onChange) {
