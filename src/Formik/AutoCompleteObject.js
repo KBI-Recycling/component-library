@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import React, {useState, useMemo} from 'react';
 import PropTypes from 'prop-types';
 import {Autocomplete} from '@material-ui/lab';
@@ -14,7 +13,6 @@ import {TextField} from '@material-ui/core';
  *
  * To add validation to AutoCompleteObject, include 'validateAutoObject' in the import statement and call it before defining the React component.
  *
- *
  * @version 1.0.0
  * @author [Gerry Blackmon](https://github.com/gblackiv)
  * @author [Daniel Kinsbursky](https://github.com/kbi-daniel)
@@ -25,7 +23,7 @@ import {TextField} from '@material-ui/core';
  *
  */
 // eslint-disable-next-line max-len
-const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
+const AutoCompleteObject = ({disabled, options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
   const [shrunkLabel, setShrunkLabel] = useState(false);
   const classes = useStyles();
 
@@ -46,7 +44,6 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
   const textFieldProps = ({field, form, params}) => {
     return {
       ...params,
-      disabled: form.isSubmitting,
       error: get(form.touched, name) && get(form.errors, name) ? true : false,
       fullWidth: true,
       helperText: get(form.touched, name) && get(form.errors, name),
@@ -76,7 +73,7 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
       disableCloseOnSelect: multiple ? true : false,
       value: !multiple ? field.value : field.value || [],
       noOptionsText: noOptionsText,
-      disabled: form.isSubmitting || otherProps.disabled,
+      disabled: form.isSubmitting || form.isValidating || disabled,
       getOptionSelected: (option, inputValue) => {
         if (inputValue === '' && option === '') {
           return true;
@@ -86,7 +83,7 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
       },
       getOptionLabel: option => get(option, optionKey, ''),
       renderInput: params => {
-      // eslint-disable-next-line max-len
+        // eslint-disable-next-line max-len
         return (<TextField {...{...params, InputLabelProps: {...params.InputLabelProps, shrink: !!field.value || shrunkLabel}, inputProps: {...params.inputProps, autoComplete: 'off'}}}
           {...textFieldProps({form, field, params})}
         />);
@@ -119,24 +116,13 @@ const AutoCompleteObject = ({options, loadingText, optionKey, autoHighlight, fas
   };
 
   if (fast) {
-    return (
-      <FastField name={name}>
-        {({field, form}) => (
-          <Autocomplete {...field} {...autocompleteProps({field, form})} />
-        )}
-      </FastField>
-    );
+    return (<FastField name={name}>
+      {({field, form}) => <Autocomplete {...field} {...autocompleteProps({field, form})} />}
+    </FastField>);
   }
-  return (
-    <Field name={name}>
-      {({field, form}) => {
-        return (
-          <Autocomplete {...field} {...autocompleteProps({field, form})} />
-        )
-        ;
-      }}
-    </Field>
-  );
+  return (<Field name={name}>
+    {({field, form}) => <Autocomplete {...field} {...autocompleteProps({field, form})} />}
+  </Field>);
 };
 
 const useStyles = makeStyles({
@@ -146,11 +132,11 @@ const useStyles = makeStyles({
     borderRadius: '5px',
   },
 });
-
 AutoCompleteObject.defaultProps = {
   autoHighlight: true,
   autoSelect: false,
   clearOnEscape: true,
+  disabled: false,
   disableClearable: false,
   fast: false,
   filterSelectedOptions: false,
@@ -170,6 +156,8 @@ AutoCompleteObject.propTypes = {
   clearOnEscape: PropTypes.bool,
   /** (incomplete) */
   disableClearable: PropTypes.bool,
+  /** If `true`, the `input` element will be disabled. */
+  disabled: PropTypes.bool,
   /** If `true` component uses `<FastField />` as an optimized version of `<Field />`. Should only be used on large forms (~30+ fields) or when a field has very expensive validation requirements. `<FastField />` has the same exact API as `<Field>`, but implements `shouldComponentUpdate()` internally to block all additional re-renders unless there are direct updates to the `<FastField />'s` relevant parts/slice of Formik state. */ //eslint-disable-line
   fast: PropTypes.bool,
   /** (incomplete) */
@@ -195,5 +183,4 @@ AutoCompleteObject.propTypes = {
   /** Array of objects. These are referenced by the 'optionKey' prop. */
   options: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
-
 export default AutoCompleteObject;
