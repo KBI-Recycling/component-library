@@ -14,7 +14,7 @@
   "author": "Daniel Kinsbursky",
   "license": "ISC",
   "dependencies": {
-    "google-libphonenumber": "3.2.12",
+    "google-libphonenumber": "3.2.13",
     "lodash.get": "4.4.2",
     "match-sorter": "4.2.0",
     "react-router-dom": "^5.2.0",
@@ -52,7 +52,7 @@
     "eslint-plugin-jsx-a11y": "6.3.1",
     "eslint-plugin-react": "7.20.6",
     "eslint-plugin-react-hooks": "2.5.1",
-    "file-loader": "^6.0.0",
+    "file-loader": "6.1.0",
     "formik": "2.1.5",
     "gh-pages": "3.1.0",
     "moment": "2.27.0",
