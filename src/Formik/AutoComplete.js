@@ -72,7 +72,6 @@ const AutoComplete = props => {
       if (onBlur) onBlur({field, form, event});
     },
     onChange: (event, value) => {
-      console.log('field', field );
       if (value && !Array.isArray(value)) form.setFieldValue(field.name, value[optionKey]);
       else if (value && Array.isArray(value)) {
         form.setFieldValue(field.name, value.map(item => {
