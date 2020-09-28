@@ -30,7 +30,7 @@ const AutoComplete = props => {
     });
     return noEmptyString;
   }, [options, optionKey]);
-  const autoCompleteProps = (form, field) => ({
+  const autoCompleteProps = (form, field, meta) => ({
     ...field,
     autoHighlight: true,
     autoSelect,
@@ -67,6 +67,7 @@ const AutoComplete = props => {
     ListboxProps: {style: {maxHeight: '200px'}},
     options,
     onBlur: event => {
+      field.onBlur(event);
       if (onBlur) onBlur({field, form, event});
     },
     onChange: (event, value) => {
@@ -89,11 +90,11 @@ const AutoComplete = props => {
     value: (noEmptyStringOption && field.value === '') ? null : field.value,
     ...otherProps,
   });
-  const renderInputProps = (form, field, params) => ({
+  const renderInputProps = (form, meta, params) => ({
     ...params,
-    error: form.touched[name] && form.errors[name] ? true : false,
+    error: meta.touched && meta.error ? true : false,
     fullWidth: true,
-    helperText: form.touched[name] && form.errors[name],
+    helperText: meta.touched && meta.error,
     label: label ? label : name,
     margin: 'dense',
     required,
@@ -103,10 +104,10 @@ const AutoComplete = props => {
   if (fast) {
     return (
       <Field name={name}>
-        {({form, field}) => (
+        {({form, field, meta}) => (
           <Autocomplete
-            {...autoCompleteProps(form, field)}
-            renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
+            {...autoCompleteProps(form, field, meta)}
+            renderInput={params => <TextField {...renderInputProps(form, meta, params)} />}
           />
         )}
       </Field>
@@ -114,11 +115,10 @@ const AutoComplete = props => {
   }
   return (
     <Field name={name}>
-      {({form, field}) => (
-        <Autocomplete
-          {...autoCompleteProps(form, field)}
-          renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
-        />
+      {({form, field, meta}) => (<Autocomplete
+        {...autoCompleteProps(form, field, meta)}
+        renderInput={params => <TextField {...renderInputProps(form, meta, params)} />}
+      />
       )}
     </Field>
   );

@@ -35,7 +35,7 @@ const ValidationExample = () => {
     Text: string().required(),
     Auto: string().required(),
     AutoObject: object().exists('AutoObject is a required field.').nullable(),
-    AutoMultiple: array().min(0),
+    AutoMultiple: array().min(1),
     Currency: number().required().min(5).max(30),
     Date: date().required(),
     Number: number().required(),

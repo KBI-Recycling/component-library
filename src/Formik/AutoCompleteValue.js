@@ -36,7 +36,7 @@ const AutoCompleteValue = props => {
     if (!valueSet.has('')) valueSet.add(''); // Add empty string to set to ensure no MUI getOptionSelected warning when passing '' from Formik
     return {values: [...valueSet], refs: {...valueRefs}};
   }, [options, optionKey]);
-  const autoCompleteProps = (form, field) => ({
+  const autoCompleteProps = (form, field, meta) => ({
     ...field,
     autoHighlight: true,
     autoSelect,
@@ -56,6 +56,7 @@ const AutoCompleteValue = props => {
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
     onBlur: event => {
+      field.onBlur(event);
       const value = event.target.value;
       if (value && freeSolo && multiple) {
         form.setFieldValue(field.name, [...field.value, value]);
@@ -81,14 +82,14 @@ const AutoCompleteValue = props => {
   });
   const renderInputProps = (form, field, meta, params) => ({
     ...params,
-    error: form.touched[name] && form.errors[name] ? true : false,
+    error: meta.touched && meta.error ? true : false,
     fullWidth: true,
     label: label ? label : name,
     margin: 'dense',
     required,
     ...textFieldProps,
     helperText: (() => {
-      if (form.touched[name] && form.errors[name]) return form.errors[name];
+      if (meta.touched && meta.error) return meta.error;
       else if (textFieldProps?.helperText) return textFieldProps.helperText;
       else return '';
     })(),
@@ -97,8 +98,8 @@ const AutoCompleteValue = props => {
   if (fast) {
     return (
       <Field name={name}>
-        {({form, field}) => (
-          <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, params)} />} />
+        {({form, field, meta}) => (
+          <Autocomplete {...autoCompleteProps(form, field, meta)} renderInput={params => <TextField {...renderInputProps(form, meta, params)} />} />
         )}
       </Field>
     );
@@ -106,7 +107,7 @@ const AutoCompleteValue = props => {
   return (
     <Field name={name}>
       {({form, field, meta}) => (
-        <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, meta, params)} />} />
+        <Autocomplete {...autoCompleteProps(form, field, meta)} renderInput={params => <TextField {...renderInputProps(form, field, meta, params)} />} />
       )}
     </Field>
   );
