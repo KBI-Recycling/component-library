@@ -4,7 +4,6 @@ import {TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
-import get from 'lodash.get';
 
 /**
  * A component that wraps Material UI Autocomplete with Formik form context. This component returns the string value associated with the selected
@@ -37,7 +36,7 @@ const AutoCompleteValue = props => {
     if (!valueSet.has('')) valueSet.add(''); // Add empty string to set to ensure no MUI getOptionSelected warning when passing '' from Formik
     return {values: [...valueSet], refs: {...valueRefs}};
   }, [options, optionKey]);
-  const autoCompleteProps = (form, field) => ({
+  const autoCompleteProps = (form, field, meta) => ({
     ...field,
     autoHighlight: true,
     autoSelect,
@@ -83,14 +82,14 @@ const AutoCompleteValue = props => {
   });
   const renderInputProps = (form, field, meta, params) => ({
     ...params,
-    error: get(form.touched, name) && get(form.errors, name) ? true : false,
+    error: meta.touched && meta.error ? true : false,
     fullWidth: true,
     label: label ? label : name,
     margin: 'dense',
     required,
     ...textFieldProps,
     helperText: (() => {
-      if (get(form.touched, name) && get(form.errors, name)) return get(form.errors, name);
+      if (meta.touched && meta.error) return meta.error;
       else if (textFieldProps?.helperText) return textFieldProps.helperText;
       else return '';
     })(),
@@ -99,8 +98,8 @@ const AutoCompleteValue = props => {
   if (fast) {
     return (
       <Field name={name}>
-        {({form, field}) => (
-          <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, params)} />} />
+        {({form, field, meta}) => (
+          <Autocomplete {...autoCompleteProps(form, field, meta)} renderInput={params => <TextField {...renderInputProps(form, meta, params)} />} />
         )}
       </Field>
     );
@@ -108,7 +107,7 @@ const AutoCompleteValue = props => {
   return (
     <Field name={name}>
       {({form, field, meta}) => (
-        <Autocomplete {...autoCompleteProps(form, field)} renderInput={params => <TextField {...renderInputProps(form, field, meta, params)} />} />
+        <Autocomplete {...autoCompleteProps(form, field, meta)} renderInput={params => <TextField {...renderInputProps(form, field, meta, params)} />} />
       )}
     </Field>
   );

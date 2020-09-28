@@ -4,7 +4,6 @@ import {TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
-import get from 'lodash.get';
 
 /**
  * A component that wraps Material UI Autocomplete with Formik form context. This component returns the string value associated with the selected
@@ -31,7 +30,7 @@ const AutoComplete = props => {
     });
     return noEmptyString;
   }, [options, optionKey]);
-  const autoCompleteProps = (form, field) => ({
+  const autoCompleteProps = (form, field, meta) => ({
     ...field,
     autoHighlight: true,
     autoSelect,
@@ -91,11 +90,11 @@ const AutoComplete = props => {
     value: (noEmptyStringOption && field.value === '') ? null : field.value,
     ...otherProps,
   });
-  const renderInputProps = (form, field, params) => ({
+  const renderInputProps = (form, meta, params) => ({
     ...params,
-    error: get(form.touched, name) && get(form.errors, name) ? true : false,
+    error: meta.touched && meta.error ? true : false,
     fullWidth: true,
-    helperText: get(form.touched, name) && get(form.errors, name),
+    helperText: meta.touched && meta.error,
     label: label ? label : name,
     margin: 'dense',
     required,
@@ -105,10 +104,10 @@ const AutoComplete = props => {
   if (fast) {
     return (
       <Field name={name}>
-        {({form, field}) => (
+        {({form, field, meta}) => (
           <Autocomplete
-            {...autoCompleteProps(form, field)}
-            renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
+            {...autoCompleteProps(form, field, meta)}
+            renderInput={params => <TextField {...renderInputProps(form, meta, params)} />}
           />
         )}
       </Field>
@@ -116,11 +115,10 @@ const AutoComplete = props => {
   }
   return (
     <Field name={name}>
-      {({form, field}) => (
-        <Autocomplete
-          {...autoCompleteProps(form, field)}
-          renderInput={params => <TextField {...renderInputProps(form, field, params)} />}
-        />
+      {({form, field, meta}) => (<Autocomplete
+        {...autoCompleteProps(form, field, meta)}
+        renderInput={params => <TextField {...renderInputProps(form, meta, params)} />}
+      />
       )}
     </Field>
   );
