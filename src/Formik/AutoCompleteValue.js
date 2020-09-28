@@ -4,6 +4,7 @@ import {TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
+import get from 'lodash.get';
 
 /**
  * A component that wraps Material UI Autocomplete with Formik form context. This component returns the string value associated with the selected
@@ -56,6 +57,7 @@ const AutoCompleteValue = props => {
     ListboxProps: {style: {maxHeight: '200px'}},
     options: optionsMemo.values,
     onBlur: event => {
+      field.onBlur(event);
       const value = event.target.value;
       if (value && freeSolo && multiple) {
         form.setFieldValue(field.name, [...field.value, value]);
@@ -81,14 +83,14 @@ const AutoCompleteValue = props => {
   });
   const renderInputProps = (form, field, meta, params) => ({
     ...params,
-    error: form.touched[name] && form.errors[name] ? true : false,
+    error: get(form.touched, name) && get(form.errors, name) ? true : false,
     fullWidth: true,
     label: label ? label : name,
     margin: 'dense',
     required,
     ...textFieldProps,
     helperText: (() => {
-      if (form.touched[name] && form.errors[name]) return form.errors[name];
+      if (get(form.touched, name) && get(form.errors, name)) return get(form.errors, name);
       else if (textFieldProps?.helperText) return textFieldProps.helperText;
       else return '';
     })(),
