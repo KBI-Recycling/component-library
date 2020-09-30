@@ -4,7 +4,7 @@ import {Checkbox} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 const RowSelectCheckbox = forwardRef(
-  ({indeterminate, selectRowHandler, selectedFlatRows, rowData, ...rest}, ref) => {
+  ({indeterminate, selectRowHandler, selectedFlatRows, rowData, selectAllHandler, ...rest}, ref) => {
     const styles = useStyles();
     const defaultRef = useRef();
     const resolvedRef = ref || defaultRef;
@@ -22,15 +22,21 @@ const RowSelectCheckbox = forwardRef(
 
     const onChangeHandler = async (event, checked) => {
       rest.onChange(event, checked);
-      let dataOfSelectedRows;
-      if (checked) {
-        dataOfSelectedRows = [...selectedFlatRows.map(tableRow => tableRow.original), rowData];
-      } else {
-        // rowData is a reference to tableRow.original. this comparison will filter out the proper object.
-        dataOfSelectedRows = selectedFlatRows.filter(tableRow => tableRow.original !== rowData);
+      if (typeof selectRowHandler === 'function') {
+        // this is selecting a row
+        let dataOfSelectedRows;
+        if (checked) {
+          dataOfSelectedRows = [...selectedFlatRows.map(tableRow => tableRow.original), rowData];
+        } else {
+          // rowData is a reference to tableRow.original. this comparison will filter out the proper object.
+          dataOfSelectedRows = selectedFlatRows.filter(tableRow => tableRow.original !== rowData);
+        }
+        selectRowHandler({event, rowData, dataOfSelectedRows, checked});
+      } else if (typeof selectAllHandler === 'function') {
+        // this will be the selectAll checkbox
+        selectAllHandler({event, checked});
       }
-
-      if (typeof selectRowHandler === 'function') selectRowHandler({event, rowData, dataOfSelectedRows, checked});
+      return null;
     };
 
     return <Checkbox {...checkboxProps} {...rest} onChange={onChangeHandler} />;
@@ -47,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 RowSelectCheckbox.propTypes = {
   indeterminate: PropTypes.bool,
   selectRowHandler: PropTypes.func,
+  selectAllHandler: PropTypes.func,
   selectedFlatRows: PropTypes.arrayOf(PropTypes.object),
   rowData: PropTypes.object,
 };

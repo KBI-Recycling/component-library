@@ -191,13 +191,13 @@ const Table = (props) => {
       if (onLoadProps.selectRows) {
         tableColumns.unshift({
           id: 'muiRowSelection',
-          Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
+          Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} selectAllHandler={props.selectAllHandler} />, //eslint-disable-line
           Cell: ({row, selectedFlatRows}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} rowData={row.original} selectedFlatRows={selectedFlatRows} selectRowHandler={props.selectRowHandler} />, //eslint-disable-line
         });
       }
       return tableColumns;
     });
-  }, [onLoadProps.selectRows, props.selectRowHandler]);
+  }, [onLoadProps.selectRows, props.selectRowHandler, props.selectAllHandler]);
 
   const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, usePagination, useRowSelect, useHooks);
   const bodyRows = useMemo(() => {
@@ -326,8 +326,10 @@ Table.propTypes = {
   rowEdgePadding: PropTypes.string,
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
   selectRows: PropTypes.bool,
-  /** When selectRows prop is true, you can pass a function in this prop that will fire when a row is checked. ***Function Shape: *** ({event, rowData, dataOfSelectedRows, checked}) => return null; dataOfSelectedRows is an array of all selected row objects.*/ //eslint-disable-line
+  /** When selectRows prop is true, you can pass a function in this prop that will fire when a row is changed. ***Function Shape: *** ({event, rowData, dataOfSelectedRows, checked}) => return null; dataOfSelectedRows is an array of all selected row objects.*/ //eslint-disable-line
   selectRowHandler: PropTypes.func,
+    /** When selectRows prop is true, you can pass a function in this prop that will fire when the select all rows is changed. ***Function Shape: *** ({event, checked}) => return null; */ //eslint-disable-line
+  selectAllHandler: PropTypes.func,
   /** An array of objects used to perform initial sort of columns. ***Array Shape:*** [{id<string>, desc<boolean>}, ...]. Object 'id' property is used to select column to be sorted and must match column accessor. Object 'desc' if true will sort column descending. If array length > 1, multi-sorting is enabled. */ //eslint-disable-line
   sortInitial: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,

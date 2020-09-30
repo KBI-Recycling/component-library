@@ -89,10 +89,11 @@ const handleAddRows = useCallback(() => {
   paginationInitialIndex={0}
   rowEdgePadding={'16px'}
   selectRows={true}
-  selectRowHandler={({event, rowData, dataOfSelectedRows}) => {
+  selectRowHandler={({event, rowData, dataOfSelectedRows, checked}) => {
     console.log('rowData of selected row:', rowData);
     console.log('All selected rows: ', dataOfSelectedRows);
     }}
+  selectAllHandler={({event, checked}) => (console.log('All rows checked?', checked))}
   sortInitial={[{id: 'full_name', desc: false}]}
   isLoading={false}
   title={{
