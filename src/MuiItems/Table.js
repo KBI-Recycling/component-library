@@ -192,12 +192,12 @@ const Table = (props) => {
         tableColumns.unshift({
           id: 'muiRowSelection',
           Header: ({getToggleAllRowsSelectedProps}) => <RowSelectCheckbox {...getToggleAllRowsSelectedProps()} />, //eslint-disable-line
-          Cell: ({row}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} />, //eslint-disable-line
+          Cell: ({row, selectedFlatRows}) => <RowSelectCheckbox {...row.getToggleRowSelectedProps()} rowData={row.original} selectedFlatRows={selectedFlatRows} selectRowHandler={props.selectRowHandler} />, //eslint-disable-line
         });
       }
       return tableColumns;
     });
-  }, [onLoadProps.selectRows]);
+  }, [onLoadProps.selectRows, props.selectRowHandler]);
 
   const rtProps = useTable({...baseConfig, columns, data, sortTypes}, useFilters, useSortBy, usePagination, useRowSelect, useHooks);
   const bodyRows = useMemo(() => {
@@ -261,6 +261,7 @@ Table.defaultProps = {
   paginationSizes: [5, 10, 15],
   rowEdgePadding: '8px',
   selectRows: false,
+  selectRowHandler: () => {},
 };
 Table.propTypes = {
   /** <p>Property defines action buttons to be displayed in Action Bar component above table. [If property not provided, Action Bar will not render]. Property must be an array that contains items that are either objects or callback functions.</p><p>***Object Shape:*** {icon, tooltip, onClick, buttonProps} - <ul><li><b>icon: </b> If provided, the icon that will be displayed within action button.</li><li><b>text: </b> (required) The text that will be displayed within the action button. </li><li><b>onClick:</b> (required) The function that will be triggered when the button is clicked. Signature: `({event, tableData}) => {}.</li><li><b>buttonProps: </b> If provided, object passed to property will modify default props passed to action Button component. ***Example:*** buttonProps: { size: 'small', style: {padding: '16px'} } <a href='https://material-ui.com/api/button/#props' target='_blank'>See Material UI Button Props</a></li></ul></p><p>***Function Shape: *** (rtProps) => return {icon, text, onClick, buttonProps} - <ul><li>A function must return an object that matches the shape described above.</li><li>A function should be used (instead of a plain object) when tableData is needed to modify properties of Action object.</li></ul></p> */ //eslint-disable-line
@@ -297,6 +298,7 @@ Table.propTypes = {
     Header: PropTypes.string,
     /** Specifies the maximum width for the column. */
     maxWidth: PropTypes.number,
+    // eslint-disable-next-line max-len
     /** Controls default column formatting, sorting and filtering. Available types include: 'alphanumeric', 'boolean', 'currency', 'datetime', 'timestamp', and 'numeric'. Defaults to 'alphanumeric'. Note: type 'timestamp' works exactly like 'datetime' but allows for the passing of FireStore timestamp object. */
     type: PropTypes.string,
     /** Controls whether text will wrap inside Table's Body cell.  Defaults to 'false'. */
@@ -324,6 +326,8 @@ Table.propTypes = {
   rowEdgePadding: PropTypes.string,
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
   selectRows: PropTypes.bool,
+  /** When selectRows prop is true, you can pass a function in this prop that will fire when a row is checked. ***Function Shape: *** ({event, rowData, dataOfSelectedRows, checked}) => return null; dataOfSelectedRows is an array of all selected row objects.*/ //eslint-disable-line
+  selectRowHandler: PropTypes.func,
   /** An array of objects used to perform initial sort of columns. ***Array Shape:*** [{id<string>, desc<boolean>}, ...]. Object 'id' property is used to select column to be sorted and must match column accessor. Object 'desc' if true will sort column descending. If array length > 1, multi-sorting is enabled. */ //eslint-disable-line
   sortInitial: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.string.isRequired,
