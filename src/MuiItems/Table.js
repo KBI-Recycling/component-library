@@ -24,6 +24,10 @@ const Table = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const baseConfig = useMemo(() => {
+    const defaultSelectedRowObject = {};
+    if (props.selectRowsInitial) {
+      props.selectRowsInitial.forEach(dataIndex => defaultSelectedRowObject[dataIndex] = true);
+    }
     return {
       autoResetSortBy: false,
       autoResetFilters: false,
@@ -34,9 +38,10 @@ const Table = (props) => {
         pageIndex: onLoadProps.paginationInitialIndex,
         pageSize: onLoadProps.paginationInitialSize,
         sortBy: props.sortInitial ? props.sortInitial : [],
+        selectedRowIds: defaultSelectedRowObject,
       },
     };
-  }, [onLoadProps, props.sortInitial]);
+  }, [onLoadProps, props.sortInitial, props.selectRowsInitial]);
   const columns = useMemo(() => {
     const tableColumns = onLoadProps.columns.map(column => {
       return {
@@ -325,7 +330,9 @@ Table.propTypes = {
   /** Extra padding added to the left side of first column and the right side of last column. Defaults to '8px'. */
   rowEdgePadding: PropTypes.string,
   /**  If `true`, implements basic row selection. Defaults to `false`. Selected rows can be accessed through `actionPerTable` onClick property, which returns selectedFlatRow (an array of row objects). */ //eslint-disable-line
-  selectRows: PropTypes.bool,
+  selectRows: PropTypes.arrayOf(PropTypes.number),
+  /** Receives an array of numbers that correspond to the index of the object within the original data prop. This index is used internally by the table to maintain an identity to the data object passed. */ //eslint-disable-line
+  selectRowsInitial: PropTypes.bool,
   /** When selectRows prop is true, you can pass a function in this prop that will fire when a row is changed. ***Function Shape: *** ({event, rowData, dataOfSelectedRows, checked}) => return null; dataOfSelectedRows is an array of all selected row objects.*/ //eslint-disable-line
   selectRowHandler: PropTypes.func,
     /** When selectRows prop is true, you can pass a function in this prop that will fire when the select all rows is changed. ***Function Shape: *** ({event, checked}) => return null; */ //eslint-disable-line
