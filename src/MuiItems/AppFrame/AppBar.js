@@ -65,7 +65,7 @@ AppBar.propTypes = {
     path: PropTypes.string.isRequired,
     pathComparisonString: PropTypes.string,
   })),
-  logoutFunction: PropTypes.func.isRequired,
+  logoutFunction: PropTypes.func,
 };
 
 export default React.memo(AppBar);
