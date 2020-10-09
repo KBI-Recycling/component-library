@@ -122,7 +122,7 @@ FrameWithThemeWrapper.propTypes = {
     path: PropTypes.string.isRequired,
     /** The string that is passed to String.includes() in order to eliminate options from the list shown by the menu */
     pathComparisonString: PropTypes.string,
-  })).isRequired,
+  })),
   /** The function that is ran from the hamburger menu Logout option. Should be a fetch request to the logout endpoint from app-engine, but has the option of being whatever function that is ran to logout and redirect the user */
   logoutFunction: PropTypes.func.isRequired,
   /** This object is spread into createMuiTheme after the default theme options are set. Passing this prop to FrameWithThemeWrapper will add additional options to the mui theme, or overwrite existing options. */
@@ -192,7 +192,7 @@ AppFrame.propTypes = {
     selectedLinkComparison: PropTypes.string,
     /** Pass a boolean to this prop in order to either hide or show the menu item */
     visible: PropTypes.bool,
-    /** This function runs onClick of the menu item. Is used for when there is not a change of pages on click, or any kind of clean up on navigation. */
+    /** This function runs onClick of the menu item. Is used for when there is not a change of pages on click, or any kind of clean up on navigation. Signature: '(event) => null'  */
     onClickFunc: PropTypes.func,
   })),
   /** The title that will display on the Drawer */
