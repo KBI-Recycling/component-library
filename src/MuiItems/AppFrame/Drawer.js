@@ -31,6 +31,8 @@ const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen,
             link={item.link}
             text={item.text}
             selectedLinkComparison={item.selectedLinkComparison}
+            onClickFunc={item.onClickFunc}
+            visible={item.visible}
             setDrawerOpen={setDrawerOpen}
             smallDevice={smallDevice}
           />),
@@ -95,8 +97,10 @@ Drawer.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.shape({
     icon: PropTypes.func.isRequired,
     text: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
+    link: PropTypes.string,
     selectedLinkComparison: PropTypes.string,
+    visible: PropTypes.bool,
+    onClickFunc: PropTypes.func,
   })),
   moduleTitle: PropTypes.string.isRequired,
   setDrawerOpen: PropTypes.func.isRequired,
