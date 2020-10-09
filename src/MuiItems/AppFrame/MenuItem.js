@@ -39,9 +39,12 @@ const MenuItem = ({icon, link, text, onClickFunc, selectedLinkComparison, smallD
   );
 };
 
+MenuItem.defaultProps = {
+  visible: true,
+};
 MenuItem.propTypes = {
   icon: PropTypes.node.isRequired,
-  link: PropTypes.string.isRequired,
+  link: PropTypes.string,
   selectedLinkComparison: PropTypes.string,
   text: PropTypes.string.isRequired,
   smallDevice: PropTypes.bool.isRequired,

@@ -194,7 +194,7 @@ AppFrame.propTypes = {
     visible: PropTypes.bool,
     /** This function runs onClick of the menu item. Is used for when there is not a change of pages on click, or any kind of clean up on navigation. Signature: '(event) => null'  */
     onClickFunc: PropTypes.func,
-  })),
+  })).isRequired,
   /** The title that will display on the Drawer */
   moduleTitle: PropTypes.string.isRequired,
   /** The path that will be passed to react-router-dom Redirect 'to' prop */
@@ -209,9 +209,9 @@ AppFrame.propTypes = {
     path: PropTypes.string.isRequired,
     /** The string that is passed to String.includes() in order to eliminate options from the list shown by the menu */
     pathComparisonString: PropTypes.string,
-  })).isRequired,
+  })),
   /** The function that is ran from the hamburger menu Logout option. Should be a fetch request to the logout endpoint from app-engine, but has the option of being whatever function that is ran to logout and redirect the user */
-  logoutFunction: PropTypes.func.isRequired,
+  logoutFunction: PropTypes.func,
   /** This object is spread into createMuiTheme after the default theme options are set. Passing this prop to FrameWithThemeWrapper will add additional options to the mui theme, or overwrite existing options. */
   themeOptions: PropTypes.object,
 };
