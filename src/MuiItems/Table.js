@@ -19,7 +19,6 @@ const Table = (props) => {
       paginationSizes: props.paginationSizes,
       rowEdgePadding: props.rowEdgePadding,
       selectRows: props.selectRows,
-      title: props.title,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -246,7 +245,7 @@ const Table = (props) => {
 
   return (
     <div id='MuiTable' style={{position: 'relative'}}>
-      <TableTitles title={onLoadProps.title} />
+      <TableTitles title={props.title} />
       <ActionBar actions={props.actionsBar} rtProps={rtProps} />
       <TableHeadBodyRows rtProps={rtProps} bodyRows={bodyRows} {...tableHeadBodyProps} />
       <TableFooterRow {...tableFooterProps} />
