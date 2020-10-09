@@ -35,12 +35,12 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFun
         <IconButton color='inherit' onClick={e => setAnchorEl(e.currentTarget)}>
           <MoreVert />
         </IconButton>
-        <ModuleMenu
+        {moduleMenuOptions ? <ModuleMenu
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
           logoutFunction={logoutFunction}
           moduleMenuOptions={moduleMenuOptions}
-        />
+        /> : null}
       </Toolbar>
     </MuiAppBar>
   );
@@ -64,7 +64,7 @@ AppBar.propTypes = {
     title: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     pathComparisonString: PropTypes.string,
-  })).isRequired,
+  })),
   logoutFunction: PropTypes.func.isRequired,
 };
 
