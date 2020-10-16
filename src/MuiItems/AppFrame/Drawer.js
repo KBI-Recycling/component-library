@@ -2,10 +2,11 @@ import React, {useMemo} from 'react';
 import {Drawer as MuiDrawer, Divider, List, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {makeStyles} from '@material-ui/core/styles';
-import KBILogo from './KBI-logo(small).png';
+import KBILogo from './Drawer/KBI-logo(small).png';
+import XevLogo from './Drawer/xEVLogoTag.svg';
 import MenuItem from './MenuItem.js';
 
-const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen, currentUserEmail}) => {
+const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen, currentUserEmail, xEVDrawerLogo}) => {
   const classes = useStyles();
 
   // Component Props
@@ -20,7 +21,7 @@ const Drawer = ({menuItems, moduleTitle, setDrawerOpen, smallDevice, drawerOpen,
 
   return (
     <MuiDrawer {...muiDrawerProps}>
-      <img src={KBILogo} alt='KBI' className={classes.logo} />
+      <img src={xEVDrawerLogo ? XevLogo : KBILogo} alt='KBI' className={classes.logo} />
       <Typography className={classes.title}>{moduleTitle}</Typography>
       <Typography className={classes.email}>{currentUserEmail}</Typography>
       <Divider className={classes.divider} />
@@ -92,6 +93,9 @@ const useStyles = makeStyles(theme => {
     },
   };
 });
+Drawer.defaultProps = {
+  xEVDrawerLogo: false,
+};
 
 Drawer.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.shape({
@@ -107,6 +111,7 @@ Drawer.propTypes = {
   drawerOpen: PropTypes.bool.isRequired,
   smallDevice: PropTypes.bool.isRequired,
   currentUserEmail: PropTypes.string.isRequired,
+  xEVDrawerLogo: PropTypes.bool,
 };
 
 export default Drawer;
