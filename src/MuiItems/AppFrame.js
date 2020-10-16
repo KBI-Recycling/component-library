@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {makeStyles, useMediaQuery, ThemeProvider, createMuiTheme} from '@material-ui/core';
 import {AppBar, Drawer, MainView} from './AppFrame/';
 
-const FrameWithThemeWrapper = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail, moduleMenuOptions, logoutFunction}) => {
+const FrameWithThemeWrapper = ({routes, menuItems, moduleTitle, redirectTo, currentUserEmail, moduleMenuOptions, logoutFunction, xEVDrawerLogo}) => {
   const classes = useStyles();
   const [drawerOpen, setDrawerOpen] = useState(true);
   const [smallDevice, setSmallDevice] = useState(false);
@@ -31,6 +31,7 @@ const FrameWithThemeWrapper = ({routes, menuItems, moduleTitle, redirectTo, curr
             drawerOpen={drawerOpen}
             setDrawerOpen={bool => setDrawerOpen(bool)}
             currentUserEmail={currentUserEmail}
+            xEVDrawerLogo={xEVDrawerLogo}
           />
         </div>
         <main className={classes.content}>
@@ -82,6 +83,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+FrameWithThemeWrapper.defaultProps = {
+  xEVDrawerLogo: false,
+};
+
 FrameWithThemeWrapper.propTypes = {
   /** The routes that will be used to navigate throughout the page. Will be passed to react-router-dom Route components. */
   routes: PropTypes.arrayOf(PropTypes.shape({
@@ -131,6 +136,8 @@ FrameWithThemeWrapper.propTypes = {
   logoutFunction: PropTypes.func,
   /** This object is spread into createMuiTheme after the default theme options are set. Passing this prop to FrameWithThemeWrapper will add additional options to the mui theme, or overwrite existing options. */
   themeOptions: PropTypes.object,
+  /** If this is true, the drawer will have the xEV logo instead of the KBI logo */
+  xEVDrawerLogo: PropTypes.bool,
 };
 
 
@@ -169,6 +176,9 @@ const AppFrame = ({themeOptions, ...otherProps}) => {
   );
 };
 
+AppFrame.defaultProps = {
+  xEVDrawerLogo: false,
+};
 AppFrame.propTypes = {
   /** The routes that will be used to navigate throughout the page. Will be passed to react-router-dom Route components. */
   routes: PropTypes.arrayOf(PropTypes.shape({
@@ -218,6 +228,8 @@ AppFrame.propTypes = {
   logoutFunction: PropTypes.func,
   /** This object is spread into createMuiTheme after the default theme options are set. Passing this prop to FrameWithThemeWrapper will add additional options to the mui theme, or overwrite existing options. */
   themeOptions: PropTypes.object,
+  /** If this is true, the drawer will have the xEV logo instead of the KBI logo */
+  xEVDrawerLogo: PropTypes.bool,
 };
 
 
