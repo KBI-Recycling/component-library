@@ -5,6 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Field, FastField} from 'formik';
 import get from 'lodash.get';
 import {TextField} from '@material-ui/core';
+import matchSorter from 'match-sorter';
 
 /**
  * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop;
@@ -23,11 +24,15 @@ import {TextField} from '@material-ui/core';
  *
  */
 // eslint-disable-next-line max-len
-const AutoCompleteObject = ({disabled, options, loadingText, optionKey, autoHighlight, fast, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
+const AutoCompleteObject = ({disabled, options, loadingText, optionKey, autoHighlight, fast, fuzzy, noOptionsText, name, onBlur, onChange, loading, filterSelectedOptions, autoSelect, clearOnEscape, freeSolo, multiple, disableClearable, ...otherProps}) => {
   const [shrunkLabel, setShrunkLabel] = useState(false);
   const classes = useStyles();
 
   const filterOptions = (options, {inputValue}) => {
+    if (fuzzy) {
+      const fuzzyOptions = matchSorter(options, inputValue, {keys: [optionKey]});
+      return fuzzyOptions.filter(option => option === '' ? false : true);
+    }
     return options.filter(option => {
       if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
       else if (get(option, optionKey, '').toLowerCase().indexOf(inputValue.toLowerCase()) === -1) return false;
@@ -140,6 +145,7 @@ AutoCompleteObject.defaultProps = {
   disableClearable: false,
   fast: false,
   filterSelectedOptions: false,
+  fuzzy: false,
   freeSolo: false,
   loading: false,
   loadingText: 'Loading...',
@@ -164,6 +170,8 @@ AutoCompleteObject.propTypes = {
   filterSelectedOptions: PropTypes.bool,
   /** (incomplete) */
   freeSolo: PropTypes.bool,
+  /** If `true` component will use fuzzy searching to return close (but not exact) options based on user entered value (e.g. "CT" will return "Cat"). */
+  fuzzy: PropTypes.bool,
   /** (incomplete) */
   loading: PropTypes.bool,
   /** (incomplete) */

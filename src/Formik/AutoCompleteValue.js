@@ -4,6 +4,7 @@ import {TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
+import matchSorter from 'match-sorter';
 
 /**
  * A component that wraps Material UI Autocomplete with Formik form context. This component returns the string value associated with the selected
@@ -21,7 +22,7 @@ import {Field} from 'formik';
  *
  */
 const AutoCompleteValue = props => {
-  const {disabled, fast, label, freeSolo, multiple, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
+  const {disabled, fast, label, freeSolo, fuzzy, multiple, name, onBlur, onChange, options, optionKey, required, autoSelect, textFieldProps, ...otherProps} = props;
   const classes = useStyles();
   const optionsMemo = useMemo(() => {
     const valueSet = new Set();
@@ -44,6 +45,10 @@ const AutoCompleteValue = props => {
     clearOnEscape: true,
     disabled: form.isSubmitting || form.isValidating || disabled,
     filterOptions: (options, state) => {
+      if (fuzzy) {
+        const fuzzyOptions = matchSorter(options, state.inputValue);
+        return fuzzyOptions.filter(option => option === '' ? false : true);
+      }
       return options.filter(option => {
         if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
         else if (option.toLowerCase().indexOf(state.inputValue.toLowerCase()) === -1) return false;
@@ -124,6 +129,7 @@ AutoCompleteValue.defaultProps = {
   autoSelect: false,
   disabled: false,
   fast: false,
+  fuzzy: false,
   freeSolo: false,
   multiple: false,
   required: false,
@@ -135,6 +141,8 @@ AutoCompleteValue.propTypes = {
   disabled: PropTypes.bool,
   /** If `true` component uses `<FastField />` as an optimized version of `<Field />`. Should only be used on large forms (~30+ fields) or when a field has very expensive validation requirements. `<FastField />` has the same exact API as `<Field>`, but implements `shouldComponentUpdate()` internally to block all additional re-renders unless there are direct updates to the `<FastField />'s` relevant parts/slice of Formik state. */ //eslint-disable-line
   fast: PropTypes.bool,
+  /** If `true` component will use fuzzy searching to return close (but not exact) options based on user entered value (e.g. "CT" will return "Cat"). */
+  fuzzy: PropTypes.bool,
   /** If true, the Autocomplete is free solo, meaning that the user input is not bound to provided options. */
   freeSolo: PropTypes.bool,
   /** The `label` content. If not set, `label` will default to `name` prop.  */
