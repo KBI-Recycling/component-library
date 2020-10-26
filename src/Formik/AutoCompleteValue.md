@@ -48,6 +48,14 @@ import {Grid, Typography} from '@material-ui/core';
       optionKey: 'name',
       onChange: ({field, form, value, selected}) => console.log({field, form, value, selected}),
     }
+    const developerFuzzyProps = {
+      id: 'AutoCompleteValue:Fuzzy',
+      fuzzy: true,
+      name: 'Developer',
+      options: [{name: 'Chris'}, {name: 'Dan'}, {name: 'Gerry'}],
+      optionKey: 'name',
+      onChange: ({field, form, value, selected}) => console.log({field, form, value, selected}),
+    }
 
     return (
       <Form style={{width: '100%'}} noValidate method="post">
@@ -67,6 +75,10 @@ import {Grid, Typography} from '@material-ui/core';
           <Grid item xs={12} sm={6}>
             <Typography variant='caption'>Free Solo Multi</Typography>
             <AutoCompleteValue {...developerFreeSoloMultiProps} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant='caption'>Fuzzy Search</Typography>
+            <AutoCompleteValue {...developerFuzzyProps} />
           </Grid>
         </Grid>
       </Form>
