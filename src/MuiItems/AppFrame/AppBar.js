@@ -32,9 +32,9 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFun
           <Menu />
         </IconButton>
         <AppBarTitle routes={routes} />
-        <IconButton color='inherit' onClick={e => setAnchorEl(e.currentTarget)}>
+        {moduleMenuOptions ? <IconButton color='inherit' onClick={e => setAnchorEl(e.currentTarget)}>
           <MoreVert />
-        </IconButton>
+        </IconButton>: null}
         {moduleMenuOptions ? <ModuleMenu
           anchorEl={anchorEl}
           setAnchorEl={setAnchorEl}
