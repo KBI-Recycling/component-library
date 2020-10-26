@@ -22,6 +22,8 @@ const MenuItem = ({icon, link, text, onClickFunc, selectedLinkComparison, smallD
       // Close Drawer, on small devices only, when menu link is clicked.
       if (smallDevice) setDrawerOpen(false);
     };
+    // don't return a Link component if link is undefined or null
+    if (link === undefined || link === null) return forwardRef((linkProps, ref) => <span ref={ref} {...linkProps} onClick={handleClick} />);
     // Makes ListItem function more like <a /> tag.
     return forwardRef((linkProps, ref) => <Link ref={ref} to={link} {...linkProps} onClick={handleClick} />);
   // eslint-disable-next-line react-hooks/exhaustive-deps
