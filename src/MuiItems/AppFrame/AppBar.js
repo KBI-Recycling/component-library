@@ -47,6 +47,7 @@ const AppBar = ({routes, drawerOpen, setDrawerOpen, moduleMenuOptions, logoutFun
 };
 
 const useStyles = makeStyles(theme => ({
+  backgroundColor: theme.palette.primary.dark,
   appBar: {zIndex: theme.zIndex.drawer + 1},
 }));
 
