@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => {
 
     },
     logo: {
-      width: '156px',
+      width: '175px',
       margin: leftOffset,
     },
     title: {
