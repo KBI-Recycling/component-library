@@ -32,7 +32,7 @@ const useDrawer = ({smallDevice, drawerOpen}) => {
         marginLeft: theme.spacing(4) + (drawerOpen ? 0 : -300),
       };
     }
-  }, [drawerOpen, smallDevice, theme]);
+  }, [drawerOpen, smallDevice, theme, isPrintView]);
 
   return {drawerMargin, drawerOpen};
 };
