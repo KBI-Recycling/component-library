@@ -35,7 +35,7 @@ const AutoCompleteObject = ({disabled, options, loadingText, optionKey, autoHigh
     }
     return options.filter(option => {
       if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
-      else if (get(option, optionKey, '').toLowerCase().indexOf(inputValue.toLowerCase()) === -1) return false;
+      else if (get(option, optionKey, '')+''.toLowerCase().indexOf(inputValue.toLowerCase()) === -1) return false;
       return true;
     });
   };
@@ -86,7 +86,9 @@ const AutoCompleteObject = ({disabled, options, loadingText, optionKey, autoHigh
           return true;
         }
       },
-      getOptionLabel: option => get(option, optionKey, ''),
+      // uses lodash get to receive any valid object path and get the value. ex. 'foo.bar.baz'
+      // the +'' is because the option label requires the value to be a string. it converts whatever the value is into some form of string to avoid an error
+      getOptionLabel: option => get(option, optionKey, '') + '',
       renderInput: params => {
         // eslint-disable-next-line max-len
         return (<TextField {...{...params, InputLabelProps: {...params.InputLabelProps, shrink: !!field.value || shrunkLabel}, inputProps: {...params.inputProps, autoComplete: 'off'}}}
