@@ -9,12 +9,20 @@ import {
 } from '@material-ui/core';
 import {NotesModal} from './NotesPanel/';
 
-const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tableProps, modalProps, Firestore}) => {
+const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tableProps, modalProps, Firestore, currentUser}) => {
   const [selectedNoteToView, setSelectedNoteToView] = useState(null);
   const [noteModalOpen, setNoteModalOpen] = useState(false);
 
   const notesModal = {
     selectedNoteToView,
+    close: () => {
+      setSelectedNoteToView(null);
+      setNoteModalOpen(false);
+    },
+    storagePath: '',
+    currentUser: currentUser,
+    Storage: {},
+    firestoreDocument: {},
     ...modalProps,
   };
 
