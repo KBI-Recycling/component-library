@@ -1,6 +1,6 @@
 import React, {Fragment, useState} from 'react';
 import PropTypes from 'prop-types';
-import {TableWithPaper} from '../../components/';
+import {Table} from '../';
 import {Add, Search, ExpandMore} from '@material-ui/icons';
 import {
   Accordion,
@@ -19,7 +19,6 @@ const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tablePr
   };
 
   const notesTable = {
-    title: 'Notes',
     isLoading: !notesForTable,
     data: notesForTable || [],
     columns: [
@@ -57,7 +56,7 @@ const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tablePr
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>Notes</Typography>
         </AccordionSummary>
-        <TableWithPaper {...notesTable} />
+        <Table {...notesTable} />
       </Accordion>
       {noteModalOpen && <NotesModal {...notesModal} />}
     </Fragment>
@@ -75,10 +74,10 @@ NotesPanel.propTypes = {
   tableProps: PropTypes.object,
   tableActionsBar: PropTypes.arrayOf(PropTypes.shape({
 
-  })).isRequired,
+  })),
   tableActionsPerRow: PropTypes.arrayOf(PropTypes.shape({
 
-  })).isRequired,
+  })),
   modalProps: PropTypes.object,
   notesForTable: PropTypes.arrayOf(PropTypes.object).isRequired,
   Firestore: PropTypes.object.isRequired,

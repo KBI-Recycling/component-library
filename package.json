@@ -19,7 +19,8 @@
     "match-sorter": "4.2.1",
     "react-responsive": "^8.1.0",
     "react-router-dom": "^5.2.0",
-    "react-table": "7.6.1"
+    "react-table": "7.6.1",
+    "jimp": "^0.16.1"
   },
   "peerDependencies": {
     "@material-ui/core": "4.x.x",
@@ -29,7 +30,8 @@
     "moment": "2.x.x",
     "react": "16.x.x",
     "react-dom": "16.x.x",
-    "react-router-dom": "^5.x.x"
+    "react-router-dom": "^5.x.x",
+    "react-dropzone": "^10.x.x"
   },
   "devDependencies": {
     "@babel/cli": "7.11.6",
@@ -68,6 +70,7 @@
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.0",
     "yup": "0.29.3",
+    "react-dropzone": "10.2.2",
     "ast-types": "0.14.x"
   },
   "resolutions": {
