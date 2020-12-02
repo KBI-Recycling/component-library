@@ -4,15 +4,12 @@ import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Gr
 import {Collapse, Alert, Formik} from '../../';
 import {NoteThumbnail} from './NotesModal/';
 import {CheckCircleOutline, DeleteForeverOutlined} from '@material-ui/icons';
-// import {useSelector} from 'react-redux';
-// import {Storage} from '../../config.js';
 import {object, string} from 'yup';
-// import {addNoteToRepair} from '../../state/actions/firestore';
 import Dropzone from 'react-dropzone';
 import Jimp from 'jimp/es';
 const {FormikForm, TextField, SubmitButton, FormButton} = Formik;
 
-const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, Storage, handleSubmit}) => {
+const NotesModal = ({close, storagePath, parentDocumentId, selectedNoteToView, Storage, handleSubmit, currentUser}) => {
   const styles = useStyles();
 
   const [stage, setStage] = useState('setNote');
@@ -24,7 +21,7 @@ const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, 
     if (selectedNoteToView) {
       const arrayOfUrlRequests = [];
       selectedNoteToView.FileNames.forEach(name => {
-        arrayOfUrlRequests.push(Storage.ref(`${storagePath}/${firestoreDocument.id}/${selectedNoteToView.id}/${name}`).getDownloadURL());
+        arrayOfUrlRequests.push(Storage.ref(`${storagePath}/${parentDocumentId}/${selectedNoteToView.id}/${name}`).getDownloadURL());
       });
       Promise.all(arrayOfUrlRequests).then(values => {
         setFileArray(selectedNoteToView.FileNames.map((name, index) => ({
@@ -35,7 +32,7 @@ const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, 
         setFileAlert('There was an error loading the images.');
       });
     }
-  }, [Storage, firestoreDocument.id, selectedNoteToView, storagePath]);
+  }, [Storage, parentDocumentId, selectedNoteToView, storagePath]);
 
   const handleClose = () => {
     setStage('setNote');
@@ -60,7 +57,14 @@ const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, 
       note: string().required('Note is a required field.'),
     }),
     onSubmit: async (values, actions) => {
-      const response = await handleSubmit(values, actions, fileArray);// await addNoteToRepair(selectedRepair.RepairId, newNote, currentUser, fileArray);
+      const newNote = {
+        Note: values.note,
+        CreatedBy: currentUser.displayName,
+        CreatedOn: new Date(),
+        FileNames: fileArray.map(file => file.fileName),
+      };
+
+      const response = await handleSubmit(newNote, fileArray, values, actions);
 
       if (response.success) {
         actions.setStatus({alert: response.error});
@@ -232,7 +236,7 @@ const useStyles = makeStyles(theme => ({
 
 NotesModal.propTypes = {
   close: PropTypes.func.isRequired,
-  firestoreDocument: PropTypes.object.isRequired,
+  parentDocumentId: PropTypes.string.isRequired,
   storagePath: PropTypes.string.isRequired,
   selectedNoteToView: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -241,5 +245,8 @@ NotesModal.propTypes = {
   }),
   Storage: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  currentUser: PropTypes.shape({
+    displayName: PropTypes.string.isRequired,
+  }).isRequired,
 };
 export default NotesModal;
