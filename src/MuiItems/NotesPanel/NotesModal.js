@@ -12,7 +12,7 @@ import Dropzone from 'react-dropzone';
 import Jimp from 'jimp/es';
 const {FormikForm, TextField, SubmitButton, FormButton} = Formik;
 
-const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, Storage, currentUser}) => {
+const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, Storage, handleSubmit}) => {
   const styles = useStyles();
 
   const [stage, setStage] = useState('setNote');
@@ -56,15 +56,12 @@ const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, 
     initialValues: {
       note: selectedNoteToView ? selectedNoteToView.Note : '',
     },
+    validationSchema: object().shape({
+      note: string().required('Note is a required field.'),
+    }),
     onSubmit: async (values, actions) => {
-      const newNote = {
-        Note: values.note,
-        CreatedBy: currentUser.displayName,
-        CreatedOn: new Date(),
-        FileNames: fileArray.map(file => file.fileName),
-      };
+      const response = await handleSubmit(values, actions, fileArray);// await addNoteToRepair(selectedRepair.RepairId, newNote, currentUser, fileArray);
 
-      const response = {};// await addNoteToRepair(selectedRepair.RepairId, newNote, currentUser, fileArray);
       if (response.success) {
         actions.setStatus({alert: response.error});
         setStage('success');
@@ -73,9 +70,7 @@ const NotesModal = ({close, storagePath, firestoreDocument, selectedNoteToView, 
         actions.setSubmitting(false);
       }
     },
-    validationSchema: object().shape({
-      note: string().required('Note is a required field.'),
-    }),
+
   };
   const dropzoneProps = {
     main: {
@@ -245,10 +240,6 @@ NotesModal.propTypes = {
     FileNames: PropTypes.arrayOf(PropTypes.string),
   }),
   Storage: PropTypes.object.isRequired,
-  currentUser: PropTypes.shape({
-    displayName: PropTypes.string.isRequired,
-    uid: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-  }).isRequired,
+  handleSubmit: PropTypes.func.isRequired,
 };
 export default NotesModal;

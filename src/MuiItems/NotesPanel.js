@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import {NotesModal} from './NotesPanel/';
 
-const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tableProps, modalProps, Firestore, currentUser}) => {
+const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tableProps, modalProps, Firestore, modalSubmission}) => {
   const [selectedNoteToView, setSelectedNoteToView] = useState(null);
   const [noteModalOpen, setNoteModalOpen] = useState(false);
 
@@ -20,9 +20,9 @@ const NotesPanel = ({notesForTable, tableActionsPerRow, tableActionsBar, tablePr
       setNoteModalOpen(false);
     },
     storagePath: '',
-    currentUser: currentUser,
     Storage: {},
     firestoreDocument: {},
+    handleSubmit: modalSubmission,
     ...modalProps,
   };
 
@@ -89,6 +89,7 @@ NotesPanel.propTypes = {
   modalProps: PropTypes.object,
   notesForTable: PropTypes.arrayOf(PropTypes.object).isRequired,
   Firestore: PropTypes.object.isRequired,
+  modalSubmission: PropTypes.func.isRequired,
 };
 
 export default NotesPanel;
