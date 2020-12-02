@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 
 const NoteThumbnail = ({src, allowOpen, pdf}) => {
   const styles = useStyles();
+  if (!src) return 'Broken Img';
+
   const openInNewWindow = () => window.open(src, '__blank');
   const props = {
     className: allowOpen ? styles.imgWithLink : styles.img,

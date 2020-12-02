@@ -82,10 +82,17 @@ NotesPanel.defaultProps = {
 NotesPanel.propTypes = {
   tableProps: PropTypes.object,
   tableActionsBar: PropTypes.arrayOf(PropTypes.shape({
-
+    icon: PropTypes.elementType.isRequired,
+    text: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    buttonProps: PropTypes.object,
   })),
   tableActionsPerRow: PropTypes.arrayOf(PropTypes.shape({
-
+    icon: PropTypes.elementType.isRequired,
+    tooltip: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    hide: PropTypes.bool,
+    disable: PropTypes.bool,
   })),
   Storage: PropTypes.object.isRequired,
   modalProps: PropTypes.object,

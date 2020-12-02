@@ -15,13 +15,12 @@ const NotesModal = ({close, storagePath, parentDocumentId, selectedNoteToView, S
   const [stage, setStage] = useState('setNote');
   const [fileArray, setFileArray] = useState([]);
   const [fileAlert, setFileAlert] = useState('');
-  // const currentUser = useSelector(state => state.auth.currentUser);
 
   useEffect(() => {
     if (selectedNoteToView) {
       const arrayOfUrlRequests = [];
       selectedNoteToView.FileNames.forEach(name => {
-        arrayOfUrlRequests.push(Storage.ref(`${storagePath}/${parentDocumentId}/${selectedNoteToView.id}/${name}`).getDownloadURL());
+        arrayOfUrlRequests.push(Storage?.ref(`${storagePath}/${parentDocumentId}/${selectedNoteToView.id}/${name}`).getDownloadURL());
       });
       Promise.all(arrayOfUrlRequests).then(values => {
         setFileArray(selectedNoteToView.FileNames.map((name, index) => ({
