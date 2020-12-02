@@ -21,6 +21,7 @@ module.exports = {
         'src/MuiItems/Table.js',
         'src/MuiItems/DetailsPanel.js',
         'src/MuiItems/AppFrame.js',
+        'src/MuiItems/NotesPanel.js',
       ],
     },
     {
@@ -71,6 +72,9 @@ module.exports = {
           ],
         },
       ],
+    },
+    node: {
+      fs: 'empty',
     },
   },
 };
