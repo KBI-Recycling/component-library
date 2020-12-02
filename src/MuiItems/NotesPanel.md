@@ -21,13 +21,18 @@ const notes = [
 
   <NotesPanel
     notesForTable={notes}
-    tableProps={{}}
-    tableActionsBar={[]}
-    tableActionsPerRow={[]}
-    modalProps={{}}
+    tableProps={{
+      sortInitial: [{id: 'CreatedOn', desc: false}],
+    }}
+    tableActionsBar={[
+      //follow the documentation for actionsBar on the Table component. This will add each action to the table
+    ]}
+    tableActionsPerRow={[
+      //follow the documentation for actionsPerRow on the Table component. This will add each action to the rows of the table
+    ]}
     // Storage={Firebase.Storage goes here}
-    storagePath=''
-    parentDocumentId=''
+    storagePath='foo/bar/folder/structure'
+    parentDocumentId='idOfTheParentDocumentToAttachNoteTo'
     modalSubmission={(newNote, fileArray, values, actions) => {
       console.log('arg[0]', newNote);
       console.log('arg[1]', fileArray);
