@@ -174,7 +174,11 @@ const NotesModal = ({close, storagePath, parentDocumentId, selectedNoteToView, S
                   {fileArray.map((file, index) => (
                     <Grid item xs={12} sm={6} key={`Image#${index}`} container style={{position: 'relative'}}>
                       {!selectedNoteToView && <Fab {...deleteButton(index)}><DeleteForeverOutlined size='small' /></Fab>}
-                      <NoteThumbnail pdf={file.fileName.split('.').pop().toLowerCase() === 'pdf'} src={file.base64} allowOpen={Boolean(selectedNoteToView)} />
+                      <NoteThumbnail pdf={file.fileName.split('.').pop().toLowerCase() === 'pdf'}
+                        src={file.base64}
+                        allowOpen={Boolean(selectedNoteToView)}
+                        fileName={file.fileName}
+                      />
                     </Grid>
                   ))}
                 </Grid>

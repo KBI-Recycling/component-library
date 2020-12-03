@@ -3,9 +3,8 @@ import {makeStyles, Grid, Typography} from '@material-ui/core';
 import {PictureAsPdf} from '@material-ui/icons';
 import PropTypes from 'prop-types';
 
-const NoteThumbnail = ({src, allowOpen, pdf}) => {
+const NoteThumbnail = ({fileName, src, allowOpen, pdf}) => {
   const styles = useStyles();
-  if (!src) return 'Broken Img';
 
   const openInNewWindow = () => window.open(src, '__blank');
   const props = {
@@ -23,7 +22,7 @@ const NoteThumbnail = ({src, allowOpen, pdf}) => {
   else {
     return (
       <Grid container justify='center' alignItems={'center'} direction='column' {...props}>
-        <Typography variant='h5'>PDF Upload</Typography>
+        <Typography variant='h5'>{fileName}</Typography>
         <PictureAsPdf className={styles.icon} />
         <Typography variant='h5'>Not Visible in Print View</Typography>
       </Grid>
@@ -57,6 +56,7 @@ NoteThumbnail.propTypes = {
   src: PropTypes.string,
   pdf: PropTypes.bool,
   allowOpen: PropTypes.bool,
+  fileName: PropTypes.string,
 };
 
 export default NoteThumbnail;
