@@ -1,17 +1,18 @@
 import React, {Fragment, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Button, Typography, Fab, makeStyles} from '@material-ui/core';
+import {NoteThumbnail} from './NotesModal/';
+import {CheckCircleOutline, DeleteForeverOutlined} from '@material-ui/icons';
+import {object, string} from 'yup';
+import Dropzone from 'react-dropzone';
+import Jimp from 'jimp/es';
+// When ran through bable, the normal way we import the components from did not work. I swapped to just importing the default export from the file
 import Collapse from '../Collapse.js';
 import Alert from '../Alert.js';
 import FormikForm from '../../Formik/FormikForm.js';
 import TextField from '../../Formik/TextField.js';
 import SubmitButton from '../../Formik/SubmitButton.js';
 import FormButton from '../../Formik/FormButton.js';
-import {NoteThumbnail} from './NotesModal/';
-import {CheckCircleOutline, DeleteForeverOutlined} from '@material-ui/icons';
-import {object, string} from 'yup';
-import Dropzone from 'react-dropzone';
-import Jimp from 'jimp/es';
 
 const NotesModal = ({close, storagePath, parentDocumentId, selectedNoteToView, Storage, handleSubmit, currentUser}) => {
   const styles = useStyles();
