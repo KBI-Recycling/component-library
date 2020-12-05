@@ -16,7 +16,7 @@
   "dependencies": {
     "google-libphonenumber": "3.2.15",
     "lodash.get": "4.4.2",
-    "match-sorter": "4.2.1",
+    "match-sorter": "6.0.1",
     "react-responsive": "^8.2.0",
     "react-router-dom": "^5.2.0",
     "react-table": "7.6.2",
