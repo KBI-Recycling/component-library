@@ -31,10 +31,10 @@
     "@material-ui/lab": "4.0.0-alpha.57",
     "formik": "2.x.x",
     "moment": "2.x.x",
-    "react": "16.x.x",
-    "react-dom": "16.x.x",
+    "react": "16.x.x || 17.x.x",
+    "react-dom": "16.x.x || 17.x.x",
     "react-router-dom": "^5.x.x",
-    "react-dropzone": "^10.x.x"
+    "react-dropzone": "10.x.x || 11.x.x"
   },
   "devDependencies": {
     "@babel/cli": "7.11.6",
@@ -49,7 +49,7 @@
     "babel-eslint": "10.1.0",
     "babel-loader": "8.2.2",
     "css-loader": "5.0.1",
-    "eslint": "7.14.0",
+    "eslint": "7.15.0",
     "eslint-config-google": "0.14.0",
     "eslint-config-react-app": "6.0.0",
     "eslint-plugin-flowtype": "5.2.0",
