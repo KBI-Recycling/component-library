@@ -11,4 +11,4 @@ npm install --save @kbi/component-library
 - [A guide to building a React component with webpack 4, publishing to npm, and deploying the demo to GitHub Pages](https://medium.com/dailyjs/building-a-react-component-with-webpack-publish-to-npm-deploy-to-github-guide-6927f60b3220)
 - [Documenting components with React Styleguidist](https://react-styleguidist.js.org/docs/documenting.html)
 
-- [View component documentation](https://kbi-recycling.github.io/component-library/#/Formik%20Components?id=autocompleteobject)
+- [View component documentation](https://kbi-recycling.github.io/component-library/)
