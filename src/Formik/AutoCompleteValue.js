@@ -4,7 +4,7 @@ import {TextField} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Autocomplete} from '@material-ui/lab';
 import {Field} from 'formik';
-import matchSorter from 'match-sorter';
+import {matchSorter} from 'match-sorter';
 
 /**
  * A component that wraps Material UI Autocomplete with Formik form context. This component returns the string value associated with the selected

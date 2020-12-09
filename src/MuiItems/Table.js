@@ -4,7 +4,7 @@ import {useTable, useFilters, usePagination, useSortBy, useRowSelect} from 'reac
 import {ActionBar, RowSelectCheckbox, TableHeadBodyRows, TableFooterRow, TableLoading, TableTitles} from './Table/';
 import {BooleanColumnFilter, DatetimeColumnFilter, DefaultColumnFilter, SelectColumnFilter} from './Table/Filters/';
 import moment from 'moment';
-import matchSorter from 'match-sorter';
+import {matchSorter} from 'match-sorter';
 
 const Table = (props) => {
   const onLoadProps = useMemo(() => {

@@ -5,7 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Field, FastField} from 'formik';
 import get from 'lodash.get';
 import {TextField} from '@material-ui/core';
-import matchSorter from 'match-sorter';
+import {matchSorter} from 'match-sorter';
 
 /**
  * A component that wraps @material-ui/lab Autocomplete with Formik form context. Underlying TextField component can be modified through the "textFieldProps" prop;
