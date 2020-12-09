@@ -35,7 +35,7 @@ const AutoCompleteObject = ({disabled, options, loadingText, optionKey, autoHigh
     }
     return options.filter(option => {
       if (option === '') return false; // Remove empty string to ensure no MUI getOptionSelected warning
-      else if (get(option, optionKey, '')+''.toLowerCase().indexOf(inputValue.toLowerCase()) === -1) return false;
+      else if (('' + get(option, optionKey, '')).toLowerCase().indexOf(inputValue.toLowerCase()) === -1) return false;
       return true;
     });
   };
