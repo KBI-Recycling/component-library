@@ -272,7 +272,7 @@ Table.propTypes = {
   actionsBar: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({
-      icon: PropTypes.oneOfType([PropTypes.object]),
+      icon: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
       text: PropTypes.string.isRequired,
       onClick: PropTypes.func.isRequired,
       buttonProps: PropTypes.object,
@@ -283,7 +283,7 @@ Table.propTypes = {
     PropTypes.func,
     PropTypes.shape({
       disabled: PropTypes.bool,
-      icon: PropTypes.oneOfType([PropTypes.object]).isRequired,
+      icon: PropTypes.node.isRequired,
       tooltip: PropTypes.string,
       onClick: PropTypes.func.isRequired,
     }),
