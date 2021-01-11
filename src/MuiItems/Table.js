@@ -283,7 +283,7 @@ Table.propTypes = {
     PropTypes.func,
     PropTypes.shape({
       disabled: PropTypes.bool,
-      icon: PropTypes.oneOfType([PropTypes.object, PropTypes.func]).isRequired,
+      icon: PropTypes.node.isRequired,
       tooltip: PropTypes.string,
       onClick: PropTypes.func.isRequired,
     }),
