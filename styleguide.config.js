@@ -22,6 +22,7 @@ module.exports = {
         'src/MuiItems/DetailsPanel.js',
         'src/MuiItems/AppFrame.js',
         'src/MuiItems/NotesPanel.js',
+        'src/MuiItems/ErrorBoundary.js',
       ],
     },
     {

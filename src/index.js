@@ -40,6 +40,9 @@ export * from './MuiItems/DetailsPanel.js';
 export {default as AppFrame} from './MuiItems/AppFrame.js';
 export * from './MuiItems/AppFrame.js';
 
+export {default as ErrorBoundary} from './MuiItems/ErrorBoundary.js';
+export * from './MuiItems/ErrorBoundary.js';
+
 export const Formik = {
   FormikForm,
   SubmitButton,
