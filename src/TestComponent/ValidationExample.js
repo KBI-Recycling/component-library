@@ -75,7 +75,7 @@ const ValidationExample = () => {
         initialValues={{...defaultFormik}}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        validateOnChange={true}
+        validateOnChange={false}
         validateOnBlur={true}
       >
         {formik => (
